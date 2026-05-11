@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F3EA"
+    android:background="@color/app_background"
     android:orientation="vertical"
     android:padding="24dp">
 
@@ -16,8 +16,8 @@
         android:layout_marginTop="16dp"
         android:max="8"
         android:progress="1"
-        android:progressTint="#111827"
-        android:backgroundTint="#E6DCCB" />
+        android:progressTint="@color/primary"
+        android:backgroundTint="@color/line" />
 
     <TextView
         android:id="@+id/txtStep"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:text="Passo 1 de 8"
-        android:textColor="#8A7D69"
+        android:textColor="@color/muted"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -38,9 +38,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="0dp"
-        app:strokeColor="#ECE3D6"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
         app:strokeWidth="1dp">
 
         <LinearLayout
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="HabitApp"
-                android:textColor="#A47F45"
+                android:textColor="@color/primary"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="Como voce quer ser chamado?"
-                android:textColor="#171717"
+                android:textColor="@color/ink"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Vamos personalizar sua rotina diaria."
-                android:textColor="#6B6255"
+                android:textColor="@color/muted"
                 android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -82,17 +82,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
                 android:hint="Resposta"
-                app:boxCornerRadiusBottomEnd="18dp"
-                app:boxCornerRadiusBottomStart="18dp"
-                app:boxCornerRadiusTopEnd="18dp"
-                app:boxCornerRadiusTopStart="18dp">
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/inputAnswer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textColor="#171717"
+                    android:textColor="@color/ink"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,8 +104,8 @@
                 android:layout_marginTop="26dp"
                 android:textAllCaps="false"
                 android:textSize="16sp"
-                app:cornerRadius="18dp"
-                app:strokeColor="#111827" />
+                app:cornerRadius="8dp"
+                app:strokeColor="@color/primary" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/optionTwo"
@@ -115,8 +115,8 @@
                 android:layout_marginTop="12dp"
                 android:textAllCaps="false"
                 android:textSize="16sp"
-                app:cornerRadius="18dp"
-                app:strokeColor="#111827" />
+                app:cornerRadius="8dp"
+                app:strokeColor="@color/primary" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/optionThree"
@@ -126,8 +126,8 @@
                 android:layout_marginTop="12dp"
                 android:textAllCaps="false"
                 android:textSize="16sp"
-                app:cornerRadius="18dp"
-                app:strokeColor="#111827" />
+                app:cornerRadius="8dp"
+                app:strokeColor="@color/primary" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -150,7 +150,7 @@
             android:layout_weight="0.8"
             android:text="Voltar"
             android:textAllCaps="false"
-            android:textColor="#4B5563" />
+            android:textColor="@color/muted" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNext"
@@ -161,7 +161,7 @@
             android:text="Continuar"
             android:textAllCaps="false"
             android:textSize="16sp"
-            app:backgroundTint="#111827"
-            app:cornerRadius="18dp" />
+            app:backgroundTint="@color/primary"
+            app:cornerRadius="8dp" />
     </LinearLayout>
 </LinearLayout>

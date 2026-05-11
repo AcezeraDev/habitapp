@@ -49,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void navigateTo(int itemId) {
+        bottomNav.setSelectedItemId(itemId);
+    }
+
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()

@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="app_background">#F6F8FB</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_soft">#EEF4FF</color>
+    <color name="ink">#14213D</color>
+    <color name="muted">#64748B</color>
+    <color name="line">#E2E8F0</color>
+    <color name="primary">#2563EB</color>
+    <color name="primary_dark">#1E3A8A</color>
+    <color name="water">#0EA5E9</color>
+    <color name="study">#7C3AED</color>
+    <color name="success">#10B981</color>
+    <color name="warning">#F59E0B</color>
+    <color name="danger">#EF4444</color>
     <color name="onboarding_option">#FFFFFF</color>
-    <color name="onboarding_option_text">#171717</color>
-    <color name="onboarding_selected">#111827</color>
+    <color name="onboarding_option_text">#14213D</color>
+    <color name="onboarding_selected">#2563EB</color>
     <color name="onboarding_selected_text">#FFFFFF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

@@ -1,118 +1,271 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0F172A"
-    android:padding="24dp">
+    android:background="@color/app_background"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:id="@+id/header"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:orientation="vertical"
-        android:fontFamily="@font/minha_fonte"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:padding="20dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="MODO FOCO"
-            android:textColor="#94A3B8"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/minha_fonte"
-            android:letterSpacing="0.2" />
+            android:text="Modo foco"
+            android:textColor="@color/ink"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutInput"
-            android:layout_width="160dp"
+        <TextView
+            android:id="@+id/txtSessaoStatus"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Minutos"
-            app:boxStrokeColor="#38BDF8"
-            android:fontFamily="@font/minha_fonte"
-            app:hintTextColor="#38BDF8">
+            android:layout_marginTop="6dp"
+            android:text="Escolha uma sessao e comece."
+            android:textColor="@color/muted"
+            android:textSize="15sp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputTempo"
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@color/ink"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:padding="20dp">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progressTimer"
+                    android:layout_width="260dp"
+                    android:layout_height="260dp"
+                    android:layout_gravity="center"
+                    app:indicatorColor="@color/success"
+                    app:indicatorSize="260dp"
+                    app:trackColor="#29405F"
+                    app:trackThickness="12dp" />
+
+                <TextView
+                    android:id="@+id/txtTempo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="25:00"
+                    android:textColor="@color/white"
+                    android:textSize="54sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/minha_fonte2"
-                android:inputType="number"
-                android:text="25"
-                android:textAlignment="center"
-                android:textColor="#F8FAFC" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Meta de foco hoje"
+                    android:textColor="@color/ink"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-    <FrameLayout
-        android:id="@+id/timerContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintBottom_toTopOf="@id/actions"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/txtFocoProgresso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="0 / 60 min"
+                    android:textColor="@color/muted"
+                    android:textSize="14sp" />
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/progressTimer"
-            android:layout_width="260dp"
-            android:layout_height="260dp"
-            app:indicatorSize="260dp"
-            app:trackThickness="12dp"
-            app:indicatorColor="#38BDF8"
-            app:trackColor="#1E293B" />
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressFocoDia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:indicatorColor="@color/study"
+                    app:trackColor="@color/line"
+                    app:trackCornerRadius="8dp"
+                    app:trackThickness="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddFocus10"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:text="Marcar +10 min ja estudados"
+                    android:textAllCaps="false"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
-            android:id="@+id/txtTempo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="25:00"
-            android:textSize="56sp"
-            android:fontFamily="@font/minha_fonte2"
-            android:textColor="#F8FAFC"/>
-    </FrameLayout>
+            android:layout_marginTop="18dp"
+            android:text="Presets"
+            android:textColor="@color/ink"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-
-    <LinearLayout
-        android:id="@+id/actions"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnStart"
-            android:layout_width="240dp"
-            android:layout_height="64dp"
-            android:text="Iniciar"
-            android:textSize="18sp"
-            app:cornerRadius="32dp"
-            android:fontFamily="@font/minha_fonte"
-            app:backgroundTint="#38BDF8"
-            android:textColor="#0F172A" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnReset"
-            style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Resetar"
-            android:textColor="#94A3B8"
-            android:fontFamily="@font/minha_fonte"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnQuickStudy"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:text="15 min"
+                android:textAllCaps="false"
+                app:cornerRadius="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPomodoro"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:text="25 min"
+                android:textAllCaps="false"
+                app:cornerRadius="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDeepWork"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:text="45 min"
+                android:textAllCaps="false"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutInput"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Minutos da sessao"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputTempo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="25" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnReset"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:text="Resetar"
+                        android:textAllCaps="false"
+                        app:cornerRadius="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStart"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1.4"
+                        android:text="Iniciar"
+                        android:textAllCaps="false"
+                        app:backgroundTint="@color/study"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Historico de foco"
+                    android:textColor="@color/ink"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/layoutHistoricoFoco"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

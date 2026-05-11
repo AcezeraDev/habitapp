@@ -1,100 +1,344 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA">
+    android:background="@color/app_background"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
-            android:text="Seu Progresso"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="#222"
-            android:fontFamily="@font/minha_fonte2"
-            android:layout_marginBottom="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Progresso"
+            android:textColor="@color/ink"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Uma leitura simples do seu dia."
+            android:textColor="@color/muted"
+            android:textSize="15sp" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="6dp">
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@color/primary"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp">
 
             <LinearLayout
-                android:orientation="vertical"
-                android:padding="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="17dp"
-                    android:fontFamily="@font/minha_fonte"
-                    android:text="💧 Água"
-                    android:textSize="27sp"
+                    android:text="Score geral"
+                    android:textColor="#DBEAFE"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtScoreProgresso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="0%"
+                    android:textColor="@color/white"
+                    android:textSize="46sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtInsights"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Comece por uma meta pequena."
+                    android:textColor="#EFF6FF"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Check-in mental"
+                    android:textColor="@color/ink"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtHumorProgresso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Humor: ainda nao registrado"
+                    android:textColor="@color/muted"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/txtEnergiaProgresso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Energia: ainda nao registrada"
+                    android:textColor="@color/muted"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Agua"
+                    android:textColor="@color/water"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtResumo"
-                    android:text="0 copos"
-                    android:fontFamily="@font/minha_fonte"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:progressTint="#4CAF50"
-                    android:backgroundTint="#DDD"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="0 ml / 2000 ml"
+                    android:textColor="@color/ink"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressAgua"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:indicatorColor="@color/water"
+                    app:trackColor="@color/line"
+                    app:trackCornerRadius="8dp"
+                    app:trackThickness="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="6dp">
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
 
             <LinearLayout
-                android:orientation="vertical"
-                android:padding="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
 
                 <TextView
-                    android:text="📚 Estudos"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/minha_fonte"
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Foco"
+                    android:textColor="@color/study"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtEstudos"
-                    android:text="0 min"
-                    android:textSize="18sp"
-                    android:fontFamily="@font/minha_fonte"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="0 min / 60 min"
+                    android:textColor="@color/ink"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/txtSessoes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="0 sessoes concluidas"
+                    android:textColor="@color/muted"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressEstudos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:indicatorColor="@color/study"
+                    app:trackColor="@color/line"
+                    app:trackCornerRadius="8dp"
+                    app:trackThickness="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Checklist"
+                    android:textColor="@color/success"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtChecklist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="0 de 3 concluidos"
+                    android:textColor="@color/ink"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressChecklist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:indicatorColor="@color/success"
+                    app:trackColor="@color/line"
+                    app:trackCornerRadius="8dp"
+                    app:trackThickness="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Habitos extras"
+                    android:textColor="@color/warning"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtHabitosProgresso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Nenhum habito extra criado"
+                    android:textColor="@color/ink"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressHabitos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:indicatorColor="@color/warning"
+                    app:trackColor="@color/line"
+                    app:trackCornerRadius="8dp"
+                    app:trackThickness="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Conquistas"
+                    android:textColor="@color/ink"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/layoutConquistas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </ScrollView>

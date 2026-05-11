@@ -21,6 +21,7 @@ import com.google.android.material.textfield.TextInputLayout;
 public class OnboardingActivity extends AppCompatActivity {
 
     private static final int TOTAL_STEPS = 8;
+    private static final int ONBOARDING_VERSION = 2;
 
     private SharedPreferences prefs;
     private int step = 0;
@@ -53,7 +54,10 @@ public class OnboardingActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("habit_data", Context.MODE_PRIVATE);
 
-        if (prefs.getLong("daily_setup_day", -1) == getTodayKey()) {
+        boolean setupDeHoje = prefs.getLong("daily_setup_day", -1) == getTodayKey();
+        boolean fluxoAtualizado = prefs.getInt("onboarding_version", 0) == ONBOARDING_VERSION;
+
+        if (setupDeHoje && fluxoAtualizado) {
             abrirApp();
             return;
         }
@@ -231,6 +235,7 @@ public class OnboardingActivity extends AppCompatActivity {
                 .putInt("meta_estudos_min", metaEstudos)
                 .putInt("foco_minutos", focoMinutos)
                 .putInt("challenge_goal_days", diasDesafio)
+                .putInt("onboarding_version", ONBOARDING_VERSION)
                 .putLong("daily_setup_day", getTodayKey())
                 .apply();
 

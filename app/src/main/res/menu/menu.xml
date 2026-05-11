@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:title="Home"
+        android:icon="@android:drawable/ic_menu_view"/>
+
+    <item
+        android:id="@+id/agua"
+        android:title="Água"
+        android:icon="@android:drawable/ic_menu_compass"/>
+
+    <item
+        android:id="@+id/estudos"
+        android:title="Estudos"
+        android:icon="@android:drawable/ic_menu_edit"/>
+
+    <item
+        android:id="@+id/progresso"
+        android:title="Progresso"
+        android:icon="@android:drawable/ic_menu_info_details"/>
+
+</menu>

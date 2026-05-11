@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0F172A"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:fontFamily="@font/minha_fonte"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MODO FOCO"
+            android:textColor="#94A3B8"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/minha_fonte"
+            android:letterSpacing="0.2" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutInput"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Minutos"
+            app:boxStrokeColor="#38BDF8"
+            android:fontFamily="@font/minha_fonte"
+            app:hintTextColor="#38BDF8">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputTempo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/minha_fonte2"
+                android:inputType="number"
+                android:text="25"
+                android:textAlignment="center"
+                android:textColor="#F8FAFC" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/timerContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toTopOf="@id/actions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressTimer"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            app:indicatorSize="260dp"
+            app:trackThickness="12dp"
+            app:indicatorColor="#38BDF8"
+            app:trackColor="#1E293B" />
+
+        <TextView
+            android:id="@+id/txtTempo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="25:00"
+            android:textSize="56sp"
+            android:fontFamily="@font/minha_fonte2"
+            android:textColor="#F8FAFC"/>
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/actions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStart"
+            android:layout_width="240dp"
+            android:layout_height="64dp"
+            android:text="Iniciar"
+            android:textSize="18sp"
+            app:cornerRadius="32dp"
+            android:fontFamily="@font/minha_fonte"
+            app:backgroundTint="#38BDF8"
+            android:textColor="#0F172A" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnReset"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resetar"
+            android:textColor="#94A3B8"
+            android:fontFamily="@font/minha_fonte"
+            android:layout_marginTop="12dp"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

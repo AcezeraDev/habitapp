@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment {
     private ActivityResultLauncher<Void> cameraLauncher;
     private LinearLayout layoutGaleria;
     private LinearLayout layoutHabitosExtras;
+    private LinearLayout layoutWeekBarsHome;
     private TextInputEditText inputNovoHabito;
     private View rootView;
 
@@ -51,8 +52,10 @@ public class HomeFragment extends Fragment {
         rootView = view;
 
         prefs = requireActivity().getSharedPreferences("habit_data", Context.MODE_PRIVATE);
+        HabitStore.ensureToday(prefs);
         layoutGaleria = view.findViewById(R.id.layoutGaleria);
         layoutHabitosExtras = view.findViewById(R.id.layoutHabitosExtras);
+        layoutWeekBarsHome = view.findViewById(R.id.layoutWeekBarsHome);
         inputNovoHabito = view.findViewById(R.id.inputNovoHabito);
 
         configurarAcoesRapidas(view);
@@ -63,6 +66,7 @@ public class HomeFragment extends Fragment {
         atualizarResumo(view);
         atualizarGaleria();
         renderHabitosExtras();
+        renderWeekBars(layoutWeekBarsHome);
 
         return view;
     }
@@ -106,6 +110,9 @@ public class HomeFragment extends Fragment {
         TextView txtPlanoDescricao = view.findViewById(R.id.txtPlanoDescricao);
         TextView txtCheckinResumo = view.findViewById(R.id.txtCheckinResumo);
         TextView txtHabitosResumo = view.findViewById(R.id.txtHabitosResumo);
+        TextView txtStreakHome = view.findViewById(R.id.txtStreakHome);
+        TextView txtMediaHome = view.findViewById(R.id.txtMediaHome);
+        TextView txtNivelHome = view.findViewById(R.id.txtNivelHome);
         LinearProgressIndicator progressDaily = view.findViewById(R.id.progressDaily);
         LinearProgressIndicator progressAguaHome = view.findViewById(R.id.progressAguaHome);
         LinearProgressIndicator progressEstudosHome = view.findViewById(R.id.progressEstudosHome);
@@ -130,9 +137,9 @@ public class HomeFragment extends Fragment {
         List<String> habitos = getCustomHabits();
         int habitosConcluidos = getHabitosExtrasConcluidos(habitos);
         int habitosPercent = habitos.isEmpty() ? 100 : calcularPercentual(habitosConcluidos, habitos.size());
-        int score = habitos.isEmpty()
-                ? (aguaPercent + estudoPercent + checklistPercent) / 3
-                : (aguaPercent + estudoPercent + checklistPercent + habitosPercent) / 4;
+        int score = HabitStore.getTodayScore(prefs);
+        int streak = HabitStore.getStreak(prefs);
+        int weeklyAverage = HabitStore.getWeeklyAverage(prefs);
 
         txtGreeting.setText(getSaudacao() + ", " + nome);
         txtScore.setText(score + "%");
@@ -149,6 +156,9 @@ public class HomeFragment extends Fragment {
         txtHabitosResumo.setText(habitos.isEmpty()
                 ? "Crie habitos pequenos para acompanhar hoje."
                 : habitosConcluidos + " de " + habitos.size() + " habitos extras concluidos");
+        txtStreakHome.setText(streak + (streak == 1 ? " dia\nstreak" : " dias\nstreak"));
+        txtMediaHome.setText(weeklyAverage + "%\nmedia");
+        txtNivelHome.setText(HabitStore.getLevelName(prefs) + "\nnivel");
 
         progressDaily.setProgressCompat(score, true);
         progressAguaHome.setProgressCompat(aguaPercent, true);
@@ -173,7 +183,9 @@ public class HomeFragment extends Fragment {
 
             prefs.edit().putFloat("agua_litros", (float) novoValor).apply();
             registrarAgua(adicionadoMl);
+            HabitStore.saveTodaySnapshot(prefs);
             atualizarResumo(rootView);
+            renderWeekBars(layoutWeekBarsHome);
             Toast.makeText(getContext(), "+" + adicionadoMl + " ml adicionados.", Toast.LENGTH_SHORT).show();
         });
 
@@ -240,8 +252,10 @@ public class HomeFragment extends Fragment {
             habitos.add(novoHabito.replace("\n", " ").replace("|", "/"));
             salvarCustomHabits(habitos);
             inputNovoHabito.setText("");
+            HabitStore.saveTodaySnapshot(prefs);
             renderHabitosExtras();
             atualizarResumo(rootView);
+            renderWeekBars(layoutWeekBarsHome);
         });
     }
 
@@ -268,21 +282,64 @@ public class HomeFragment extends Fragment {
             checkBox.setChecked(isHabitoConcluido(habito));
             checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 prefs.edit().putBoolean(getHabitoKey(habito), isChecked).apply();
+                HabitStore.saveTodaySnapshot(prefs);
                 atualizarResumo(rootView);
+                renderWeekBars(layoutWeekBarsHome);
             });
             layoutHabitosExtras.addView(checkBox);
         }
     }
 
+    private void renderWeekBars(LinearLayout layout) {
+        if (layout == null) return;
+
+        layout.removeAllViews();
+        int[] scores = HabitStore.getWeekScores(prefs);
+
+        for (int i = 0; i < scores.length; i++) {
+            LinearLayout row = new LinearLayout(requireContext());
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setPadding(0, 4, 0, 4);
+
+            TextView label = new TextView(requireContext());
+            label.setText(i == 6 ? "Hoje" : "-" + (6 - i) + "d");
+            label.setTextColor(0xFF64748B);
+            label.setTextSize(12f);
+            row.addView(label, new LinearLayout.LayoutParams(44, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            LinearProgressIndicator bar = new LinearProgressIndicator(requireContext());
+            bar.setMax(100);
+            bar.setProgressCompat(scores[i], false);
+            bar.setIndicatorColor(0xFF2563EB);
+            bar.setTrackColor(0xFFE2E8F0);
+            LinearLayout.LayoutParams barParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            row.addView(bar, barParams);
+
+            TextView value = new TextView(requireContext());
+            value.setText(scores[i] + "%");
+            value.setGravity(Gravity.END);
+            value.setTextColor(0xFF14213D);
+            value.setTextSize(12f);
+            row.addView(value, new LinearLayout.LayoutParams(48, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            layout.addView(row);
+        }
+    }
+
     private void salvarChecklist(String chave, boolean marcado) {
         prefs.edit().putBoolean(chave + getTodayKey(), marcado).apply();
+        HabitStore.saveTodaySnapshot(prefs);
         atualizarResumo(rootView);
+        renderWeekBars(layoutWeekBarsHome);
     }
 
     private void salvarNivel(String prefixo, int nivel) {
         prefs.edit().putInt(prefixo + getTodayKey(), nivel).apply();
         configurarCheckin(rootView);
+        HabitStore.saveTodaySnapshot(prefs);
         atualizarResumo(rootView);
+        renderWeekBars(layoutWeekBarsHome);
     }
 
     private int getChecklistConcluido() {

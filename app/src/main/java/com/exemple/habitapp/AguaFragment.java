@@ -38,6 +38,7 @@ public class AguaFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         prefs = requireActivity().getSharedPreferences("habit_data", Context.MODE_PRIVATE);
+        HabitStore.ensureToday(prefs);
         viewModel = new ViewModelProvider(this).get(AguaViewModel.class);
 
         configurarObservadores();
@@ -112,6 +113,7 @@ public class AguaFragment extends Fragment {
         binding.btnReset.setOnClickListener(v -> {
             viewModel.resetarAgua();
             prefs.edit().remove(getLogKey()).apply();
+            HabitStore.saveTodaySnapshot(prefs);
             renderHistoricoAgua();
             Toast.makeText(requireContext(), "Agua zerada para hoje.", Toast.LENGTH_SHORT).show();
         });
@@ -126,6 +128,7 @@ public class AguaFragment extends Fragment {
             try {
                 double novaMeta = Double.parseDouble(input);
                 viewModel.salvarNovaMeta(novaMeta);
+                HabitStore.saveTodaySnapshot(prefs);
                 binding.editMeta.clearFocus();
                 Toast.makeText(requireContext(), "Nova meta salva.", Toast.LENGTH_SHORT).show();
             } catch (NumberFormatException e) {
@@ -151,6 +154,7 @@ public class AguaFragment extends Fragment {
         int registradoMl = (int) Math.round(Math.min(quantidadeMl, (meta - atual) * 1000));
         viewModel.adicionarAgua(quantidadeMl);
         registrarAgua(registradoMl);
+        HabitStore.saveTodaySnapshot(prefs);
         renderHistoricoAgua();
         Toast.makeText(requireContext(), "+" + registradoMl + " ml adicionados.", Toast.LENGTH_SHORT).show();
     }

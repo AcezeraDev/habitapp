@@ -46,6 +46,7 @@ public class EstudosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_estudos, container, false);
 
         prefs = requireActivity().getSharedPreferences("habit_data", Context.MODE_PRIVATE);
+        HabitStore.ensureToday(prefs);
 
         txtTempo = view.findViewById(R.id.txtTempo);
         txtSessaoStatus = view.findViewById(R.id.txtSessaoStatus);
@@ -169,6 +170,7 @@ public class EstudosFragment extends Fragment {
                 .apply();
 
         registrarFoco(minutos, "Manual");
+        HabitStore.saveTodaySnapshot(prefs);
         atualizarStatus();
         renderHistoricoFoco();
         Toast.makeText(getContext(), "+" + minutos + " min registrados.", Toast.LENGTH_SHORT).show();
@@ -186,6 +188,7 @@ public class EstudosFragment extends Fragment {
                 .apply();
 
         registrarFoco(minutosSessao, "Sessao concluida");
+        HabitStore.saveTodaySnapshot(prefs);
     }
 
     private void atualizarTempo() {

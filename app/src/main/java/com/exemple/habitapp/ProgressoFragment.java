@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +33,18 @@ public class ProgressoFragment extends Fragment {
         TextView txtHumor = view.findViewById(R.id.txtHumorProgresso);
         TextView txtEnergia = view.findViewById(R.id.txtEnergiaProgresso);
         TextView txtHabitos = view.findViewById(R.id.txtHabitosProgresso);
+        TextView txtResumoSemana = view.findViewById(R.id.txtResumoSemana);
+        TextView txtNivelProgresso = view.findViewById(R.id.txtNivelProgresso);
         LinearLayout layoutConquistas = view.findViewById(R.id.layoutConquistas);
+        LinearLayout layoutWeekBars = view.findViewById(R.id.layoutWeekBarsProgresso);
         LinearProgressIndicator progressAgua = view.findViewById(R.id.progressAgua);
         LinearProgressIndicator progressEstudos = view.findViewById(R.id.progressEstudos);
         LinearProgressIndicator progressChecklist = view.findViewById(R.id.progressChecklist);
         LinearProgressIndicator progressHabitos = view.findViewById(R.id.progressHabitos);
 
         SharedPreferences prefs = requireActivity().getSharedPreferences("habit_data", Context.MODE_PRIVATE);
+        HabitStore.ensureToday(prefs);
+        HabitStore.saveTodaySnapshot(prefs);
 
         double aguaLitros = prefs.getFloat("agua_litros", 0f);
         double metaLitros = prefs.getFloat("meta_litros", 2.0f);
@@ -55,11 +61,13 @@ public class ProgressoFragment extends Fragment {
         int estudoPercent = percentual(estudos, metaEstudos);
         int checklistPercent = percentual(checklist, 3);
         int habitosPercent = habitos.isEmpty() ? 100 : percentual(habitosConcluidos, habitos.size());
-        int score = habitos.isEmpty()
-                ? (aguaPercent + estudoPercent + checklistPercent) / 3
-                : (aguaPercent + estudoPercent + checklistPercent + habitosPercent) / 4;
+        int score = HabitStore.getTodayScore(prefs);
+        int streak = HabitStore.getStreak(prefs);
+        int weeklyAverage = HabitStore.getWeeklyAverage(prefs);
 
         txtScore.setText(score + "%");
+        txtResumoSemana.setText("Media " + weeklyAverage + "% | streak " + streak + (streak == 1 ? " dia" : " dias"));
+        txtNivelProgresso.setText("Nivel: " + HabitStore.getLevelName(prefs));
         txtResumo.setText(aguaMl + " ml / " + metaMl + " ml");
         txtEstudos.setText(estudos + " min / " + metaEstudos + " min");
         txtSessoes.setText(sessoes + (sessoes == 1 ? " sessao concluida" : " sessoes concluidas"));
@@ -75,6 +83,7 @@ public class ProgressoFragment extends Fragment {
         progressEstudos.setProgressCompat(estudoPercent, true);
         progressChecklist.setProgressCompat(checklistPercent, true);
         progressHabitos.setProgressCompat(habitosPercent, true);
+        renderWeekBars(layoutWeekBars, prefs);
         renderConquistas(layoutConquistas, score, aguaPercent, estudoPercent, checklistPercent, habitos, habitosConcluidos, sessoes);
 
         return view;
@@ -133,6 +142,40 @@ public class ProgressoFragment extends Fragment {
         linha.setTextSize(14f);
         linha.setPadding(0, 6, 0, 6);
         layout.addView(linha);
+    }
+
+    private void renderWeekBars(LinearLayout layout, SharedPreferences prefs) {
+        layout.removeAllViews();
+        int[] scores = HabitStore.getWeekScores(prefs);
+
+        for (int i = 0; i < scores.length; i++) {
+            LinearLayout row = new LinearLayout(requireContext());
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setPadding(0, 4, 0, 4);
+
+            TextView label = new TextView(requireContext());
+            label.setText(i == 6 ? "Hoje" : "-" + (6 - i) + "d");
+            label.setTextColor(0xFF64748B);
+            label.setTextSize(12f);
+            row.addView(label, new LinearLayout.LayoutParams(44, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            LinearProgressIndicator bar = new LinearProgressIndicator(requireContext());
+            bar.setMax(100);
+            bar.setProgressCompat(scores[i], false);
+            bar.setIndicatorColor(0xFF2563EB);
+            bar.setTrackColor(0xFFE2E8F0);
+            row.addView(bar, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+            TextView value = new TextView(requireContext());
+            value.setText(scores[i] + "%");
+            value.setGravity(Gravity.END);
+            value.setTextColor(0xFF14213D);
+            value.setTextSize(12f);
+            row.addView(value, new LinearLayout.LayoutParams(48, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            layout.addView(row);
+        }
     }
 
     private int percentual(double atual, double meta) {

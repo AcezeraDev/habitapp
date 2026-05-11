@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        HabitStore.ensureToday(getSharedPreferences("habit_data", MODE_PRIVATE));
 
         bottomNav = findViewById(R.id.bottom_nav);
 

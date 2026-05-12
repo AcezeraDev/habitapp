@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hidratacao"
+            android:text="Hidratação"
             android:textColor="@color/ink"
             android:textSize="32sp"
             android:textStyle="bold" />
@@ -94,7 +94,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Plano de hidratacao"
+                    android:text="Plano de hidratação"
                     android:textColor="@color/ink"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -114,7 +114,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Proximo lembrete sugerido: em 90 min"
+                    android:text="Próximo lembrete sugerido: em 90 min"
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
 
@@ -252,7 +252,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Meta diaria em litros"
+                    android:hint="Meta diária em litros"
                     app:boxCornerRadiusBottomEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusTopEnd="8dp"
@@ -318,7 +318,7 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="10dp"
-            android:text="Zerar agua de hoje"
+            android:text="Zerar água de hoje"
             android:textAllCaps="false"
             android:textColor="@color/danger" />
     </LinearLayout>

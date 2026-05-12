@@ -4,12 +4,12 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/ic_nav_home"
-        android:title="Inicio" />
+        android:title="Início" />
 
     <item
         android:id="@+id/agua"
         android:icon="@drawable/ic_nav_water"
-        android:title="Agua" />
+        android:title="Água" />
 
     <item
         android:id="@+id/estudos"

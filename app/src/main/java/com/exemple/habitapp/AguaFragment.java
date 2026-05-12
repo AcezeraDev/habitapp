@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -66,22 +67,22 @@ public class AguaFragment extends Fragment {
         binding.txtAgua.setText(String.format(Locale.getDefault(), "%.2f L", litros));
         binding.txtMetaLabel.setText(String.format(Locale.getDefault(), "Meta: %.2f L", meta));
         binding.progressoAgua.setMax((int) (meta * 100));
-        binding.progressoAgua.setProgressCompat((int) (litros * 100), true);
+        UiAnimator.animateProgress(binding.progressoAgua, (int) (litros * 100));
         binding.txtCoposRestantes.setText(coposRestantes == 0
                 ? "Nenhum copo restante"
                 : coposRestantes + (coposRestantes == 1 ? " copo" : " copos") + " de 250 ml restantes");
 
         if (faltaMl == 0) {
             binding.txtFaltam.setText("Meta atingida. Excelente consistencia.");
-            binding.txtDicaAgua.setText("Dica: mantenha o ritmo amanha com pequenos registros ao longo do dia.");
-            binding.txtProximaAgua.setText("Proximo lembrete sugerido: meta fechada");
+            binding.txtDicaAgua.setText("Dica: mantenha o ritmo amanhã com pequenos registros ao longo do dia.");
+            binding.txtProximaAgua.setText("Próximo lembrete sugerido: meta fechada");
             binding.txtRitmoAgua.setText("Ritmo de hoje: completo.");
         } else {
             binding.txtFaltam.setText(String.format(Locale.getDefault(), "Faltam %.0f ml", faltaMl));
             binding.txtDicaAgua.setText(faltaMl <= 500
-                    ? "Dica: voce esta perto. Mais um copo pode fechar a meta."
-                    : "Dica: registre pequenas doses para nao depender de um grande volume no fim do dia.");
-            binding.txtProximaAgua.setText("Proximo lembrete sugerido: em 90 min");
+                    ? "Dica: você está perto. Mais um copo pode fechar a meta."
+                    : "Dica: registre pequenas doses para não depender de um grande volume no fim do dia.");
+            binding.txtProximaAgua.setText("Próximo lembrete sugerido: em 90 min");
             binding.txtRitmoAgua.setText(criarRitmoHidratacao(litros, meta));
         }
     }
@@ -106,7 +107,7 @@ public class AguaFragment extends Fragment {
                 binding.editQuantidade.setText("");
                 binding.editQuantidade.clearFocus();
             } catch (NumberFormatException e) {
-                Toast.makeText(requireContext(), "Numero invalido.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Número inválido.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -115,7 +116,7 @@ public class AguaFragment extends Fragment {
             prefs.edit().remove(getLogKey()).apply();
             HabitStore.saveTodaySnapshot(prefs);
             renderHistoricoAgua();
-            Toast.makeText(requireContext(), "Agua zerada para hoje.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Água zerada para hoje.", Toast.LENGTH_SHORT).show();
         });
 
         binding.layoutMetaInput.setEndIconOnClickListener(v -> {
@@ -132,7 +133,7 @@ public class AguaFragment extends Fragment {
                 binding.editMeta.clearFocus();
                 Toast.makeText(requireContext(), "Nova meta salva.", Toast.LENGTH_SHORT).show();
             } catch (NumberFormatException e) {
-                Toast.makeText(requireContext(), "Numero invalido.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Número inválido.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -147,7 +148,7 @@ public class AguaFragment extends Fragment {
         }
 
         if (atual >= meta) {
-            Toast.makeText(requireContext(), "Meta ja atingida.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Meta já atingida.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -156,13 +157,14 @@ public class AguaFragment extends Fragment {
         registrarAgua(registradoMl);
         HabitStore.saveTodaySnapshot(prefs);
         renderHistoricoAgua();
+        UiAnimator.pulse(binding.txtAgua);
         Toast.makeText(requireContext(), "+" + registradoMl + " ml adicionados.", Toast.LENGTH_SHORT).show();
     }
 
     private String criarRitmoHidratacao(double litros, double meta) {
         double percentual = meta <= 0 ? 0 : litros / meta;
-        if (percentual < 0.33) return "Ritmo de hoje: comece com 2 copos nas proximas horas.";
-        if (percentual < 0.66) return "Ritmo de hoje: voce esta no meio do caminho.";
+        if (percentual < 0.33) return "Ritmo de hoje: comece com 2 copos nas próximas horas.";
+        if (percentual < 0.66) return "Ritmo de hoje: você está no meio do caminho.";
         return "Ritmo de hoje: falta pouco para fechar.";
     }
 
@@ -186,7 +188,7 @@ public class AguaFragment extends Fragment {
         String log = prefs.getString(getLogKey(), "");
 
         if (TextUtils.isEmpty(log)) {
-            adicionarLinhaHistorico("Nenhum registro de agua hoje.");
+            adicionarLinhaHistorico("Nenhum registro de água hoje.");
             return;
         }
 
@@ -199,7 +201,7 @@ public class AguaFragment extends Fragment {
     private void adicionarLinhaHistorico(String texto) {
         TextView linha = new TextView(requireContext());
         linha.setText(texto);
-        linha.setTextColor(0xFF667085);
+        linha.setTextColor(ContextCompat.getColor(requireContext(), R.color.muted));
         linha.setTextSize(14f);
         linha.setPadding(0, 6, 0, 6);
         binding.layoutHistoricoAgua.addView(linha);

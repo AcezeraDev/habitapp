@@ -48,7 +48,7 @@ public class RotinaFragment extends Fragment {
         btnTarde = view.findViewById(R.id.btnRotinaTarde);
         btnNoite = view.findViewById(R.id.btnRotinaNoite);
 
-        btnManha.setOnClickListener(v -> salvarPeriodo("Manha"));
+        btnManha.setOnClickListener(v -> salvarPeriodo("Manhã"));
         btnTarde.setOnClickListener(v -> salvarPeriodo("Tarde"));
         btnNoite.setOnClickListener(v -> salvarPeriodo("Noite"));
 
@@ -72,14 +72,14 @@ public class RotinaFragment extends Fragment {
 
     private void salvarPeriodo(String periodo) {
         prefs.edit().putString("rotina_periodo_principal", periodo).apply();
-        Toast.makeText(getContext(), "Periodo definido: " + periodo, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Período definido: " + periodo, Toast.LENGTH_SHORT).show();
         atualizarPeriodo();
         atualizarTela();
     }
 
     private void atualizarPeriodo() {
-        String periodo = prefs.getString("rotina_periodo_principal", prefs.getString("melhor_horario", "Manha"));
-        btnManha.setAlpha("Manha".equals(periodo) ? 1f : 0.55f);
+        String periodo = prefs.getString("rotina_periodo_principal", prefs.getString("melhor_horario", "Manhã"));
+        btnManha.setAlpha(("Manhã".equals(periodo) || "Manha".equals(periodo)) ? 1f : 0.55f);
         btnTarde.setAlpha("Tarde".equals(periodo) ? 1f : 0.55f);
         btnNoite.setAlpha("Noite".equals(periodo) ? 1f : 0.55f);
     }
@@ -87,11 +87,11 @@ public class RotinaFragment extends Fragment {
     private void atualizarTela() {
         int concluidos = getRotinaConcluida();
         int score = HabitStore.percent(concluidos, 4);
-        String periodo = prefs.getString("rotina_periodo_principal", prefs.getString("melhor_horario", "Manha"));
+        String periodo = prefs.getString("rotina_periodo_principal", prefs.getString("melhor_horario", "Manhã"));
 
-        txtResumo.setText(concluidos + " de 4 blocos concluidos no periodo " + periodo.toLowerCase() + ".");
-        txtScore.setText(score + "%");
-        progressRotina.setProgressCompat(score, true);
+        txtResumo.setText(concluidos + " de 4 blocos concluídos no período " + periodo.toLowerCase() + ".");
+        UiAnimator.animatePercentText(txtScore, score);
+        UiAnimator.animateProgress(progressRotina, score);
         txtPlano.setText(criarPlano(periodo, concluidos));
     }
 
@@ -111,9 +111,9 @@ public class RotinaFragment extends Fragment {
         }
 
         if (concluidos < 4) {
-            return "Foque no proximo bloco do periodo " + periodo.toLowerCase() + ". Rotina forte nasce de repeticao simples.";
+            return "Foque no próximo bloco do período " + periodo.toLowerCase() + ". Rotina forte nasce de repetição simples.";
         }
 
-        return "Rotina fechada. Agora mantenha o ambiente pronto para repetir amanha.";
+        return "Rotina fechada. Agora mantenha o ambiente pronto para repetir amanhã.";
     }
 }

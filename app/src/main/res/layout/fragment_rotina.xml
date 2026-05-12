@@ -94,7 +94,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Periodo principal"
+                    android:text="Período principal"
                     android:textColor="@color/ink"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -112,7 +112,7 @@
                         android:layout_height="48dp"
                         android:layout_marginEnd="6dp"
                         android:layout_weight="1"
-                        android:text="Manha"
+                        android:text="Manhã"
                         android:textAllCaps="false"
                         app:cornerRadius="8dp" />
 
@@ -178,14 +178,14 @@
                     android:id="@+id/checkRotinaAlimentacao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Fiz uma refeicao planejada"
+                    android:text="Fiz uma refeição planejada"
                     android:textColor="@color/ink" />
 
                 <CheckBox
                     android:id="@+id/checkRotinaTreino"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Treino ou movimento concluido"
+                    android:text="Treino ou movimento concluído"
                     android:textColor="@color/ink" />
 
                 <CheckBox

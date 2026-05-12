@@ -130,7 +130,7 @@ public final class HabitStore {
         int weeklyAverage = getWeeklyAverage(prefs);
 
         if (streak >= 14 && weeklyAverage >= 85) return "Elite";
-        if (streak >= 7 && weeklyAverage >= 75) return "Avancado";
+        if (streak >= 7 && weeklyAverage >= 75) return "Avançado";
         if (streak >= 3 || weeklyAverage >= 60) return "Consistente";
         return "Inicial";
     }

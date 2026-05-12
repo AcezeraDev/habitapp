@@ -102,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Media 0% | streak 0 dias"
+                    android:text="Média 0% | streak 0 dias"
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
 
@@ -111,10 +111,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Nivel: Inicial"
+                    android:text="Nível: Inicial"
                     android:textColor="@color/ink"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/layoutWeekChartProgresso"
+                    android:layout_width="match_parent"
+                    android:layout_height="132dp"
+                    android:layout_marginTop="14dp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal" />
 
                 <LinearLayout
                     android:id="@+id/layoutWeekBarsProgresso"
@@ -154,7 +162,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Humor: ainda nao registrado"
+                    android:text="Humor: ainda não registrado"
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
 
@@ -163,7 +171,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Energia: ainda nao registrada"
+                    android:text="Energia: ainda não registrada"
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -188,7 +196,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Agua"
+                    android:text="Água"
                     android:textColor="@color/water"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -254,7 +262,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="0 sessoes concluidas"
+                    android:text="0 sessões concluídas"
                     android:textColor="@color/muted"
                     android:textSize="13sp" />
 
@@ -299,7 +307,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="0 de 3 concluidos"
+                    android:text="0 de 3 concluídos"
                     android:textColor="@color/ink"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -335,7 +343,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Habitos extras"
+                    android:text="Hábitos extras"
                     android:textColor="@color/warning"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -345,7 +353,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Nenhum habito extra criado"
+                    android:text="Nenhum hábito extra criado"
                     android:textColor="@color/ink"
                     android:textSize="18sp"
                     android:textStyle="bold" />

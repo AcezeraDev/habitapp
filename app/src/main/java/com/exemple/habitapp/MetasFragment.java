@@ -56,9 +56,9 @@ public class MetasFragment extends Fragment {
     }
 
     private void atualizarLabels() {
-        txtMetaAgua.setText(String.format(Locale.getDefault(), "Agua: %.2f L", sliderAgua.getValue()));
-        txtMetaEstudo.setText("Foco diario: " + Math.round(sliderEstudo.getValue()) + " min");
-        txtMetaSessao.setText("Sessao padrao: " + Math.round(sliderSessao.getValue()) + " min");
+        txtMetaAgua.setText(String.format(Locale.getDefault(), "Água: %.2f L", sliderAgua.getValue()));
+        txtMetaEstudo.setText("Foco diário: " + Math.round(sliderEstudo.getValue()) + " min");
+        txtMetaSessao.setText("Sessão padrão: " + Math.round(sliderSessao.getValue()) + " min");
         txtInsight.setText(criarInsight());
     }
 
@@ -79,9 +79,9 @@ public class MetasFragment extends Fragment {
         }
 
         if (sliderSessao.getValue() <= 20) {
-            return "Sessoes curtas sao otimas para consistencia diaria.";
+            return "Sessões curtas são ótimas para consistência diária.";
         }
 
-        return "Esse conjunto esta equilibrado para evoluir sem pesar demais.";
+        return "Esse conjunto está equilibrado para evoluir sem pesar demais.";
     }
 }

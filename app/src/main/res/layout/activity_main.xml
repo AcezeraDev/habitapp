@@ -6,31 +6,38 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_screen_gradient">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/main_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/bg_tabs_surface"
-        android:elevation="8dp"
-        android:minHeight="54dp"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
-        app:tabGravity="start"
-        app:tabIndicatorColor="@color/primary"
-        app:tabIndicatorFullWidth="false"
-        app:tabIndicatorHeight="4dp"
-        app:tabMode="scrollable"
-        app:tabRippleColor="@color/tab_ripple"
-        app:tabSelectedTextColor="@color/primary"
-        app:tabTextColor="@color/muted" />
-
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        app:cardBackgroundColor="@color/surface"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="10dp"
+        app:strokeColor="@color/line"
+        app:strokeWidth="1dp">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/bottom_nav_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+        </HorizontalScrollView>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

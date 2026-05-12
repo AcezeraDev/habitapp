@@ -7,7 +7,7 @@
 
     <item
         android:id="@+id/agua"
-        android:title="Agua" />
+        android:title="Água" />
 
     <item
         android:id="@+id/estudos"

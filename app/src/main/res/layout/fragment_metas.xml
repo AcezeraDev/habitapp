@@ -49,7 +49,7 @@
                     android:id="@+id/txtMetaAgua"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Agua: 2.0 L"
+                    android:text="Água: 2.0 L"
                     android:textColor="@color/ink"
                     android:textSize="18sp"
                     android:textStyle="bold" />

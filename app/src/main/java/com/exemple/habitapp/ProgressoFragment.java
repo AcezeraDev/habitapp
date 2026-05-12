@@ -2,6 +2,7 @@ package com.exemple.habitapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
@@ -37,6 +39,7 @@ public class ProgressoFragment extends Fragment {
         TextView txtNivelProgresso = view.findViewById(R.id.txtNivelProgresso);
         LinearLayout layoutConquistas = view.findViewById(R.id.layoutConquistas);
         LinearLayout layoutWeekBars = view.findViewById(R.id.layoutWeekBarsProgresso);
+        LinearLayout layoutWeekChart = view.findViewById(R.id.layoutWeekChartProgresso);
         LinearProgressIndicator progressAgua = view.findViewById(R.id.progressAgua);
         LinearProgressIndicator progressEstudos = view.findViewById(R.id.progressEstudos);
         LinearProgressIndicator progressChecklist = view.findViewById(R.id.progressChecklist);
@@ -65,25 +68,26 @@ public class ProgressoFragment extends Fragment {
         int streak = HabitStore.getStreak(prefs);
         int weeklyAverage = HabitStore.getWeeklyAverage(prefs);
 
-        txtScore.setText(score + "%");
-        txtResumoSemana.setText("Media " + weeklyAverage + "% | streak " + streak + (streak == 1 ? " dia" : " dias"));
-        txtNivelProgresso.setText("Nivel: " + HabitStore.getLevelName(prefs));
+        UiAnimator.animatePercentText(txtScore, score);
+        txtResumoSemana.setText("Média " + weeklyAverage + "% | streak " + streak + (streak == 1 ? " dia" : " dias"));
+        txtNivelProgresso.setText("Nível: " + HabitStore.getLevelName(prefs));
         txtResumo.setText(aguaMl + " ml / " + metaMl + " ml");
         txtEstudos.setText(estudos + " min / " + metaEstudos + " min");
-        txtSessoes.setText(sessoes + (sessoes == 1 ? " sessao concluida" : " sessoes concluidas"));
-        txtChecklist.setText(checklist + " de 3 concluidos");
+        txtSessoes.setText(sessoes + (sessoes == 1 ? " sessão concluída" : " sessões concluídas"));
+        txtChecklist.setText(checklist + " de 3 concluídos");
         txtHabitos.setText(habitos.isEmpty()
-                ? "Nenhum habito extra criado"
-                : habitosConcluidos + " de " + habitos.size() + " concluidos");
+                ? "Nenhum hábito extra criado"
+                : habitosConcluidos + " de " + habitos.size() + " concluídos");
         txtHumor.setText("Humor: " + labelNivel(prefs.getInt("mood_" + getTodayKey(), -1)));
         txtEnergia.setText("Energia: " + labelNivel(prefs.getInt("energy_" + getTodayKey(), -1)));
         txtInsights.setText(criarInsight(aguaPercent, estudoPercent, checklistPercent, habitosPercent, habitos.isEmpty()));
 
-        progressAgua.setProgressCompat(aguaPercent, true);
-        progressEstudos.setProgressCompat(estudoPercent, true);
-        progressChecklist.setProgressCompat(checklistPercent, true);
-        progressHabitos.setProgressCompat(habitosPercent, true);
+        UiAnimator.animateProgress(progressAgua, aguaPercent);
+        UiAnimator.animateProgress(progressEstudos, estudoPercent);
+        UiAnimator.animateProgress(progressChecklist, checklistPercent);
+        UiAnimator.animateProgress(progressHabitos, habitosPercent);
         renderWeekBars(layoutWeekBars, prefs);
+        renderWeekChart(layoutWeekChart, prefs);
         renderConquistas(layoutConquistas, score, aguaPercent, estudoPercent, checklistPercent, habitos, habitosConcluidos, sessoes);
 
         return view;
@@ -127,21 +131,56 @@ public class ProgressoFragment extends Fragment {
     private void renderConquistas(LinearLayout layout, int score, int agua, int estudo, int checklist, List<String> habitos, int habitosConcluidos, int sessoes) {
         layout.removeAllViews();
 
-        adicionarConquista(layout, agua >= 100, "Meta de agua fechada");
+        adicionarConquista(layout, agua >= 100, "Meta de água fechada");
         adicionarConquista(layout, estudo >= 100, "Meta de foco fechada");
         adicionarConquista(layout, checklist >= 100, "Checklist completo");
         adicionarConquista(layout, score >= 80, "Score acima de 80%");
-        adicionarConquista(layout, sessoes >= 3, "3 sessoes de foco no dia");
-        adicionarConquista(layout, !habitos.isEmpty() && habitosConcluidos == habitos.size(), "Todos os habitos extras concluidos");
+        adicionarConquista(layout, sessoes >= 3, "3 sessões de foco no dia");
+        adicionarConquista(layout, !habitos.isEmpty() && habitosConcluidos == habitos.size(), "Todos os hábitos extras concluídos");
     }
 
     private void adicionarConquista(LinearLayout layout, boolean concluida, String titulo) {
         TextView linha = new TextView(requireContext());
-        linha.setText((concluida ? "[ok] " : "[ ] ") + titulo);
-        linha.setTextColor(concluida ? 0xFF12B76A : 0xFF667085);
+        linha.setText((concluida ? "✓ " : "• ") + titulo);
+        linha.setTextColor(ContextCompat.getColor(requireContext(), concluida ? R.color.success : R.color.muted));
         linha.setTextSize(14f);
         linha.setPadding(0, 6, 0, 6);
         layout.addView(linha);
+    }
+
+    private void renderWeekChart(LinearLayout layout, SharedPreferences prefs) {
+        layout.removeAllViews();
+        int[] scores = HabitStore.getWeekScores(prefs);
+
+        for (int i = 0; i < scores.length; i++) {
+            LinearLayout column = new LinearLayout(requireContext());
+            column.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+            column.setOrientation(LinearLayout.VERTICAL);
+
+            View bar = new View(requireContext());
+            int barHeight = dp(Math.max(18, scores[i]));
+            GradientDrawable drawable = new GradientDrawable(
+                    GradientDrawable.Orientation.TOP_BOTTOM,
+                    new int[]{
+                            ContextCompat.getColor(requireContext(), R.color.primary),
+                            ContextCompat.getColor(requireContext(), R.color.success)
+                    }
+            );
+            drawable.setCornerRadius(dp(8));
+            bar.setBackground(drawable);
+            column.addView(bar, new LinearLayout.LayoutParams(dp(22), barHeight));
+
+            TextView label = new TextView(requireContext());
+            label.setText(i == 6 ? "Hoje" : "-" + (6 - i));
+            label.setTextColor(ContextCompat.getColor(requireContext(), R.color.muted));
+            label.setTextSize(11f);
+            label.setGravity(Gravity.CENTER);
+            label.setPadding(0, dp(8), 0, 0);
+            column.addView(label, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
+            layout.addView(column, params);
+        }
     }
 
     private void renderWeekBars(LinearLayout layout, SharedPreferences prefs) {
@@ -156,21 +195,21 @@ public class ProgressoFragment extends Fragment {
 
             TextView label = new TextView(requireContext());
             label.setText(i == 6 ? "Hoje" : "-" + (6 - i) + "d");
-            label.setTextColor(0xFF667085);
+            label.setTextColor(ContextCompat.getColor(requireContext(), R.color.muted));
             label.setTextSize(12f);
             row.addView(label, new LinearLayout.LayoutParams(44, ViewGroup.LayoutParams.WRAP_CONTENT));
 
             LinearProgressIndicator bar = new LinearProgressIndicator(requireContext());
             bar.setMax(100);
             bar.setProgressCompat(scores[i], false);
-            bar.setIndicatorColor(0xFF165DFF);
-            bar.setTrackColor(0xFFD9E4F2);
+            bar.setIndicatorColor(ContextCompat.getColor(requireContext(), R.color.primary));
+            bar.setTrackColor(ContextCompat.getColor(requireContext(), R.color.line));
             row.addView(bar, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
             TextView value = new TextView(requireContext());
             value.setText(scores[i] + "%");
             value.setGravity(Gravity.END);
-            value.setTextColor(0xFF101828);
+            value.setTextColor(ContextCompat.getColor(requireContext(), R.color.ink));
             value.setTextSize(12f);
             row.addView(value, new LinearLayout.LayoutParams(48, ViewGroup.LayoutParams.WRAP_CONTENT));
 
@@ -185,29 +224,33 @@ public class ProgressoFragment extends Fragment {
 
     private String criarInsight(int agua, int estudo, int checklist, int habitos, boolean semHabitos) {
         if (agua >= 100 && estudo >= 100 && checklist >= 100 && (semHabitos || habitos >= 100)) {
-            return "Dia completo. Agora o mais profissional e repetir amanha.";
+            return "Dia completo. Agora o mais profissional é repetir amanhã.";
         }
 
         if (agua <= estudo && agua <= checklist && agua <= habitos) {
-            return "Seu melhor proximo passo e hidratar. Um copo ja muda o painel.";
+            return "Seu melhor próximo passo é hidratar. Um copo já muda o painel.";
         }
 
         if (estudo <= agua && estudo <= checklist && estudo <= habitos) {
-            return "Abra uma sessao curta de foco para puxar o score para cima.";
+            return "Abra uma sessão curta de foco para puxar o score para cima.";
         }
 
         if (!semHabitos && habitos <= agua && habitos <= estudo && habitos <= checklist) {
-            return "Escolha um habito extra e marque uma vitoria pequena agora.";
+            return "Escolha um hábito extra e marque uma vitória pequena agora.";
         }
 
-        return "Feche um item do checklist para transformar intencao em rotina.";
+        return "Feche um item do checklist para transformar intenção em rotina.";
     }
 
     private String labelNivel(int nivel) {
         if (nivel == 0) return "baixo";
         if (nivel == 1) return "ok";
         if (nivel == 2) return "alto";
-        return "ainda nao registrado";
+        return "ainda não registrado";
+    }
+
+    private int dp(int value) {
+        return (int) (value * getResources().getDisplayMetrics().density);
     }
 
     private long getTodayKey() {

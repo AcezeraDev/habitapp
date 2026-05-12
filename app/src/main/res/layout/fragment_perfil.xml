@@ -60,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Streak 0 dias | media 0%"
+                    android:text="Streak 0 dias | média 0%"
                     android:textColor="#ECFDF3"
                     android:textSize="14sp" />
             </LinearLayout>

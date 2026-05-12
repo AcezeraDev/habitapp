@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Escolha uma sessao e comece."
+            android:text="Escolha uma sessão e comece."
             android:textColor="@color/muted"
             android:textSize="15sp" />
 
@@ -115,7 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="12dp"
-                    android:text="Marcar +10 min ja estudados"
+                    android:text="Marcar +10 min já estudados"
                     android:textAllCaps="false"
                     app:cornerRadius="8dp" />
             </LinearLayout>
@@ -198,7 +198,7 @@
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Minutos da sessao"
+                    android:hint="Minutos da sessão"
                     app:boxCornerRadiusBottomEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusTopEnd="8dp"

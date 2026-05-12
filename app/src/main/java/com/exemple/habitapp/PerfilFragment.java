@@ -75,8 +75,8 @@ public class PerfilFragment extends Fragment {
 
         txtTitulo.setText("Perfil de " + nome);
         txtSubtitulo.setText(objetivo);
-        txtNivel.setText("Nivel " + HabitStore.getLevelName(prefs));
-        txtStats.setText("Streak " + streak + (streak == 1 ? " dia" : " dias") + " | media " + media + "%");
-        txtResumo.setText("Total registrado: " + aguaTotal + " ml de agua e " + focoTotal + " min de foco. Seu objetivo atual e: " + objetivo + ".");
+        txtNivel.setText("Nível " + HabitStore.getLevelName(prefs));
+        txtStats.setText("Streak " + streak + (streak == 1 ? " dia" : " dias") + " | média " + media + "%");
+        txtResumo.setText("Total registrado: " + aguaTotal + " ml de água e " + focoTotal + " min de foco. Seu objetivo atual é: " + objetivo + ".");
     }
 }

@@ -77,7 +77,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="Comece com uma acao pequena"
+                        android:text="Comece com uma ação pequena"
                         android:textColor="#ECFDF3"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -140,7 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="0%\nmedia"
+                        android:text="0%\nmédia"
                         android:textColor="@color/ink"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -151,7 +151,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Inicial\nnivel"
+                        android:text="Inicial\nnível"
                         android:textColor="@color/ink"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -192,7 +192,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Agua"
+                        android:text="Água"
                         android:textColor="@color/water"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -304,7 +304,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Acoes rapidas"
+                    android:text="Ações rápidas"
                     android:textColor="@color/ink"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -370,7 +370,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Uma acao pequena agora deixa o dia mais facil."
+                    android:text="Uma ação pequena agora deixa o dia mais fácil."
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -405,7 +405,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Registre como voce chegou hoje."
+                    android:text="Registre como você chegou hoje."
                     android:textColor="@color/muted"
                     android:textSize="13sp" />
 
@@ -540,7 +540,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="0 de 3 concluidos"
+                    android:text="0 de 3 concluídos"
                     android:textColor="@color/muted"
                     android:textSize="13sp" />
 
@@ -597,7 +597,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Habitos extras"
+                    android:text="Hábitos extras"
                     android:textColor="@color/ink"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -607,7 +607,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Crie habitos pequenos para acompanhar hoje."
+                    android:text="Crie hábitos pequenos para acompanhar hoje."
                     android:textColor="@color/muted"
                     android:textSize="13sp" />
 
@@ -631,7 +631,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
-                        android:hint="Novo habito"
+                        android:hint="Novo hábito"
                         app:boxCornerRadiusBottomEnd="8dp"
                         app:boxCornerRadiusBottomStart="8dp"
                         app:boxCornerRadiusTopEnd="8dp"
@@ -675,7 +675,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Desafio de evolucao"
+                    android:text="Desafio de evolução"
                     android:textColor="#FFF3E0"
                     android:textSize="13sp"
                     android:textStyle="bold" />

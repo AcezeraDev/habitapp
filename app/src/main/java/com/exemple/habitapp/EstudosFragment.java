@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
@@ -80,7 +81,7 @@ public class EstudosFragment extends Fragment {
 
     private void configurarDuracao(int minutos) {
         if (rodando) {
-            Toast.makeText(getContext(), "Pause a sessao antes de trocar o tempo.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Pause a sessão antes de trocar o tempo.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -98,7 +99,7 @@ public class EstudosFragment extends Fragment {
 
             rodando = true;
             btnStart.setText("Pausar");
-            txtSessaoStatus.setText("Sessao em andamento. Mantenha uma unica prioridade.");
+            txtSessaoStatus.setText("Sessão em andamento. Mantenha uma única prioridade.");
 
             timer = new CountDownTimer(tempoRestante, 500) {
                 @Override
@@ -116,7 +117,7 @@ public class EstudosFragment extends Fragment {
                     atualizarTempo();
                     atualizarStatus();
                     renderHistoricoFoco();
-                    Toast.makeText(getContext(), "Sessao concluida.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Sessão concluída.", Toast.LENGTH_SHORT).show();
                 }
             }.start();
         } else {
@@ -135,7 +136,7 @@ public class EstudosFragment extends Fragment {
         try {
             int minutos = Integer.parseInt(valor);
             if (minutos <= 0) {
-                Toast.makeText(getContext(), "Tempo invalido.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Tempo inválido.", Toast.LENGTH_SHORT).show();
                 return false;
             }
 
@@ -187,7 +188,7 @@ public class EstudosFragment extends Fragment {
                 .putInt("total_foco_min_registrado", totalGeral)
                 .apply();
 
-        registrarFoco(minutosSessao, "Sessao concluida");
+        registrarFoco(minutosSessao, "Sessão concluída");
         HabitStore.saveTodaySnapshot(prefs);
     }
 
@@ -200,7 +201,7 @@ public class EstudosFragment extends Fragment {
 
         if (progressIndicator != null && tempoTotal > 0) {
             int progresso = (int) (((tempoTotal - tempoRestante) * 100) / tempoTotal);
-            progressIndicator.setProgressCompat(progresso, true);
+            UiAnimator.animateProgress(progressIndicator, progresso);
         }
     }
 
@@ -210,9 +211,9 @@ public class EstudosFragment extends Fragment {
         int sessoes = prefs.getInt("sessoes_foco_concluidas", 0);
         int percentual = percentual(estudos, meta);
 
-        txtSessaoStatus.setText("Hoje: " + estudos + "/" + meta + " min em " + sessoes + " sessoes.");
+        txtSessaoStatus.setText("Hoje: " + estudos + "/" + meta + " min em " + sessoes + " sessões.");
         txtFocoProgresso.setText(estudos + " / " + meta + " min  |  " + percentual + "% da meta");
-        progressFocoDia.setProgressCompat(percentual, true);
+        UiAnimator.animateProgress(progressFocoDia, percentual);
     }
 
     private void registrarFoco(int minutos, String origem) {
@@ -228,7 +229,7 @@ public class EstudosFragment extends Fragment {
         String log = prefs.getString(getLogKey(), "");
 
         if (TextUtils.isEmpty(log)) {
-            adicionarLinhaHistorico("Nenhuma sessao registrada hoje.");
+            adicionarLinhaHistorico("Nenhuma sessão registrada hoje.");
             return;
         }
 
@@ -241,7 +242,7 @@ public class EstudosFragment extends Fragment {
     private void adicionarLinhaHistorico(String texto) {
         TextView linha = new TextView(requireContext());
         linha.setText(texto);
-        linha.setTextColor(0xFF667085);
+        linha.setTextColor(ContextCompat.getColor(requireContext(), R.color.muted));
         linha.setTextSize(14f);
         linha.setPadding(0, 6, 0, 6);
         layoutHistoricoFoco.addView(linha);

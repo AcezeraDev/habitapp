@@ -29,7 +29,7 @@ public class OnboardingActivity extends AppCompatActivity {
     private String nome = "";
     private String objetivo = "Mais disciplina";
     private String rotina = "Equilibrada";
-    private String horario = "Manha";
+    private String horario = "Manhã";
     private double aguaAtual = 0.0;
     private double metaAgua = 2.0;
     private int metaEstudos = 60;
@@ -127,36 +127,36 @@ public class OnboardingActivity extends AppCompatActivity {
         optionThree.setVisibility(View.GONE);
 
         if (step == 0) {
-            txtQuestion.setText("Como voce quer ser chamado?");
-            txtSubtitle.setText("Vamos personalizar sua rotina diaria com um toque mais seu.");
+            txtQuestion.setText("Como você quer ser chamado?");
+            txtSubtitle.setText("Vamos personalizar sua rotina diária com um toque mais seu.");
             mostrarInput(nome, "Digite seu nome");
         } else if (step == 1) {
             txtQuestion.setText("Qual e seu foco principal agora?");
             txtSubtitle.setText("Escolha o objetivo que mais combina com sua fase.");
-            mostrarOpcoes(objetivo, "Mais disciplina", "Beber mais agua", "Estudar melhor");
+            mostrarOpcoes(objetivo, "Mais disciplina", "Beber mais água", "Estudar melhor");
         } else if (step == 2) {
             txtQuestion.setText("Como esta sua rotina hoje?");
             txtSubtitle.setText("Isso ajuda o HabitApp a montar metas mais realistas.");
             mostrarOpcoes(rotina, "Corrida", "Equilibrada", "Tranquila");
         } else if (step == 3) {
-            txtQuestion.setText("Em qual periodo voce rende melhor?");
-            txtSubtitle.setText("Seu foco pode comecar no melhor horario do seu dia.");
-            mostrarOpcoes(horario, "Manha", "Tarde", "Noite");
+            txtQuestion.setText("Em qual período você rende melhor?");
+            txtSubtitle.setText("Seu foco pode começar no melhor horário do seu dia.");
+            mostrarOpcoes(horario, "Manhã", "Tarde", "Noite");
         } else if (step == 4) {
-            txtQuestion.setText("Quantos litros de agua voce ja bebeu hoje?");
+            txtQuestion.setText("Quantos litros de água você já bebeu hoje?");
             txtSubtitle.setText("Pode ser aproximado. Exemplo: 0.5, 1 ou 1.5.");
             mostrarInput(String.valueOf(aguaAtual), "Litros bebidos hoje");
         } else if (step == 5) {
-            txtQuestion.setText("Qual meta de agua parece boa para hoje?");
-            txtSubtitle.setText("Uma meta simples e clara fica mais facil de cumprir.");
+            txtQuestion.setText("Qual meta de água parece boa para hoje?");
+            txtSubtitle.setText("Uma meta simples e clara fica mais fácil de cumprir.");
             mostrarOpcoes(String.valueOf(metaAgua), "1.5 L", "2.0 L", "2.5 L");
         } else if (step == 6) {
-            txtQuestion.setText("Quanto tempo voce quer estudar hoje?");
-            txtSubtitle.setText("O app vai usar isso no resumo e no progresso diario.");
+            txtQuestion.setText("Quanto tempo você quer estudar hoje?");
+            txtSubtitle.setText("O app vai usar isso no resumo e no progresso diário.");
             mostrarOpcoes(String.valueOf(metaEstudos), "30 min", "60 min", "90 min");
         } else {
-            txtQuestion.setText("Qual sessao de foco combina com voce?");
-            txtSubtitle.setText("Tambem vamos manter o desafio de fotos em 30 dias.");
+            txtQuestion.setText("Qual sessão de foco combina com você?");
+            txtSubtitle.setText("Também vamos manter o desafio de fotos em 30 dias.");
             mostrarOpcoes(String.valueOf(focoMinutos), "15 min", "25 min", "45 min");
         }
     }
@@ -211,7 +211,7 @@ public class OnboardingActivity extends AppCompatActivity {
         } else if (step == 4) {
             aguaAtual = lerDouble(resposta, 0.0);
             if (aguaAtual < 0) {
-                Toast.makeText(this, "Informe um valor valido.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Informe um valor válido.", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }

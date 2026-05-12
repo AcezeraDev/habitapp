@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="18dp">
 
         <TextView
             android:id="@+id/txtGreeting"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="Bom dia"
             android:textColor="@color/primary"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
@@ -28,16 +28,16 @@
             android:layout_marginTop="6dp"
             android:text="Seu painel de disciplina para hoje"
             android:textColor="@color/ink"
-            android:textSize="30sp"
+            android:textSize="26sp"
             android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="14dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
+            app:cardElevation="4dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -45,14 +45,14 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_score_gradient"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="18dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Score do dia"
                     android:textColor="@color/hero_text_soft"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -69,7 +69,7 @@
                         android:layout_weight="1"
                         android:text="0%"
                         android:textColor="@color/white"
-                        android:textSize="44sp"
+                        android:textSize="40sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -97,7 +97,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
@@ -169,7 +169,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
@@ -194,7 +194,7 @@
                         android:layout_height="wrap_content"
                         android:text="Água"
                         android:textColor="@color/water"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -204,7 +204,7 @@
                         android:layout_marginTop="8dp"
                         android:text="0 ml"
                         android:textColor="@color/ink"
-                        android:textSize="20sp"
+                        android:textSize="19sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -250,7 +250,7 @@
                         android:layout_height="wrap_content"
                         android:text="Foco"
                         android:textColor="@color/study"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -260,7 +260,7 @@
                         android:layout_marginTop="8dp"
                         android:text="0 min"
                         android:textColor="@color/ink"
-                        android:textSize="20sp"
+                        android:textSize="19sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -288,7 +288,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
@@ -343,7 +343,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
@@ -379,7 +379,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
@@ -395,7 +395,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Check-in rapido"
+                    android:text="Check-in rápido"
                     android:textColor="@color/ink"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -407,7 +407,7 @@
                     android:layout_marginTop="6dp"
                     android:text="Registre como você chegou hoje."
                     android:textColor="@color/muted"
-                    android:textSize="13sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -514,7 +514,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
@@ -542,7 +542,7 @@
                     android:layout_marginTop="6dp"
                     android:text="0 de 3 concluídos"
                     android:textColor="@color/muted"
-                    android:textSize="13sp" />
+                    android:textSize="12sp" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
                     android:id="@+id/progressChecklistHome"
@@ -559,7 +559,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Planejei as proximas acoes"
+                    android:text="Planejei as próximas ações"
                     android:textColor="@color/ink" />
 
                 <CheckBox
@@ -581,7 +581,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
@@ -609,7 +609,7 @@
                     android:layout_marginTop="6dp"
                     android:text="Crie hábitos pequenos para acompanhar hoje."
                     android:textColor="@color/muted"
-                    android:textSize="13sp" />
+                    android:textSize="12sp" />
 
                 <LinearLayout
                     android:id="@+id/layoutHabitosExtras"
@@ -659,10 +659,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
+            app:cardElevation="4dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -677,7 +677,7 @@
                     android:layout_height="wrap_content"
                     android:text="Desafio de evolução"
                     android:textColor="#FFF3E0"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -687,7 +687,7 @@
                     android:layout_marginTop="8dp"
                     android:text="Dia 1 de 30"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="19sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
@@ -717,3 +717,5 @@
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </ScrollView>
+
+

@@ -2,6 +2,7 @@ package com.exemple.habitapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
@@ -157,7 +159,7 @@ public class HomeFragment extends Fragment {
         txtHabitosResumo.setText(habitos.isEmpty()
                 ? "Crie hábitos pequenos para acompanhar hoje."
                 : habitosConcluidos + " de " + habitos.size() + " hábitos extras concluídos");
-        txtStreakHome.setText(streak + (streak == 1 ? " dia\nstreak" : " dias\nstreak"));
+        txtStreakHome.setText(streak + (streak == 1 ? " dia\nseguido" : " dias\nseguidos"));
         txtMediaHome.setText(weeklyAverage + "%\nmédia");
         txtNivelHome.setText(HabitStore.getLevelName(prefs) + "\nnível");
 
@@ -202,7 +204,7 @@ public class HomeFragment extends Fragment {
         CheckBox checkPlanejamento = view.findViewById(R.id.checkPlanejamento);
         CheckBox checkTreino = view.findViewById(R.id.checkTreino);
         CheckBox checkSono = view.findViewById(R.id.checkSono);
-        long hoje = getTodayKey();
+        long hoje = HabitStore.todayKey();
 
         checkPlanejamento.setChecked(prefs.getBoolean("check_planejamento_" + hoje, false));
         checkTreino.setChecked(prefs.getBoolean("check_treino_" + hoje, false));
@@ -277,6 +279,11 @@ public class HomeFragment extends Fragment {
         }
 
         for (String habito : habitos) {
+            LinearLayout row = new LinearLayout(getContext());
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setPadding(0, 4, 0, 4);
+
             CheckBox checkBox = new CheckBox(getContext());
             checkBox.setText(habito);
             checkBox.setTextColor(ContextCompat.getColor(requireContext(), R.color.ink));
@@ -288,8 +295,106 @@ public class HomeFragment extends Fragment {
                 atualizarResumo(rootView);
                 renderWeekBars(layoutWeekBarsHome);
             });
-            layoutHabitosExtras.addView(checkBox);
+
+            MaterialButton btnEdit = createIconButton(R.drawable.ic_edit, "Editar hábito");
+            btnEdit.setOnClickListener(v -> editarHabito(habito));
+
+            MaterialButton btnDelete = createIconButton(R.drawable.ic_delete, "Remover hábito");
+            btnDelete.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.danger)));
+            btnDelete.setOnClickListener(v -> confirmarRemocaoHabito(habito));
+
+            row.addView(checkBox, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+            row.addView(btnEdit);
+            row.addView(btnDelete);
+            layoutHabitosExtras.addView(row);
         }
+    }
+
+    private MaterialButton createIconButton(int iconRes, String description) {
+        MaterialButton button = new MaterialButton(requireContext(), null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
+        button.setIconResource(iconRes);
+        button.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_START);
+        button.setText("");
+        button.setContentDescription(description);
+        button.setTooltipText(description);
+        button.setMinWidth(0);
+        button.setMinimumWidth(0);
+        button.setMinHeight(0);
+        button.setMinimumHeight(0);
+        button.setInsetTop(0);
+        button.setInsetBottom(0);
+        button.setStrokeWidth(0);
+        button.setCornerRadius(dp(8));
+        button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.nav_selected_background)));
+        button.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.primary)));
+        button.setLayoutParams(new LinearLayout.LayoutParams(dp(42), dp(42)));
+        return button;
+    }
+
+    private void editarHabito(String habitoAtual) {
+        TextInputEditText input = new TextInputEditText(requireContext());
+        input.setText(habitoAtual);
+        input.setSelectAllOnFocus(true);
+        input.setSingleLine(true);
+        input.setPadding(dp(18), dp(8), dp(18), dp(8));
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Editar hábito")
+                .setView(input)
+                .setNegativeButton("Cancelar", null)
+                .setPositiveButton("Salvar", (dialog, which) -> {
+                    String novoHabito = input.getText() != null
+                            ? input.getText().toString().trim().replace("\n", " ").replace("|", "/")
+                            : "";
+
+                    if (TextUtils.isEmpty(novoHabito)) {
+                        Toast.makeText(getContext(), "Digite um nome para o hábito.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (!habitoAtual.equals(novoHabito) && getCustomHabits().contains(novoHabito)) {
+                        Toast.makeText(getContext(), "Esse hábito já existe.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    List<String> habitos = getCustomHabits();
+                    int index = habitos.indexOf(habitoAtual);
+                    if (index >= 0) {
+                        boolean concluidoHoje = isHabitoConcluido(habitoAtual);
+                        habitos.set(index, novoHabito);
+                        salvarCustomHabits(habitos);
+                        prefs.edit()
+                                .remove(getHabitoKey(habitoAtual))
+                                .putBoolean(getHabitoKey(novoHabito), concluidoHoje)
+                                .apply();
+                        HabitStore.saveTodaySnapshot(prefs);
+                        renderHabitosExtras();
+                        atualizarResumo(rootView);
+                        renderWeekBars(layoutWeekBarsHome);
+                    }
+                })
+                .show();
+    }
+
+    private void confirmarRemocaoHabito(String habito) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Remover hábito")
+                .setMessage("Remover \"" + habito + "\" da sua lista?")
+                .setNegativeButton("Cancelar", null)
+                .setPositiveButton("Remover", (dialog, which) -> removerHabito(habito))
+                .show();
+    }
+
+    private void removerHabito(String habito) {
+        List<String> habitos = getCustomHabits();
+        habitos.remove(habito);
+        salvarCustomHabits(habitos);
+        prefs.edit().remove(getHabitoKey(habito)).apply();
+        HabitStore.saveTodaySnapshot(prefs);
+        renderHabitosExtras();
+        atualizarResumo(rootView);
+        renderWeekBars(layoutWeekBarsHome);
+        Toast.makeText(getContext(), "Hábito removido.", Toast.LENGTH_SHORT).show();
     }
 
     private void renderWeekBars(LinearLayout layout) {
@@ -308,7 +413,7 @@ public class HomeFragment extends Fragment {
             label.setText(i == 6 ? "Hoje" : "-" + (6 - i) + "d");
             label.setTextColor(ContextCompat.getColor(requireContext(), R.color.muted));
             label.setTextSize(12f);
-            row.addView(label, new LinearLayout.LayoutParams(44, ViewGroup.LayoutParams.WRAP_CONTENT));
+            row.addView(label, new LinearLayout.LayoutParams(dp(48), ViewGroup.LayoutParams.WRAP_CONTENT));
 
             LinearProgressIndicator bar = new LinearProgressIndicator(requireContext());
             bar.setMax(100);
@@ -323,21 +428,21 @@ public class HomeFragment extends Fragment {
             value.setGravity(Gravity.END);
             value.setTextColor(ContextCompat.getColor(requireContext(), R.color.ink));
             value.setTextSize(12f);
-            row.addView(value, new LinearLayout.LayoutParams(48, ViewGroup.LayoutParams.WRAP_CONTENT));
+            row.addView(value, new LinearLayout.LayoutParams(dp(50), ViewGroup.LayoutParams.WRAP_CONTENT));
 
             layout.addView(row);
         }
     }
 
     private void salvarChecklist(String chave, boolean marcado) {
-        prefs.edit().putBoolean(chave + getTodayKey(), marcado).apply();
+        prefs.edit().putBoolean(chave + HabitStore.todayKey(), marcado).apply();
         HabitStore.saveTodaySnapshot(prefs);
         atualizarResumo(rootView);
         renderWeekBars(layoutWeekBarsHome);
     }
 
     private void salvarNivel(String prefixo, int nivel) {
-        prefs.edit().putInt(prefixo + getTodayKey(), nivel).apply();
+        prefs.edit().putInt(prefixo + HabitStore.todayKey(), nivel).apply();
         configurarCheckin(rootView);
         HabitStore.saveTodaySnapshot(prefs);
         atualizarResumo(rootView);
@@ -345,7 +450,7 @@ public class HomeFragment extends Fragment {
     }
 
     private int getChecklistConcluido() {
-        long hoje = getTodayKey();
+        long hoje = HabitStore.todayKey();
         int total = 0;
         if (prefs.getBoolean("check_planejamento_" + hoje, false)) total++;
         if (prefs.getBoolean("check_treino_" + hoje, false)) total++;
@@ -384,15 +489,15 @@ public class HomeFragment extends Fragment {
     }
 
     private String getHabitoKey(String habito) {
-        return "custom_habit_" + getTodayKey() + "_" + habito.hashCode();
+        return "custom_habit_" + HabitStore.todayKey() + "_" + habito.hashCode();
     }
 
     private int getMood() {
-        return prefs.getInt("mood_" + getTodayKey(), -1);
+        return prefs.getInt("mood_" + HabitStore.todayKey(), -1);
     }
 
     private int getEnergy() {
-        return prefs.getInt("energy_" + getTodayKey(), -1);
+        return prefs.getInt("energy_" + HabitStore.todayKey(), -1);
     }
 
     private void atualizarGrupoCheckin(MaterialButton baixo, MaterialButton medio, MaterialButton alto, int nivel) {
@@ -407,6 +512,10 @@ public class HomeFragment extends Fragment {
     private int calcularPercentual(double atual, double meta) {
         if (meta <= 0) return 0;
         return (int) Math.max(0, Math.min(100, Math.round((atual / meta) * 100)));
+    }
+
+    private int dp(int value) {
+        return (int) (value * getResources().getDisplayMetrics().density);
     }
 
     private String proximaAcao(int faltaAgua, int faltaEstudos) {
@@ -455,11 +564,11 @@ public class HomeFragment extends Fragment {
     }
 
     private boolean jaTirouFotoHoje() {
-        return getTodayKey() == prefs.getLong("ultimo_dia_foto", -1);
+        return HabitStore.todayKey() == prefs.getLong("ultimo_dia_foto", -1);
     }
 
     private void salvarFotoDoDia(Bitmap bitmap) {
-        long hoje = getTodayKey();
+        long hoje = HabitStore.todayKey();
         int diaAtual = prefs.getInt("challenge_day", 1);
 
         File pasta = new File(requireContext().getFilesDir(), "shape_challenge");
@@ -485,7 +594,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void registrarAgua(int quantidadeMl) {
-        String chave = "agua_log_" + getTodayKey();
+        String chave = "agua_log_" + HabitStore.todayKey();
         String horario = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
         String entrada = horario + " - " + quantidadeMl + " ml";
         String logAtual = prefs.getString(chave, "");
@@ -495,10 +604,6 @@ public class HomeFragment extends Fragment {
                 .putString(chave, novoLog)
                 .putInt("total_agua_ml_registrado", totalRegistrado)
                 .apply();
-    }
-
-    private long getTodayKey() {
-        return System.currentTimeMillis() / (1000L * 60 * 60 * 24);
     }
 
     private void atualizarGaleria() {
@@ -515,12 +620,12 @@ public class HomeFragment extends Fragment {
             card.setGravity(Gravity.CENTER);
             card.setPadding(8, 8, 8, 8);
 
-            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(132, ViewGroup.LayoutParams.WRAP_CONTENT);
-            cardParams.setMargins(0, 0, 12, 0);
+            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(dp(132), ViewGroup.LayoutParams.WRAP_CONTENT);
+            cardParams.setMargins(0, 0, dp(12), 0);
             card.setLayoutParams(cardParams);
 
             ImageView imagem = new ImageView(getContext());
-            imagem.setLayoutParams(new LinearLayout.LayoutParams(116, 116));
+            imagem.setLayoutParams(new LinearLayout.LayoutParams(dp(116), dp(116)));
             imagem.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             if (caminhoFoto != null) {

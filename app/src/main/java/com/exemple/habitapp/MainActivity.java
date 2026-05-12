@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeController.apply(this);
         setContentView(R.layout.activity_main);
         HabitStore.ensureToday(getSharedPreferences("habit_data", MODE_PRIVATE));
+        HabitWidgetProvider.updateAll(this);
         NotificationHelper.createChannels(this);
         ReminderScheduler.scheduleDefaultReminders(this);
         requestNotificationPermissionIfNeeded();
@@ -38,10 +41,25 @@ public class MainActivity extends AppCompatActivity {
         bottomNavContainer = findViewById(R.id.bottom_nav_container);
         configurarNavegacaoInferior();
 
+        int requestedItem = getIntent() != null ? getIntent().getIntExtra("nav_target", R.id.home) : R.id.home;
         int initialItem = savedInstanceState != null
                 ? savedInstanceState.getInt(STATE_ITEM_ID, R.id.home)
-                : R.id.home;
+                : requestedItem;
         navigateTo(initialItem);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HabitWidgetProvider.updateAll(this);
+    }
+
+    @Override
+    protected void onNewIntent(android.content.Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        int target = intent != null ? intent.getIntExtra("nav_target", currentItemId) : currentItemId;
+        navigateTo(target);
     }
 
     @Override
@@ -51,13 +69,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configurarNavegacaoInferior() {
-        adicionarItemNav("Início", R.id.home, R.drawable.ic_nav_home);
+        adicionarItemNav("Hoje", R.id.home, R.drawable.ic_nav_home);
         adicionarItemNav("Água", R.id.agua, R.drawable.ic_nav_water);
         adicionarItemNav("Foco", R.id.estudos, R.drawable.ic_nav_focus);
-        adicionarItemNav("Rotina", R.id.rotina, R.drawable.ic_nav_routine);
-        adicionarItemNav("Metas", R.id.metas, R.drawable.ic_nav_goals);
-        adicionarItemNav("Perfil", R.id.perfil, R.drawable.ic_nav_profile);
-        adicionarItemNav("Progresso", R.id.progresso, R.drawable.ic_nav_chart);
+        adicionarItemNav("Ritmo", R.id.rotina, R.drawable.ic_nav_routine);
+        adicionarItemNav("Mais", R.id.mais, R.drawable.ic_nav_more);
     }
 
     private void adicionarItemNav(String titulo, int id, int iconRes) {
@@ -65,11 +81,16 @@ public class MainActivity extends AppCompatActivity {
         button.setId(View.generateViewId());
         button.setTag(id);
         button.setText(titulo);
-        button.setTextSize(11f);
+        button.setTextSize(9.5f);
+        button.setSingleLine(true);
+        button.setMaxLines(1);
+        button.setEllipsize(TextUtils.TruncateAt.END);
+        button.setIncludeFontPadding(false);
         button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         button.setGravity(Gravity.CENTER);
         button.setAllCaps(false);
         button.setIconResource(iconRes);
+        button.setIconSize(dp(22));
         button.setIconGravity(MaterialButton.ICON_GRAVITY_TOP);
         button.setIconPadding(dp(2));
         button.setMinWidth(0);
@@ -87,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dp(78), ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
         params.setMargins(2, 6, 2, 6);
         bottomNavContainer.addView(button, params);
     }
@@ -109,18 +130,33 @@ public class MainActivity extends AppCompatActivity {
             if (!(child instanceof MaterialButton)) continue;
 
             MaterialButton button = (MaterialButton) child;
-            boolean selected = button.getTag() instanceof Integer && ((Integer) button.getTag()) == currentItemId;
+            boolean selected = button.getTag() instanceof Integer && isNavItemSelected((Integer) button.getTag());
             int color = selected ? selectedColor : defaultColor;
 
             button.setTextColor(color);
             button.setIconTint(ColorStateList.valueOf(color));
             button.setBackgroundTintList(ColorStateList.valueOf(selected ? selectedBackground : transparent));
             button.animate()
-                    .scaleX(selected ? 1.04f : 1f)
-                    .scaleY(selected ? 1.04f : 1f)
+                    .scaleX(selected ? 1.02f : 1f)
+                    .scaleY(selected ? 1.02f : 1f)
                     .setDuration(160)
                     .start();
         }
+    }
+
+    private boolean isNavItemSelected(int navItemId) {
+        if (navItemId == currentItemId) return true;
+        if (navItemId == R.id.mais) {
+            return currentItemId == R.id.progresso
+                    || currentItemId == R.id.metas
+                    || currentItemId == R.id.perfil
+                    || currentItemId == R.id.historico
+                    || currentItemId == R.id.configuracoes
+                    || currentItemId == R.id.backup
+                    || currentItemId == R.id.conquistas
+                    || currentItemId == R.id.calendario;
+        }
+        return false;
     }
 
     private void loadFragmentById(int id) {
@@ -132,12 +168,24 @@ public class MainActivity extends AppCompatActivity {
             loadFragment(new EstudosFragment());
         } else if (id == R.id.rotina) {
             loadFragment(new RotinaFragment());
+        } else if (id == R.id.mais) {
+            loadFragment(new MaisFragment());
         } else if (id == R.id.metas) {
             loadFragment(new MetasFragment());
         } else if (id == R.id.perfil) {
             loadFragment(new PerfilFragment());
         } else if (id == R.id.progresso) {
             loadFragment(new ProgressoFragment());
+        } else if (id == R.id.historico) {
+            loadFragment(new HistoricoFragment());
+        } else if (id == R.id.configuracoes) {
+            loadFragment(new ConfiguracoesFragment());
+        } else if (id == R.id.backup) {
+            loadFragment(new BackupFragment());
+        } else if (id == R.id.conquistas) {
+            loadFragment(new ConquistasFragment());
+        } else if (id == R.id.calendario) {
+            loadFragment(new CalendarioFragment());
         }
     }
 

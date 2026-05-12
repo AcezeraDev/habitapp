@@ -103,7 +103,7 @@ public class AguaFragment extends Fragment {
             }
 
             try {
-                adicionarQuantidade(Double.parseDouble(input));
+                adicionarQuantidade(parseDecimal(input));
                 binding.editQuantidade.setText("");
                 binding.editQuantidade.clearFocus();
             } catch (NumberFormatException e) {
@@ -127,7 +127,7 @@ public class AguaFragment extends Fragment {
             if (input.isEmpty()) return;
 
             try {
-                double novaMeta = Double.parseDouble(input);
+                double novaMeta = parseDecimal(input);
                 viewModel.salvarNovaMeta(novaMeta);
                 HabitStore.saveTodaySnapshot(prefs);
                 binding.editMeta.clearFocus();
@@ -208,11 +208,11 @@ public class AguaFragment extends Fragment {
     }
 
     private String getLogKey() {
-        return "agua_log_" + getTodayKey();
+        return "agua_log_" + HabitStore.todayKey();
     }
 
-    private long getTodayKey() {
-        return System.currentTimeMillis() / (1000L * 60 * 60 * 24);
+    private double parseDecimal(String input) {
+        return Double.parseDouble(input.trim().replace(",", "."));
     }
 
     @Override

@@ -42,9 +42,9 @@ public class MetasFragment extends Fragment {
         sliderSessao = view.findViewById(R.id.sliderSessao);
         MaterialButton btnSalvar = view.findViewById(R.id.btnSalvarMetas);
 
-        sliderAgua.setValue(prefs.getFloat("meta_litros", 2.0f));
-        sliderEstudo.setValue(prefs.getInt("meta_estudos_min", 60));
-        sliderSessao.setValue(prefs.getInt("foco_minutos", 25));
+        setSliderValueSafely(sliderAgua, prefs.getFloat("meta_litros", 2.0f));
+        setSliderValueSafely(sliderEstudo, prefs.getInt("meta_estudos_min", 60));
+        setSliderValueSafely(sliderSessao, prefs.getInt("foco_minutos", 25));
 
         sliderAgua.addOnChangeListener((slider, value, fromUser) -> atualizarLabels());
         sliderEstudo.addOnChangeListener((slider, value, fromUser) -> atualizarLabels());
@@ -71,6 +71,20 @@ public class MetasFragment extends Fragment {
 
         HabitStore.saveTodaySnapshot(prefs);
         Toast.makeText(getContext(), "Metas salvas.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setSliderValueSafely(Slider slider, float value) {
+        float min = slider.getValueFrom();
+        float max = slider.getValueTo();
+        float clamped = Math.max(min, Math.min(max, value));
+        float step = slider.getStepSize();
+
+        if (step > 0f) {
+            clamped = min + Math.round((clamped - min) / step) * step;
+            clamped = Math.max(min, Math.min(max, clamped));
+        }
+
+        slider.setValue(clamped);
     }
 
     private String criarInsight() {

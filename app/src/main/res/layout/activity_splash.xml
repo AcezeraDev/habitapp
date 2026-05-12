@@ -32,3 +32,4 @@
         android:textColor="@color/hero_text_soft"
         android:textSize="16sp" />
 </LinearLayout>
+

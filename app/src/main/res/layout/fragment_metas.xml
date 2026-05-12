@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="18dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Metas"
             android:textColor="@color/ink"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <TextView
@@ -67,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:text="Foco diario: 60 min"
+                    android:text="Foco diário: 60 min"
                     android:textColor="@color/ink"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:text="Sessao padrao: 25 min"
+                    android:text="Sessão padrão: 25 min"
                     android:textColor="@color/ink"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -115,8 +115,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:text="Metas boas sao claras, visiveis e possiveis."
+            android:text="Metas boas são claras, visíveis e possíveis."
             android:textColor="@color/muted"
             android:textSize="14sp" />
     </LinearLayout>
 </ScrollView>
+

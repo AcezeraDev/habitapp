@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="18dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Modo foco"
             android:textColor="@color/ink"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <TextView
@@ -32,25 +32,25 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
+            app:cardElevation="4dp"
             app:strokeWidth="0dp">
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="320dp"
+                android:layout_height="286dp"
                 android:background="@drawable/bg_focus_gradient"
-                android:padding="20dp">
+                android:padding="18dp">
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/progressTimer"
-                    android:layout_width="260dp"
-                    android:layout_height="260dp"
+                    android:layout_width="228dp"
+                    android:layout_height="228dp"
                     android:layout_gravity="center"
                     app:indicatorColor="@color/success"
-                    app:indicatorSize="260dp"
+                    app:indicatorSize="228dp"
                     app:trackColor="#7357CE"
                     app:trackThickness="12dp" />
 
@@ -61,7 +61,7 @@
                     android:layout_gravity="center"
                     android:text="25:00"
                     android:textColor="@color/white"
-                    android:textSize="54sp"
+                    android:textSize="44sp"
                     android:textStyle="bold" />
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -277,3 +277,4 @@
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </ScrollView>
+

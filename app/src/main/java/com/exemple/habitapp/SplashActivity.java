@@ -1,6 +1,7 @@
 package com.exemple.habitapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,6 +14,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeController.apply(this);
         setContentView(R.layout.activity_splash);
 
         View logo = findViewById(R.id.imgSplashLogo);
@@ -27,7 +29,11 @@ public class SplashActivity extends AppCompatActivity {
                 .start();
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(this, OnboardingActivity.class));
+            SharedPreferences prefs = getSharedPreferences("habit_data", MODE_PRIVATE);
+            Class<?> destino = prefs.getBoolean("perfil_logado", false)
+                    ? OnboardingActivity.class
+                    : LoginActivity.class;
+            startActivity(new Intent(this, destino));
             finish();
         }, 850);
     }

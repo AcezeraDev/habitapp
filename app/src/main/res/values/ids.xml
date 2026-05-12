@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="home" type="id" />
+    <item name="agua" type="id" />
+    <item name="estudos" type="id" />
     <item name="rotina" type="id" />
     <item name="metas" type="id" />
     <item name="perfil" type="id" />
+    <item name="progresso" type="id" />
+    <item name="mais" type="id" />
+    <item name="historico" type="id" />
+    <item name="configuracoes" type="id" />
+    <item name="backup" type="id" />
+    <item name="conquistas" type="id" />
+    <item name="calendario" type="id" />
 </resources>

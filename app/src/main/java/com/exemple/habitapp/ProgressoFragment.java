@@ -57,6 +57,8 @@ public class ProgressoFragment extends Fragment {
         int checklist = getChecklistConcluido(prefs);
         List<String> habitos = getCustomHabits(prefs);
         int habitosConcluidos = getHabitosExtrasConcluidos(prefs, habitos);
+        int totalAgua = prefs.getInt("total_agua_ml_registrado", 0);
+        int totalFoco = prefs.getInt("total_foco_min_registrado", 0);
 
         int aguaMl = (int) Math.round(aguaLitros * 1000);
         int metaMl = (int) Math.round(metaLitros * 1000);
@@ -69,7 +71,7 @@ public class ProgressoFragment extends Fragment {
         int weeklyAverage = HabitStore.getWeeklyAverage(prefs);
 
         UiAnimator.animatePercentText(txtScore, score);
-        txtResumoSemana.setText("Média " + weeklyAverage + "% | streak " + streak + (streak == 1 ? " dia" : " dias"));
+        txtResumoSemana.setText("Média " + weeklyAverage + "% | sequência " + streak + (streak == 1 ? " dia" : " dias") + " | " + totalFoco + " min foco total");
         txtNivelProgresso.setText("Nível: " + HabitStore.getLevelName(prefs));
         txtResumo.setText(aguaMl + " ml / " + metaMl + " ml");
         txtEstudos.setText(estudos + " min / " + metaEstudos + " min");
@@ -78,8 +80,8 @@ public class ProgressoFragment extends Fragment {
         txtHabitos.setText(habitos.isEmpty()
                 ? "Nenhum hábito extra criado"
                 : habitosConcluidos + " de " + habitos.size() + " concluídos");
-        txtHumor.setText("Humor: " + labelNivel(prefs.getInt("mood_" + getTodayKey(), -1)));
-        txtEnergia.setText("Energia: " + labelNivel(prefs.getInt("energy_" + getTodayKey(), -1)));
+        txtHumor.setText("Humor: " + labelNivel(prefs.getInt("mood_" + HabitStore.todayKey(), -1)));
+        txtEnergia.setText("Energia: " + labelNivel(prefs.getInt("energy_" + HabitStore.todayKey(), -1)));
         txtInsights.setText(criarInsight(aguaPercent, estudoPercent, checklistPercent, habitosPercent, habitos.isEmpty()));
 
         UiAnimator.animateProgress(progressAgua, aguaPercent);
@@ -88,13 +90,13 @@ public class ProgressoFragment extends Fragment {
         UiAnimator.animateProgress(progressHabitos, habitosPercent);
         renderWeekBars(layoutWeekBars, prefs);
         renderWeekChart(layoutWeekChart, prefs);
-        renderConquistas(layoutConquistas, score, aguaPercent, estudoPercent, checklistPercent, habitos, habitosConcluidos, sessoes);
+        renderConquistas(layoutConquistas, score, aguaPercent, estudoPercent, checklistPercent, habitos, habitosConcluidos, sessoes, streak, weeklyAverage, totalAgua, totalFoco);
 
         return view;
     }
 
     private int getChecklistConcluido(SharedPreferences prefs) {
-        long hoje = getTodayKey();
+        long hoje = HabitStore.todayKey();
         int total = 0;
         if (prefs.getBoolean("check_planejamento_" + hoje, false)) total++;
         if (prefs.getBoolean("check_treino_" + hoje, false)) total++;
@@ -125,10 +127,10 @@ public class ProgressoFragment extends Fragment {
     }
 
     private String getHabitoKey(String habito) {
-        return "custom_habit_" + getTodayKey() + "_" + habito.hashCode();
+        return "custom_habit_" + HabitStore.todayKey() + "_" + habito.hashCode();
     }
 
-    private void renderConquistas(LinearLayout layout, int score, int agua, int estudo, int checklist, List<String> habitos, int habitosConcluidos, int sessoes) {
+    private void renderConquistas(LinearLayout layout, int score, int agua, int estudo, int checklist, List<String> habitos, int habitosConcluidos, int sessoes, int streak, int weeklyAverage, int totalAgua, int totalFoco) {
         layout.removeAllViews();
 
         adicionarConquista(layout, agua >= 100, "Meta de água fechada");
@@ -137,6 +139,11 @@ public class ProgressoFragment extends Fragment {
         adicionarConquista(layout, score >= 80, "Score acima de 80%");
         adicionarConquista(layout, sessoes >= 3, "3 sessões de foco no dia");
         adicionarConquista(layout, !habitos.isEmpty() && habitosConcluidos == habitos.size(), "Todos os hábitos extras concluídos");
+        adicionarConquista(layout, streak >= 3, "3 dias fortes em sequência");
+        adicionarConquista(layout, streak >= 7, "7 dias de consistência");
+        adicionarConquista(layout, weeklyAverage >= 70, "Média semanal acima de 70%");
+        adicionarConquista(layout, totalAgua >= 10000, "10 litros de água registrados");
+        adicionarConquista(layout, totalFoco >= 300, "300 minutos de foco registrados");
     }
 
     private void adicionarConquista(LinearLayout layout, boolean concluida, String titulo) {
@@ -197,7 +204,7 @@ public class ProgressoFragment extends Fragment {
             label.setText(i == 6 ? "Hoje" : "-" + (6 - i) + "d");
             label.setTextColor(ContextCompat.getColor(requireContext(), R.color.muted));
             label.setTextSize(12f);
-            row.addView(label, new LinearLayout.LayoutParams(44, ViewGroup.LayoutParams.WRAP_CONTENT));
+            row.addView(label, new LinearLayout.LayoutParams(dp(48), ViewGroup.LayoutParams.WRAP_CONTENT));
 
             LinearProgressIndicator bar = new LinearProgressIndicator(requireContext());
             bar.setMax(100);
@@ -211,7 +218,7 @@ public class ProgressoFragment extends Fragment {
             value.setGravity(Gravity.END);
             value.setTextColor(ContextCompat.getColor(requireContext(), R.color.ink));
             value.setTextSize(12f);
-            row.addView(value, new LinearLayout.LayoutParams(48, ViewGroup.LayoutParams.WRAP_CONTENT));
+            row.addView(value, new LinearLayout.LayoutParams(dp(50), ViewGroup.LayoutParams.WRAP_CONTENT));
 
             layout.addView(row);
         }
@@ -253,7 +260,4 @@ public class ProgressoFragment extends Fragment {
         return (int) (value * getResources().getDisplayMetrics().density);
     }
 
-    private long getTodayKey() {
-        return System.currentTimeMillis() / (1000L * 60 * 60 * 24);
-    }
 }

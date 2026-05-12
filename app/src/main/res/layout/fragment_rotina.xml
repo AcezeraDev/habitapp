@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="18dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Rotina"
             android:textColor="@color/ink"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
+            app:cardElevation="4dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -216,3 +216,4 @@
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </ScrollView>
+

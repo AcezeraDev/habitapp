@@ -51,10 +51,11 @@ public class OnboardingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeController.apply(this);
 
         prefs = getSharedPreferences("habit_data", Context.MODE_PRIVATE);
 
-        boolean setupDeHoje = prefs.getLong("daily_setup_day", -1) == getTodayKey();
+        boolean setupDeHoje = prefs.getLong("daily_setup_day", -1) == HabitStore.todayKey();
         boolean fluxoAtualizado = prefs.getInt("onboarding_version", 0) == ONBOARDING_VERSION;
 
         if (setupDeHoje && fluxoAtualizado) {
@@ -209,11 +210,12 @@ public class OnboardingActivity extends AppCompatActivity {
         if (step == 0) {
             nome = resposta;
         } else if (step == 4) {
-            aguaAtual = lerDouble(resposta, 0.0);
-            if (aguaAtual < 0) {
+            Double litros = TextUtils.isEmpty(resposta) ? 0.0 : parseDoubleOrNull(resposta);
+            if (litros == null || litros < 0) {
                 Toast.makeText(this, "Informe um valor válido.", Toast.LENGTH_SHORT).show();
                 return false;
             }
+            aguaAtual = litros;
         }
 
         return true;
@@ -236,7 +238,7 @@ public class OnboardingActivity extends AppCompatActivity {
                 .putInt("foco_minutos", focoMinutos)
                 .putInt("challenge_goal_days", diasDesafio)
                 .putInt("onboarding_version", ONBOARDING_VERSION)
-                .putLong("daily_setup_day", getTodayKey())
+                .putLong("daily_setup_day", HabitStore.todayKey())
                 .apply();
 
         abrirApp();
@@ -247,11 +249,16 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
     private double lerDouble(String valor, double padrao) {
+        Double parsed = parseDoubleOrNull(valor);
+        return parsed != null ? parsed : padrao;
+    }
+
+    private Double parseDoubleOrNull(String valor) {
         try {
-            String limpo = valor.replace(",", ".");
-            return TextUtils.isEmpty(limpo) ? padrao : Double.parseDouble(limpo);
+            String limpo = valor.trim().replace(",", ".");
+            return TextUtils.isEmpty(limpo) ? null : Double.parseDouble(limpo);
         } catch (NumberFormatException e) {
-            return padrao;
+            return null;
         }
     }
 
@@ -265,10 +272,6 @@ public class OnboardingActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             return padrao;
         }
-    }
-
-    private long getTodayKey() {
-        return System.currentTimeMillis() / (1000L * 60 * 60 * 24);
     }
 
     private void abrirApp() {

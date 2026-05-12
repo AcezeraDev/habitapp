@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="18dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hidratação"
             android:textColor="@color/ink"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
+            app:cardElevation="4dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_water_gradient"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="18dp">
 
                 <TextView
                     android:id="@+id/txtAgua"
@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:text="0.00 L"
                     android:textColor="@color/white"
-                    android:textSize="48sp"
+                    android:textSize="44sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -132,8 +132,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Adicionar rapido"
+            android:layout_marginTop="16dp"
+            android:text="Adicionar rápido"
             android:textColor="@color/ink"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -323,3 +323,4 @@
             android:textColor="@color/danger" />
     </LinearLayout>
 </ScrollView>
+

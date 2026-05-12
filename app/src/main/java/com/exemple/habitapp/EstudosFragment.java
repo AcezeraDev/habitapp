@@ -254,11 +254,7 @@ public class EstudosFragment extends Fragment {
     }
 
     private String getLogKey() {
-        return "focus_log_" + getTodayKey();
-    }
-
-    private long getTodayKey() {
-        return System.currentTimeMillis() / (1000L * 60 * 60 * 24);
+        return "focus_log_" + HabitStore.todayKey();
     }
 
     @Override

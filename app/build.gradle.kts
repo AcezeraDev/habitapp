@@ -10,8 +10,8 @@ android {
         applicationId = "com.exemple.habitapp"
         minSdk = 21
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 6
+        versionName = "1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,6 +31,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

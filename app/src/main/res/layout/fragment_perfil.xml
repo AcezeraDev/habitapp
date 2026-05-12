@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="18dp"
+        android:paddingBottom="132dp">
 
         <TextView
             android:id="@+id/txtPerfilTitulo"
@@ -18,7 +19,7 @@
             android:layout_height="wrap_content"
             android:text="Perfil"
             android:textColor="@color/ink"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <TextView
@@ -34,9 +35,111 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/imgPerfilAvatar"
+                    android:layout_width="92dp"
+                    android:layout_height="92dp"
+                    android:background="@drawable/shape_circle_avatar"
+                    android:clipToOutline="true"
+                    android:contentDescription="Foto do perfil"
+                    android:padding="16dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_nav_profile" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtPerfilEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="email@exemplo.com"
+                        android:textColor="@color/ink"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Foto e dados do seu perfil local"
+                        android:textColor="@color/muted"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/txtPerfilBadges"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="0 medalhas liberadas"
+                        android:textColor="@color/primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTrocarFotoPerfil"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="44dp"
+                            android:layout_weight="1"
+                            android:text="Foto"
+                            android:textAllCaps="false"
+                            android:textColor="@color/primary"
+                            app:cornerRadius="8dp"
+                            app:icon="@drawable/ic_edit"
+                            app:iconTint="@color/primary"
+                            app:strokeColor="@color/line" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnRemoverFotoPerfil"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:layout_marginStart="8dp"
+                            android:contentDescription="Remover foto"
+                            app:cornerRadius="8dp"
+                            app:icon="@drawable/ic_delete"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            app:iconTint="@color/danger"
+                            app:strokeColor="@color/line" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
+            app:cardElevation="4dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -101,6 +204,25 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutPerfilEmail"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:hint="E-mail"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputPerfilEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutPerfilObjetivo"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -128,6 +250,18 @@
                     android:textAllCaps="false"
                     app:backgroundTint="@color/coral"
                     app:cornerRadius="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSairPerfil"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Sair da conta"
+                    android:textAllCaps="false"
+                    android:textColor="@color/danger"
+                    app:cornerRadius="8dp"
+                    app:strokeColor="@color/line" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -152,3 +286,4 @@
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </ScrollView>
+

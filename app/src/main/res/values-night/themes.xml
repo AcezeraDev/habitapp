@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.HabitApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:fontFamily">sans</item>
+    <style name="Base.Theme.HabitApp.Common" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:fontFamily">sans-serif</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/study</item>
@@ -9,9 +9,9 @@
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/ink</item>
         <item name="colorOutline">@color/line</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowLightNavigationBar">false</item>
         <item name="android:statusBarColor">@color/screen_start</item>
         <item name="android:navigationBarColor">@color/surface</item>
     </style>
+
+    <style name="Base.Theme.HabitApp" parent="Base.Theme.HabitApp.Common" />
 </resources>

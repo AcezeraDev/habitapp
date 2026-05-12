@@ -4,11 +4,13 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public final class HabitStore {
 
     public static final String CUSTOM_HABITS_KEY = "custom_habits";
+    private static final long DAY_MILLIS = 1000L * 60L * 60L * 24L;
 
     private HabitStore() {
     }
@@ -19,6 +21,12 @@ public final class HabitStore {
 
         if (lastActiveDay == -1) {
             prefs.edit().putLong("last_active_day", today).apply();
+            saveTodaySnapshot(prefs);
+            return;
+        }
+
+        if (lastActiveDay != today && lastActiveDay == legacyUtcTodayKey()) {
+            migrateLegacyCurrentDay(prefs, lastActiveDay, today);
             saveTodaySnapshot(prefs);
             return;
         }
@@ -89,10 +97,9 @@ public final class HabitStore {
 
     public static int[] getWeekScores(SharedPreferences prefs) {
         int[] scores = new int[7];
-        long today = todayKey();
 
         for (int i = 0; i < 7; i++) {
-            long day = today - (6 - i);
+            long day = dayKey(i - 6);
             scores[i] = getScoreForDay(prefs, day);
         }
 
@@ -112,10 +119,9 @@ public final class HabitStore {
 
     public static int getStreak(SharedPreferences prefs) {
         int streak = 0;
-        long today = todayKey();
 
         for (int i = 0; i < 90; i++) {
-            if (getScoreForDay(prefs, today - i) >= 80) {
+            if (getScoreForDay(prefs, dayKey(-i)) >= 80) {
                 streak++;
             } else {
                 break;
@@ -181,12 +187,83 @@ public final class HabitStore {
         return "custom_habit_" + day + "_" + habito.hashCode();
     }
 
+    private static void migrateLegacyCurrentDay(SharedPreferences prefs, long legacyDay, long today) {
+        SharedPreferences.Editor editor = prefs.edit()
+                .putLong("last_active_day", today);
+
+        copyBoolean(editor, prefs, "check_planejamento_", legacyDay, today);
+        copyBoolean(editor, prefs, "check_treino_", legacyDay, today);
+        copyBoolean(editor, prefs, "check_sono_", legacyDay, today);
+        copyBoolean(editor, prefs, "rotina_bloco_manha_", legacyDay, today);
+        copyBoolean(editor, prefs, "rotina_bloco_alimentacao_", legacyDay, today);
+        copyBoolean(editor, prefs, "rotina_bloco_treino_", legacyDay, today);
+        copyBoolean(editor, prefs, "rotina_bloco_sono_", legacyDay, today);
+        copyInt(editor, prefs, "mood_", legacyDay, today);
+        copyInt(editor, prefs, "energy_", legacyDay, today);
+        copyString(editor, prefs, "agua_log_", legacyDay, today);
+        copyString(editor, prefs, "focus_log_", legacyDay, today);
+
+        for (String habito : getCustomHabits(prefs)) {
+            String oldKey = getHabitoKey(habito, legacyDay);
+            if (prefs.contains(oldKey)) {
+                editor.putBoolean(getHabitoKey(habito, today), prefs.getBoolean(oldKey, false));
+            }
+        }
+
+        if (prefs.getLong("daily_setup_day", -1) == legacyDay) {
+            editor.putLong("daily_setup_day", today);
+        }
+        if (prefs.getLong("ultimo_dia_foto", -1) == legacyDay) {
+            editor.putLong("ultimo_dia_foto", today);
+        }
+
+        editor.apply();
+    }
+
+    private static void copyBoolean(SharedPreferences.Editor editor, SharedPreferences prefs, String prefix, long oldDay, long newDay) {
+        String oldKey = prefix + oldDay;
+        if (prefs.contains(oldKey)) {
+            editor.putBoolean(prefix + newDay, prefs.getBoolean(oldKey, false));
+        }
+    }
+
+    private static void copyInt(SharedPreferences.Editor editor, SharedPreferences prefs, String prefix, long oldDay, long newDay) {
+        String oldKey = prefix + oldDay;
+        if (prefs.contains(oldKey)) {
+            editor.putInt(prefix + newDay, prefs.getInt(oldKey, -1));
+        }
+    }
+
+    private static void copyString(SharedPreferences.Editor editor, SharedPreferences prefs, String prefix, long oldDay, long newDay) {
+        String oldKey = prefix + oldDay;
+        if (prefs.contains(oldKey)) {
+            editor.putString(prefix + newDay, prefs.getString(oldKey, ""));
+        }
+    }
+
     public static int percent(double atual, double meta) {
         if (meta <= 0) return 0;
         return (int) Math.max(0, Math.min(100, Math.round((atual / meta) * 100)));
     }
 
     public static long todayKey() {
-        return System.currentTimeMillis() / (1000L * 60 * 60 * 24);
+        return dayKey(0);
+    }
+
+    public static long dayKey(int daysFromToday) {
+        Calendar calendar = Calendar.getInstance();
+        if (daysFromToday != 0) {
+            calendar.add(Calendar.DAY_OF_YEAR, daysFromToday);
+        }
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTimeInMillis() / DAY_MILLIS;
+    }
+
+    private static long legacyUtcTodayKey() {
+        return System.currentTimeMillis() / DAY_MILLIS;
     }
 }

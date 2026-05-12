@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
+import java.util.Locale;
+
 public class RotinaFragment extends Fragment {
 
     private SharedPreferences prefs;
@@ -89,7 +91,7 @@ public class RotinaFragment extends Fragment {
         int score = HabitStore.percent(concluidos, 4);
         String periodo = prefs.getString("rotina_periodo_principal", prefs.getString("melhor_horario", "Manhã"));
 
-        txtResumo.setText(concluidos + " de 4 blocos concluídos no período " + periodo.toLowerCase() + ".");
+        txtResumo.setText(concluidos + " de 4 blocos concluídos no período " + periodo.toLowerCase(Locale.ROOT) + ".");
         UiAnimator.animatePercentText(txtScore, score);
         UiAnimator.animateProgress(progressRotina, score);
         txtPlano.setText(criarPlano(periodo, concluidos));
@@ -111,7 +113,7 @@ public class RotinaFragment extends Fragment {
         }
 
         if (concluidos < 4) {
-            return "Foque no próximo bloco do período " + periodo.toLowerCase() + ". Rotina forte nasce de repetição simples.";
+            return "Foque no próximo bloco do período " + periodo.toLowerCase(Locale.ROOT) + ". Rotina forte nasce de repetição simples.";
         }
 
         return "Rotina fechada. Agora mantenha o ambiente pronto para repetir amanhã.";

@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/surface_elevated"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
+        app:cardElevation="4dp"
         app:strokeColor="@color/line"
         app:strokeWidth="1dp">
 
@@ -165,3 +165,4 @@
             app:cornerRadius="8dp" />
     </LinearLayout>
 </LinearLayout>
+

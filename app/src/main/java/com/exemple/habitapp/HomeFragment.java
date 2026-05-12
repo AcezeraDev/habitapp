@@ -151,7 +151,7 @@ public class HomeFragment extends Fragment {
         txtGreeting.setText(getSaudacao() + ", " + nome);
         txtHomeXp.setText("Nivel " + XpEngine.getLevel(prefs) + " | " + XpEngine.getBaseXp(prefs) + " XP");
         txtHomeMission.setText("Missao em foco: " + MissionEngine.getNextMissionTitle(missions));
-        txtHomeTheme.setText("Tema ativo: " + ThemeController.getAccentTheme(requireContext()));
+            txtHomeTheme.setText("Tema ativo: " + ThemeController.getAccentTheme(requireContext()) + " | " + ThemeController.getModeLabel(requireContext()));
         UiAnimator.animatePercentText(txtScore, score);
         txtScoreLabel.setText(score >= 100 ? "Dia fechado com consistência" : "Próxima meta: " + proximaAcao(faltaAgua, faltaEstudos));
         txtAguaHome.setText(aguaMl + " / " + metaMl + " ml");

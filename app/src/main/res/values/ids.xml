@@ -15,6 +15,7 @@
     <item name="calendario" type="id" />
     <item name="missoes" type="id" />
     <item name="relatorio" type="id" />
+    <item name="aparencia" type="id" />
     <item name="temas" type="id" />
     <item name="desafios" type="id" />
     <item name="diario" type="id" />

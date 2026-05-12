@@ -24,6 +24,10 @@ public final class ThemeController {
         return prefs.getBoolean(PREF_DARK_MODE, false);
     }
 
+    public static String getModeLabel(Context context) {
+        return isDarkMode(context) ? "Escuro" : "Claro";
+    }
+
     public static void setDarkMode(Context context, boolean enabled) {
         context.getSharedPreferences("habit_data", Context.MODE_PRIVATE)
                 .edit()

@@ -9,6 +9,7 @@ HabitApp e um app Android para acompanhar rotina, hidratacao, foco, metas e prog
 - Tela de abertura personalizada com identidade visual propria.
 - Painel de score com animacoes e cards em destaque.
 - Modo escuro com paleta dedicada.
+- Tela de aparencia para alternar entre modo claro e escuro.
 - Grafico semanal, calendario mensal, conquistas e leitura rapida de progresso.
 - Widget Android com score, agua, foco e acao rapida de +250 ml.
 - Lembretes locais inteligentes para agua, foco e fechamento da rotina.
@@ -21,7 +22,7 @@ HabitApp e um app Android para acompanhar rotina, hidratacao, foco, metas e prog
 
 ## Download
 
-APK debug atual: [`dist/HabitApp-v1.6-debug.apk`](dist/HabitApp-v1.6-debug.apk)
+APK debug atual: [`dist/HabitApp-v1.7-debug.apk`](dist/HabitApp-v1.7-debug.apk)
 
 ## Build
 
@@ -39,4 +40,4 @@ Para gerar uma APK de release local:
 
 ## Versao
 
-Versao atual: `1.6`
+Versao atual: `1.7`

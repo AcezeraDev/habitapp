@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
                     || currentItemId == R.id.calendario
                     || currentItemId == R.id.missoes
                     || currentItemId == R.id.relatorio
+                    || currentItemId == R.id.aparencia
                     || currentItemId == R.id.temas
                     || currentItemId == R.id.desafios
                     || currentItemId == R.id.diario
@@ -196,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
             loadFragment(new MissoesFragment());
         } else if (id == R.id.relatorio) {
             loadFragment(new RelatorioFragment());
+        } else if (id == R.id.aparencia) {
+            loadFragment(new AparenciaFragment());
         } else if (id == R.id.temas) {
             loadFragment(new TemasFragment());
         } else if (id == R.id.desafios) {

@@ -54,10 +54,10 @@ public class TemasFragment extends Fragment {
         }
 
         MaterialButton primary = view.findViewById(R.id.btnFeaturePrimary);
-        primary.setText("Voltar para configuracoes");
+        primary.setText("Mudar claro/escuro");
         primary.setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).navigateTo(R.id.configuracoes);
+                ((MainActivity) getActivity()).navigateTo(R.id.aparencia);
             }
         });
         view.findViewById(R.id.btnFeatureSecondary).setVisibility(View.GONE);

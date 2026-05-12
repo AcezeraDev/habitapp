@@ -40,6 +40,7 @@ public class MaisFragment extends Fragment {
         addAction(layout, R.drawable.ic_nav_chart, "Progresso", "Graficos, conquistas e leitura da semana.", R.id.progresso);
         addAction(layout, R.drawable.ic_nav_chart, "Conquistas", "Medalhas desbloqueadas por consistencia.", R.id.conquistas);
         addAction(layout, R.drawable.ic_history, "Calendario", "Dias do mes coloridos por desempenho.", R.id.calendario);
+        addAction(layout, R.drawable.ic_settings, "Aparencia", "Alterne entre modo claro e escuro.", R.id.aparencia);
         addAction(layout, R.drawable.ic_settings, "Loja de temas", "Temas desbloqueados conforme seu XP cresce.", R.id.temas);
         addAction(layout, R.drawable.ic_history, "Desafios", "Ciclos de 7, 14 e 30 dias para manter ritmo.", R.id.desafios);
         addAction(layout, R.drawable.ic_edit, "Diario", "Escreva uma nota rapida sobre o dia.", R.id.diario);

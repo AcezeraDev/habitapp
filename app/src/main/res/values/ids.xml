@@ -13,4 +13,10 @@
     <item name="backup" type="id" />
     <item name="conquistas" type="id" />
     <item name="calendario" type="id" />
+    <item name="missoes" type="id" />
+    <item name="relatorio" type="id" />
+    <item name="temas" type="id" />
+    <item name="desafios" type="id" />
+    <item name="diario" type="id" />
+    <item name="estatisticas" type="id" />
 </resources>

@@ -74,6 +74,17 @@
                     app:icon="@drawable/ic_backup" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCloudBackup"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Salvar na nuvem / Drive"
+                    android:textAllCaps="false"
+                    app:cornerRadius="8dp"
+                    app:icon="@drawable/ic_backup" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnImportBackup"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"

@@ -60,7 +60,8 @@ public final class NotificationHelper {
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setColor(ContextCompat.getColor(context, getColor(type)))
-                .addAction(R.drawable.ic_notification, getActionLabel(type), pendingIntent);
+                .addAction(R.drawable.ic_notification, getActionLabel(type), getActionIntent(context, type))
+                .addAction(R.drawable.ic_notification, "Abrir app", pendingIntent);
 
         NotificationManagerCompat.from(context).notify(type.hashCode(), builder.build());
     }
@@ -72,6 +73,27 @@ public final class NotificationHelper {
         return PendingIntent.getActivity(
                 context,
                 type.hashCode(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | immutableFlag()
+        );
+    }
+
+    private static PendingIntent getActionIntent(Context context, String type) {
+        if (ReminderScheduler.TYPE_WATER.equals(type)) {
+            return broadcastAction(context, WidgetActionReceiver.ACTION_ADD_WATER, 410);
+        }
+        if (ReminderScheduler.TYPE_FOCUS.equals(type)) {
+            return broadcastAction(context, WidgetActionReceiver.ACTION_ADD_FOCUS, 420);
+        }
+        return broadcastAction(context, WidgetActionReceiver.ACTION_COMPLETE_ROUTINE, 430);
+    }
+
+    private static PendingIntent broadcastAction(Context context, String action, int requestCode) {
+        Intent intent = new Intent(context, WidgetActionReceiver.class);
+        intent.setAction(action);
+        return PendingIntent.getBroadcast(
+                context,
+                requestCode,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | immutableFlag()
         );

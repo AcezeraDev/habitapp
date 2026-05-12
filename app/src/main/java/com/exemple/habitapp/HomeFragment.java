@@ -101,6 +101,9 @@ public class HomeFragment extends Fragment {
 
     private void atualizarResumo(View view) {
         TextView txtGreeting = view.findViewById(R.id.txtGreeting);
+        TextView txtHomeXp = view.findViewById(R.id.txtHomeXp);
+        TextView txtHomeMission = view.findViewById(R.id.txtHomeMission);
+        TextView txtHomeTheme = view.findViewById(R.id.txtHomeTheme);
         TextView txtScore = view.findViewById(R.id.txtScore);
         TextView txtScoreLabel = view.findViewById(R.id.txtScoreLabel);
         TextView txtAguaHome = view.findViewById(R.id.txtAguaHome);
@@ -143,8 +146,12 @@ public class HomeFragment extends Fragment {
         int score = HabitStore.getTodayScore(prefs);
         int streak = HabitStore.getStreak(prefs);
         int weeklyAverage = HabitStore.getWeeklyAverage(prefs);
+        List<Mission> missions = MissionEngine.getDailyMissions(prefs);
 
         txtGreeting.setText(getSaudacao() + ", " + nome);
+        txtHomeXp.setText("Nivel " + XpEngine.getLevel(prefs) + " | " + XpEngine.getBaseXp(prefs) + " XP");
+        txtHomeMission.setText("Missao em foco: " + MissionEngine.getNextMissionTitle(missions));
+        txtHomeTheme.setText("Tema ativo: " + ThemeController.getAccentTheme(requireContext()));
         UiAnimator.animatePercentText(txtScore, score);
         txtScoreLabel.setText(score >= 100 ? "Dia fechado com consistência" : "Próxima meta: " + proximaAcao(faltaAgua, faltaEstudos));
         txtAguaHome.setText(aguaMl + " / " + metaMl + " ml");
@@ -187,9 +194,11 @@ public class HomeFragment extends Fragment {
             prefs.edit().putFloat("agua_litros", (float) novoValor).apply();
             registrarAgua(adicionadoMl);
             HabitStore.saveTodaySnapshot(prefs);
+            HabitWidgetProvider.updateAll(requireContext());
             atualizarResumo(rootView);
             renderWeekBars(layoutWeekBarsHome);
             UiAnimator.pulse(btnQuickWater);
+            FeedbackHelper.success(requireContext());
             Toast.makeText(getContext(), "+" + adicionadoMl + " ml adicionados.", Toast.LENGTH_SHORT).show();
         });
 

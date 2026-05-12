@@ -12,12 +12,16 @@ HabitApp e um app Android para acompanhar rotina, hidratacao, foco, metas e prog
 - Grafico semanal, calendario mensal, conquistas e leitura rapida de progresso.
 - Widget Android com score, agua, foco e acao rapida de +250 ml.
 - Lembretes locais inteligentes para agua, foco e fechamento da rotina.
-- Backup local com exportacao/restauracao dos dados.
+- Notificacoes com acoes rapidas para agua, foco e rotina.
+- Missoes diarias, XP, nivel, desafios e loja de temas.
+- Relatorio semanal automatico com exportacao em PDF.
+- Diario rapido e estatisticas avancadas de agua, foco, XP e score.
+- Backup local e opcao de salvar o arquivo na nuvem/Drive.
 - Metas ajustaveis para hidratacao, estudo e sessoes de foco.
 
 ## Download
 
-APK debug atual: [`dist/HabitApp-v1.5-debug.apk`](dist/HabitApp-v1.5-debug.apk)
+APK debug atual: [`dist/HabitApp-v1.6-debug.apk`](dist/HabitApp-v1.6-debug.apk)
 
 ## Build
 
@@ -35,4 +39,4 @@ Para gerar uma APK de release local:
 
 ## Versao
 
-Versao atual: `1.5`
+Versao atual: `1.6`

@@ -154,7 +154,13 @@ public class MainActivity extends AppCompatActivity {
                     || currentItemId == R.id.configuracoes
                     || currentItemId == R.id.backup
                     || currentItemId == R.id.conquistas
-                    || currentItemId == R.id.calendario;
+                    || currentItemId == R.id.calendario
+                    || currentItemId == R.id.missoes
+                    || currentItemId == R.id.relatorio
+                    || currentItemId == R.id.temas
+                    || currentItemId == R.id.desafios
+                    || currentItemId == R.id.diario
+                    || currentItemId == R.id.estatisticas;
         }
         return false;
     }
@@ -186,6 +192,18 @@ public class MainActivity extends AppCompatActivity {
             loadFragment(new ConquistasFragment());
         } else if (id == R.id.calendario) {
             loadFragment(new CalendarioFragment());
+        } else if (id == R.id.missoes) {
+            loadFragment(new MissoesFragment());
+        } else if (id == R.id.relatorio) {
+            loadFragment(new RelatorioFragment());
+        } else if (id == R.id.temas) {
+            loadFragment(new TemasFragment());
+        } else if (id == R.id.desafios) {
+            loadFragment(new DesafiosFragment());
+        } else if (id == R.id.diario) {
+            loadFragment(new DiarioFragment());
+        } else if (id == R.id.estatisticas) {
+            loadFragment(new EstatisticasFragment());
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 public final class ThemeController {
 
     public static final String PREF_DARK_MODE = "theme_dark_mode";
+    public static final String PREF_ACCENT_THEME = "theme_accent_name";
 
     private ThemeController() {
     }
@@ -29,5 +30,17 @@ public final class ThemeController {
                 .putBoolean(PREF_DARK_MODE, enabled)
                 .apply();
         apply(context);
+    }
+
+    public static String getAccentTheme(Context context) {
+        return context.getSharedPreferences("habit_data", Context.MODE_PRIVATE)
+                .getString(PREF_ACCENT_THEME, "Classico");
+    }
+
+    public static void setAccentTheme(Context context, String themeName) {
+        context.getSharedPreferences("habit_data", Context.MODE_PRIVATE)
+                .edit()
+                .putString(PREF_ACCENT_THEME, themeName)
+                .apply();
     }
 }

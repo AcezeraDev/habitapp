@@ -32,17 +32,23 @@ public class MaisFragment extends Fragment {
         HabitStore.ensureToday(prefs);
 
         TextView resumo = view.findViewById(R.id.txtMaisResumo);
-        resumo.setText("Score hoje " + HabitStore.getTodayScore(prefs) + "% • sequência " + HabitStore.getStreak(prefs) + " dias • nível " + HabitStore.getLevelName(prefs));
+        resumo.setText("Score hoje " + HabitStore.getTodayScore(prefs) + "% | XP nivel " + XpEngine.getLevel(prefs) + " | sequencia " + HabitStore.getStreak(prefs) + " dias");
 
         LinearLayout layout = view.findViewById(R.id.layoutMaisAcoes);
-        addAction(layout, R.drawable.ic_nav_chart, "Progresso", "Gráficos, conquistas e leitura da semana.", R.id.progresso);
-        addAction(layout, R.drawable.ic_nav_chart, "Conquistas", "Medalhas desbloqueadas por consistência.", R.id.conquistas);
-        addAction(layout, R.drawable.ic_history, "Calendário", "Dias do mês coloridos por desempenho.", R.id.calendario);
-        addAction(layout, R.drawable.ic_nav_goals, "Metas", "Ajuste água, foco diário e tempo das sessões.", R.id.metas);
-        addAction(layout, R.drawable.ic_history, "Histórico", "Veja os últimos dias e entenda seu ritmo.", R.id.historico);
-        addAction(layout, R.drawable.ic_settings, "Lembretes", "Configure horários e notificações do app.", R.id.configuracoes);
-        addAction(layout, R.drawable.ic_backup, "Backup", "Exporte ou restaure seus dados.", R.id.backup);
-        addAction(layout, R.drawable.ic_nav_profile, "Perfil", "Nome, objetivo e resumo geral do usuário.", R.id.perfil);
+        addAction(layout, R.drawable.ic_nav_goals, "Missoes", "Tarefas diarias com XP para subir de nivel.", R.id.missoes);
+        addAction(layout, R.drawable.ic_nav_chart, "Relatorio semanal", "Resumo automatico e PDF do seu progresso.", R.id.relatorio);
+        addAction(layout, R.drawable.ic_nav_chart, "Progresso", "Graficos, conquistas e leitura da semana.", R.id.progresso);
+        addAction(layout, R.drawable.ic_nav_chart, "Conquistas", "Medalhas desbloqueadas por consistencia.", R.id.conquistas);
+        addAction(layout, R.drawable.ic_history, "Calendario", "Dias do mes coloridos por desempenho.", R.id.calendario);
+        addAction(layout, R.drawable.ic_settings, "Loja de temas", "Temas desbloqueados conforme seu XP cresce.", R.id.temas);
+        addAction(layout, R.drawable.ic_history, "Desafios", "Ciclos de 7, 14 e 30 dias para manter ritmo.", R.id.desafios);
+        addAction(layout, R.drawable.ic_edit, "Diario", "Escreva uma nota rapida sobre o dia.", R.id.diario);
+        addAction(layout, R.drawable.ic_nav_chart, "Estatisticas", "Leitura avancada de agua, foco, XP e score.", R.id.estatisticas);
+        addAction(layout, R.drawable.ic_nav_goals, "Metas", "Ajuste agua, foco diario e tempo das sessoes.", R.id.metas);
+        addAction(layout, R.drawable.ic_history, "Historico", "Veja os ultimos dias e entenda seu ritmo.", R.id.historico);
+        addAction(layout, R.drawable.ic_settings, "Lembretes", "Configure horarios e notificacoes do app.", R.id.configuracoes);
+        addAction(layout, R.drawable.ic_backup, "Backup", "Exporte, restaure ou salve na nuvem.", R.id.backup);
+        addAction(layout, R.drawable.ic_nav_profile, "Perfil", "Nome, objetivo e resumo geral do usuario.", R.id.perfil);
     }
 
     private void addAction(LinearLayout parent, int iconRes, String title, String subtitle, int destinationId) {
@@ -84,15 +90,15 @@ public class MaisFragment extends Fragment {
         row.addView(texts, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
         TextView arrow = new TextView(requireContext());
-        arrow.setText("›");
+        arrow.setText(">");
         arrow.setTextColor(ContextCompat.getColor(requireContext(), R.color.muted));
-        arrow.setTextSize(28f);
+        arrow.setTextSize(22f);
         row.addView(arrow);
 
         parent.addView(row, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
     private int dp(int value) {
-        return (int) (value * getResources().getDisplayMetrics().density);
+        return Math.round(value * getResources().getDisplayMetrics().density);
     }
 }

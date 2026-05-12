@@ -73,12 +73,14 @@ public class BackupFragment extends Fragment {
         TextView resumo = view.findViewById(R.id.txtBackupResumo);
         TextView detalhes = view.findViewById(R.id.txtBackupDetalhes);
         MaterialButton btnExport = view.findViewById(R.id.btnExportBackup);
+        MaterialButton btnCloud = view.findViewById(R.id.btnCloudBackup);
         MaterialButton btnImport = view.findViewById(R.id.btnImportBackup);
 
         int medalhas = AchievementEngine.getUnlockedCount(AchievementEngine.getAchievements(prefs));
         resumo.setText("Ha " + prefs.getAll().size() + " registros salvos no HabitApp.");
         detalhes.setText("Inclui perfil, metas, " + medalhas + " medalhas, calendario, historico e lembretes.");
         btnExport.setOnClickListener(v -> exportLauncher.launch(defaultFileName()));
+        btnCloud.setOnClickListener(v -> exportLauncher.launch(cloudFileName()));
         btnImport.setOnClickListener(v -> importLauncher.launch(new String[]{"application/json", "text/*"}));
     }
 
@@ -171,5 +173,10 @@ public class BackupFragment extends Fragment {
     private String defaultFileName() {
         String stamp = new SimpleDateFormat("yyyy-MM-dd-HHmm", Locale.getDefault()).format(new Date());
         return "habitapp-backup-" + stamp + ".json";
+    }
+
+    private String cloudFileName() {
+        String stamp = new SimpleDateFormat("yyyy-MM-dd-HHmm", Locale.getDefault()).format(new Date());
+        return "habitapp-cloud-backup-" + stamp + ".json";
     }
 }

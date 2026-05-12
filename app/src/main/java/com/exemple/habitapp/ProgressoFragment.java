@@ -138,7 +138,7 @@ public class ProgressoFragment extends Fragment {
     private void adicionarConquista(LinearLayout layout, boolean concluida, String titulo) {
         TextView linha = new TextView(requireContext());
         linha.setText((concluida ? "[ok] " : "[ ] ") + titulo);
-        linha.setTextColor(concluida ? 0xFF10B981 : 0xFF64748B);
+        linha.setTextColor(concluida ? 0xFF12B76A : 0xFF667085);
         linha.setTextSize(14f);
         linha.setPadding(0, 6, 0, 6);
         layout.addView(linha);
@@ -156,21 +156,21 @@ public class ProgressoFragment extends Fragment {
 
             TextView label = new TextView(requireContext());
             label.setText(i == 6 ? "Hoje" : "-" + (6 - i) + "d");
-            label.setTextColor(0xFF64748B);
+            label.setTextColor(0xFF667085);
             label.setTextSize(12f);
             row.addView(label, new LinearLayout.LayoutParams(44, ViewGroup.LayoutParams.WRAP_CONTENT));
 
             LinearProgressIndicator bar = new LinearProgressIndicator(requireContext());
             bar.setMax(100);
             bar.setProgressCompat(scores[i], false);
-            bar.setIndicatorColor(0xFF2563EB);
-            bar.setTrackColor(0xFFE2E8F0);
+            bar.setIndicatorColor(0xFF165DFF);
+            bar.setTrackColor(0xFFD9E4F2);
             row.addView(bar, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
             TextView value = new TextView(requireContext());
             value.setText(scores[i] + "%");
             value.setGravity(Gravity.END);
-            value.setTextColor(0xFF14213D);
+            value.setTextColor(0xFF101828);
             value.setTextSize(12f);
             row.addView(value, new LinearLayout.LayoutParams(48, ViewGroup.LayoutParams.WRAP_CONTENT));
 

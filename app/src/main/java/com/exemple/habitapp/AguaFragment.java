@@ -199,7 +199,7 @@ public class AguaFragment extends Fragment {
     private void adicionarLinhaHistorico(String texto) {
         TextView linha = new TextView(requireContext());
         linha.setText(texto);
-        linha.setTextColor(0xFF64748B);
+        linha.setTextColor(0xFF667085);
         linha.setTextSize(14f);
         linha.setPadding(0, 6, 0, 6);
         binding.layoutHistoricoAgua.addView(linha);

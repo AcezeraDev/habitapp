@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@drawable/bg_screen_gradient"
     android:fillViewport="true">
 
     <LinearLayout
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="Metas"
             android:textColor="@color/ink"
-            android:textSize="30sp"
+            android:textSize="32sp"
             android:textStyle="bold" />
 
         <TextView
@@ -33,9 +33,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="@color/surface_elevated"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
+            app:cardElevation="4dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 
@@ -105,7 +105,7 @@
                     android:layout_marginTop="16dp"
                     android:text="Salvar metas"
                     android:textAllCaps="false"
-                    app:backgroundTint="@color/primary"
+                    app:backgroundTint="@color/coral"
                     app:cornerRadius="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

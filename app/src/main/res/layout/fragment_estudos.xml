@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@drawable/bg_screen_gradient"
     android:fillViewport="true">
 
     <LinearLayout
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="Modo foco"
             android:textColor="@color/ink"
-            android:textSize="30sp"
+            android:textSize="32sp"
             android:textStyle="bold" />
 
         <TextView
@@ -33,13 +33,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:cardBackgroundColor="@color/ink"
+            app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp">
+            app:cardElevation="8dp"
+            app:strokeWidth="0dp">
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="320dp"
+                android:background="@drawable/bg_focus_gradient"
                 android:padding="20dp">
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -49,7 +51,7 @@
                     android:layout_gravity="center"
                     app:indicatorColor="@color/success"
                     app:indicatorSize="260dp"
-                    app:trackColor="#29405F"
+                    app:trackColor="#7357CE"
                     app:trackThickness="12dp" />
 
                 <TextView
@@ -143,6 +145,8 @@
                 android:layout_weight="1"
                 android:text="15 min"
                 android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/study"
                 app:cornerRadius="8dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -155,6 +159,8 @@
                 android:layout_weight="1"
                 android:text="25 min"
                 android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/primary"
                 app:cornerRadius="8dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -166,6 +172,8 @@
                 android:layout_weight="1"
                 android:text="45 min"
                 android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/coral"
                 app:cornerRadius="8dp" />
         </LinearLayout>
 
@@ -229,7 +237,7 @@
                         android:layout_weight="1.4"
                         android:text="Iniciar"
                         android:textAllCaps="false"
-                        app:backgroundTint="@color/study"
+                        app:backgroundTint="@color/coral"
                         app:cornerRadius="8dp" />
                 </LinearLayout>
             </LinearLayout>

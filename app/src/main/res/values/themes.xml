@@ -3,10 +3,15 @@
     <style name="Base.Theme.HabitApp" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:fontFamily">sans</item>
         <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/study</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/ink</item>
+        <item name="colorOutline">@color/line</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:statusBarColor">@color/app_background</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:statusBarColor">#EAF3FF</item>
         <item name="android:navigationBarColor">@color/surface</item>
     </style>
 

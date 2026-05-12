@@ -268,7 +268,7 @@ public class HomeFragment extends Fragment {
         if (habitos.isEmpty()) {
             TextView vazio = new TextView(getContext());
             vazio.setText("Nenhum habito extra ainda.");
-            vazio.setTextColor(0xFF64748B);
+            vazio.setTextColor(0xFF667085);
             vazio.setTextSize(14f);
             layoutHabitosExtras.addView(vazio);
             return;
@@ -277,7 +277,7 @@ public class HomeFragment extends Fragment {
         for (String habito : habitos) {
             CheckBox checkBox = new CheckBox(getContext());
             checkBox.setText(habito);
-            checkBox.setTextColor(0xFF14213D);
+            checkBox.setTextColor(0xFF101828);
             checkBox.setTextSize(15f);
             checkBox.setChecked(isHabitoConcluido(habito));
             checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -304,22 +304,22 @@ public class HomeFragment extends Fragment {
 
             TextView label = new TextView(requireContext());
             label.setText(i == 6 ? "Hoje" : "-" + (6 - i) + "d");
-            label.setTextColor(0xFF64748B);
+            label.setTextColor(0xFF667085);
             label.setTextSize(12f);
             row.addView(label, new LinearLayout.LayoutParams(44, ViewGroup.LayoutParams.WRAP_CONTENT));
 
             LinearProgressIndicator bar = new LinearProgressIndicator(requireContext());
             bar.setMax(100);
             bar.setProgressCompat(scores[i], false);
-            bar.setIndicatorColor(0xFF2563EB);
-            bar.setTrackColor(0xFFE2E8F0);
+            bar.setIndicatorColor(0xFF165DFF);
+            bar.setTrackColor(0xFFD9E4F2);
             LinearLayout.LayoutParams barParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
             row.addView(bar, barParams);
 
             TextView value = new TextView(requireContext());
             value.setText(scores[i] + "%");
             value.setGravity(Gravity.END);
-            value.setTextColor(0xFF14213D);
+            value.setTextColor(0xFF101828);
             value.setTextSize(12f);
             row.addView(value, new LinearLayout.LayoutParams(48, ViewGroup.LayoutParams.WRAP_CONTENT));
 
@@ -548,7 +548,7 @@ public class HomeFragment extends Fragment {
             TextView vazio = new TextView(getContext());
             vazio.setText("Nenhuma foto registrada ainda.");
             vazio.setTextSize(14f);
-            vazio.setTextColor(0xFFDBEAFE);
+            vazio.setTextColor(0xFFFFF3E0);
             vazio.setPadding(0, 8, 0, 8);
             layoutGaleria.addView(vazio);
         }

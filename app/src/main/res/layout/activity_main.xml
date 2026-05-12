@@ -4,16 +4,27 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background">
+    android:background="@drawable/bg_screen_gradient">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/main_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bg_tabs_surface"
+        android:elevation="8dp"
+        android:minHeight="54dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         app:tabGravity="start"
         app:tabIndicatorColor="@color/primary"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="4dp"
         app:tabMode="scrollable"
+        app:tabRippleColor="@color/tab_ripple"
         app:tabSelectedTextColor="@color/primary"
         app:tabTextColor="@color/muted" />
 

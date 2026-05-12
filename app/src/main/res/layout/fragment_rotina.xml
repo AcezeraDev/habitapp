@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@drawable/bg_screen_gradient"
     android:fillViewport="true">
 
     <LinearLayout
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="Rotina"
             android:textColor="@color/ink"
-            android:textSize="30sp"
+            android:textSize="32sp"
             android:textStyle="bold" />
 
         <TextView
@@ -33,13 +33,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            app:cardBackgroundColor="@color/ink"
+            app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp">
+            app:cardElevation="8dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_challenge_gradient"
                 android:orientation="vertical"
                 android:padding="18dp">
 
@@ -47,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Score da rotina"
-                    android:textColor="#BFD7FF"
+                    android:textColor="#FFF3E0"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
@@ -66,8 +68,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    app:indicatorColor="@color/success"
-                    app:trackColor="#29405F"
+                    app:indicatorColor="@color/white"
+                    app:trackColor="#FFB36A"
                     app:trackCornerRadius="8dp"
                     app:trackThickness="10dp" />
             </LinearLayout>

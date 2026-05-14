@@ -54,7 +54,7 @@ public final class HabitUi {
         TextView view = text(context, value, 12, colorRes, true);
         view.setGravity(Gravity.CENTER);
         view.setPadding(dp(context, 10), dp(context, 6), dp(context, 10), dp(context, 6));
-        view.setBackground(rounded(context, R.color.surface_tint, colorRes, 1, 8));
+        view.setBackground(rounded(context, softForColor(colorRes), colorRes, 1, 8));
         return view;
     }
 
@@ -63,7 +63,7 @@ public final class HabitUi {
         icon.setImageResource(iconRes);
         icon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(context, colorRes)));
         icon.setPadding(dp(context, 10), dp(context, 10), dp(context, 10), dp(context, 10));
-        icon.setBackground(rounded(context, R.color.surface_tint, colorRes, 1, 8));
+        icon.setBackground(rounded(context, softForColor(colorRes), colorRes, 1, 8));
         icon.setContentDescription(null);
         icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         icon.setLayoutParams(new LinearLayout.LayoutParams(dp(context, 46), dp(context, 46)));
@@ -108,5 +108,13 @@ public final class HabitUi {
 
     public static int dp(Context context, int value) {
         return Math.round(value * context.getResources().getDisplayMetrics().density);
+    }
+
+    private static int softForColor(int colorRes) {
+        if (colorRes == R.color.water) return R.color.water_soft;
+        if (colorRes == R.color.study) return R.color.study_soft;
+        if (colorRes == R.color.success) return R.color.success_soft;
+        if (colorRes == R.color.coral || colorRes == R.color.warning) return R.color.coral_soft;
+        return R.color.primary_soft;
     }
 }

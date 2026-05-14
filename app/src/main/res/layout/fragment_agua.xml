@@ -50,13 +50,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_water_gradient"
+                android:minHeight="214dp"
                 android:orientation="vertical"
-                android:padding="18dp">
+                android:padding="22dp">
 
                 <TextView
                     android:id="@+id/txtAgua"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_on_dark"
+                    android:paddingStart="14dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="8dp"
                     android:text="0.00 L"
                     android:textColor="@color/white"
                     android:textSize="44sp"
@@ -87,10 +93,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="@color/water_soft"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp"
-            app:strokeColor="@color/line"
+            app:strokeColor="@color/water"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -156,20 +162,22 @@
                 android:id="@+id/btnWater250"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
+                android:layout_height="58dp"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
                 android:text="250 ml"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/water"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_nav_water"
+                app:iconTint="@color/white" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnWater500"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
+                android:layout_height="58dp"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
@@ -177,27 +185,31 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/primary"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_garrafa"
+                app:iconTint="@color/white" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnWater750"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
+                android:layout_height="58dp"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
                 android:text="750 ml"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/success"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_nav_water"
+                app:iconTint="@color/white" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="@color/surface_tint"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
@@ -283,6 +295,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
+            android:background="@drawable/bg_metric_water"
+            android:padding="14dp"
             android:text="Dica: beber em pequenas doses mantem a meta mais leve."
             android:textColor="@color/muted"
             android:textSize="14sp" />
@@ -291,7 +305,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="@color/surface_tint"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"

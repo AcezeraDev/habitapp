@@ -48,17 +48,17 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="292dp"
+                android:layout_height="310dp"
                 android:background="@drawable/bg_focus_gradient"
-                android:padding="18dp">
+                android:padding="20dp">
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/progressTimer"
-                    android:layout_width="228dp"
-                    android:layout_height="228dp"
+                    android:layout_width="238dp"
+                    android:layout_height="238dp"
                     android:layout_gravity="center"
                     app:indicatorColor="@color/success"
-                    app:indicatorSize="228dp"
+                    app:indicatorSize="238dp"
                     app:trackColor="#7357CE"
                     app:trackThickness="12dp" />
 
@@ -66,7 +66,12 @@
                     android:id="@+id/txtTempo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_on_dark"
                     android:layout_gravity="center"
+                    android:paddingStart="18dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="18dp"
+                    android:paddingBottom="10dp"
                     android:text="25:00"
                     android:textColor="@color/white"
                     android:textSize="44sp"
@@ -78,10 +83,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="@color/study_soft"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp"
-            app:strokeColor="@color/line"
+            app:strokeColor="@color/study"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -123,8 +128,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="12dp"
+                    android:textColor="@color/study"
                     android:text="Marcar +10 min já estudados"
                     android:textAllCaps="false"
+                    app:backgroundTint="@color/surface"
                     app:cornerRadius="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -155,7 +162,9 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/study"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_nav_focus"
+                app:iconTint="@color/white" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPomodoro"
@@ -169,7 +178,9 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/primary"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_nav_focus"
+                app:iconTint="@color/white" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDeepWork"
@@ -182,7 +193,9 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/coral"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_nav_focus"
+                app:iconTint="@color/white" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView

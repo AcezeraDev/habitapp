@@ -18,11 +18,11 @@ public final class FeatureUi {
 
     public static void addCard(Context context, LinearLayout parent, String title, String subtitle, int progress, int colorRes) {
         MaterialCardView card = new MaterialCardView(context);
-        card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.surface));
+        card.setCardBackgroundColor(ContextCompat.getColor(context, softForColor(colorRes)));
         card.setRadius(dp(context, 8));
-        card.setCardElevation(dp(context, 2));
+        card.setCardElevation(dp(context, 3));
         card.setStrokeWidth(dp(context, 1));
-        card.setStrokeColor(ContextCompat.getColor(context, R.color.line));
+        card.setStrokeColor(ContextCompat.getColor(context, colorRes));
 
         LinearLayout content = new LinearLayout(context);
         content.setOrientation(LinearLayout.VERTICAL);
@@ -72,5 +72,13 @@ public final class FeatureUi {
 
     public static int dp(Context context, int value) {
         return Math.round(value * context.getResources().getDisplayMetrics().density);
+    }
+
+    private static int softForColor(int colorRes) {
+        if (colorRes == R.color.water) return R.color.water_soft;
+        if (colorRes == R.color.study) return R.color.study_soft;
+        if (colorRes == R.color.success) return R.color.success_soft;
+        if (colorRes == R.color.coral || colorRes == R.color.warning) return R.color.coral_soft;
+        return R.color.primary_soft;
     }
 }

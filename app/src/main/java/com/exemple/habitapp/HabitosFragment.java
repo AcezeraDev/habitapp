@@ -94,9 +94,22 @@ public class HabitosFragment extends Fragment {
             chip.setText(value);
             chip.setCheckable(true);
             chip.setChecked(i == 0);
-            chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.ink));
-            chip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.surface_soft)));
-            chip.setChipStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.line)));
+            int[][] states = new int[][]{
+                    new int[]{android.R.attr.state_checked},
+                    new int[]{}
+            };
+            chip.setTextColor(new ColorStateList(states, new int[]{
+                    ContextCompat.getColor(requireContext(), R.color.primary),
+                    ContextCompat.getColor(requireContext(), R.color.ink)
+            }));
+            chip.setChipBackgroundColor(new ColorStateList(states, new int[]{
+                    ContextCompat.getColor(requireContext(), R.color.primary_soft),
+                    ContextCompat.getColor(requireContext(), R.color.surface_soft)
+            }));
+            chip.setChipStrokeColor(new ColorStateList(states, new int[]{
+                    ContextCompat.getColor(requireContext(), R.color.primary),
+                    ContextCompat.getColor(requireContext(), R.color.line)
+            }));
             chip.setChipStrokeWidth(HabitUi.dp(requireContext(), 1));
             chip.setOnClickListener(v -> {
                 for (int index = 0; index < group.getChildCount(); index++) {
@@ -152,6 +165,8 @@ public class HabitosFragment extends Fragment {
         int colorRes = habit.colorRes();
 
         com.google.android.material.card.MaterialCardView card = HabitUi.surfaceCard(requireContext());
+        card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), softForColor(colorRes)));
+        card.setStrokeColor(ContextCompat.getColor(requireContext(), colorRes));
         LinearLayout content = HabitUi.paddedColumn(requireContext(), 16);
 
         LinearLayout header = new LinearLayout(requireContext());
@@ -235,6 +250,14 @@ public class HabitosFragment extends Fragment {
         params.setMargins(HabitUi.dp(requireContext(), 8), 0, 0, 0);
         button.setLayoutParams(params);
         return button;
+    }
+
+    private int softForColor(int colorRes) {
+        if (colorRes == R.color.water) return R.color.water_soft;
+        if (colorRes == R.color.study) return R.color.study_soft;
+        if (colorRes == R.color.success) return R.color.success_soft;
+        if (colorRes == R.color.coral || colorRes == R.color.warning) return R.color.coral_soft;
+        return R.color.primary_soft;
     }
 
     private void showHabitDialog(HabitRecord editing) {

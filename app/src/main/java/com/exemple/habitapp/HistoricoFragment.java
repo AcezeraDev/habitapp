@@ -71,13 +71,14 @@ public class HistoricoFragment extends Fragment {
         int habitos = offset == 0
                 ? HabitStore.getHabitosExtrasConcluidos(prefs, HabitStore.getCustomHabits(prefs), day)
                 : prefs.getInt("habitos_done_day_" + day, 0);
+        int accent = score >= 80 ? R.color.success : R.color.primary;
 
         MaterialCardView card = new MaterialCardView(requireContext());
-        card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.surface));
+        card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), score >= 80 ? R.color.success_soft : R.color.primary_soft));
         card.setRadius(dp(8));
-        card.setCardElevation(0);
+        card.setCardElevation(dp(2));
         card.setStrokeWidth(dp(1));
-        card.setStrokeColor(ContextCompat.getColor(requireContext(), R.color.line));
+        card.setStrokeColor(ContextCompat.getColor(requireContext(), accent));
 
         LinearLayout content = new LinearLayout(requireContext());
         content.setOrientation(LinearLayout.VERTICAL);
@@ -97,17 +98,21 @@ public class HistoricoFragment extends Fragment {
         TextView scoreView = new TextView(requireContext());
         scoreView.setText(score + "%");
         scoreView.setGravity(Gravity.END);
-        scoreView.setTextColor(ContextCompat.getColor(requireContext(), score >= 80 ? R.color.success : R.color.primary));
+        scoreView.setTextColor(ContextCompat.getColor(requireContext(), accent));
         scoreView.setTextSize(20f);
         scoreView.setTypeface(scoreView.getTypeface(), Typeface.BOLD);
+        scoreView.setBackground(HabitUi.rounded(requireContext(), R.color.surface, accent, 1, 8));
+        scoreView.setPadding(dp(10), dp(5), dp(10), dp(5));
         header.addView(scoreView);
         content.addView(header);
 
         LinearProgressIndicator progress = new LinearProgressIndicator(requireContext());
         progress.setMax(100);
         progress.setProgressCompat(score, false);
-        progress.setIndicatorColor(ContextCompat.getColor(requireContext(), score >= 80 ? R.color.success : R.color.primary));
+        progress.setIndicatorColor(ContextCompat.getColor(requireContext(), accent));
         progress.setTrackColor(ContextCompat.getColor(requireContext(), R.color.line));
+        progress.setTrackThickness(dp(8));
+        progress.setTrackCornerRadius(dp(8));
         LinearLayout.LayoutParams progressParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         progressParams.setMargins(0, dp(10), 0, dp(10));
         content.addView(progress, progressParams);
@@ -116,6 +121,8 @@ public class HistoricoFragment extends Fragment {
         details.setText("Água " + aguaMl + " ml • foco " + estudos + " min • checklist " + checklist + "/3 • hábitos " + habitos);
         details.setTextColor(ContextCompat.getColor(requireContext(), R.color.muted));
         details.setTextSize(13f);
+        details.setBackground(HabitUi.rounded(requireContext(), R.color.surface, R.color.line, 1, 8));
+        details.setPadding(dp(12), dp(10), dp(12), dp(10));
         content.addView(details);
 
         card.addView(content);

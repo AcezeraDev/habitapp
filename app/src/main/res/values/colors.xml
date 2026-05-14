@@ -24,6 +24,8 @@
     <color name="coral_soft">#FFF0EC</color>
     <color name="sun">#F4A62A</color>
     <color name="hero_text_soft">#E8F1FF</color>
+    <color name="glass_on_dark">#24FFFFFF</color>
+    <color name="glass_stroke">#45FFFFFF</color>
     <color name="tab_ripple">#1A2257C7</color>
     <color name="nav_selected_background">#EAF1FF</color>
     <color name="nav_shell">#FBFDFF</color>

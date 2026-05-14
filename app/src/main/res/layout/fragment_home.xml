@@ -52,6 +52,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_soft_panel"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -98,8 +99,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_score_gradient"
+                android:minHeight="174dp"
                 android:orientation="vertical"
-                android:padding="18dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -130,7 +132,12 @@
                         android:id="@+id/txtScoreLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/bg_glass_on_dark"
                         android:gravity="end"
+                        android:paddingStart="12dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="8dp"
                         android:text="Comece com uma ação pequena"
                         android:textColor="#ECFDF3"
                         android:textSize="14sp" />
@@ -161,7 +168,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="@color/surface_tint"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
@@ -191,7 +198,11 @@
                         android:id="@+id/txtStreakHome"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
                         android:layout_weight="1"
+                        android:background="@drawable/bg_metric_coral"
+                        android:gravity="center"
+                        android:padding="12dp"
                         android:text="0 dias\nstreak"
                         android:textColor="@color/ink"
                         android:textSize="15sp"
@@ -201,8 +212,12 @@
                         android:id="@+id/txtMediaHome"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
                         android:layout_weight="1"
+                        android:background="@drawable/bg_metric_primary"
                         android:gravity="center"
+                        android:padding="12dp"
                         android:text="0%\nmédia"
                         android:textColor="@color/ink"
                         android:textSize="15sp"
@@ -212,8 +227,11 @@
                         android:id="@+id/txtNivelHome"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
                         android:layout_weight="1"
-                        android:gravity="end"
+                        android:background="@drawable/bg_metric_success"
+                        android:gravity="center"
+                        android:padding="12dp"
                         android:text="Inicial\nnível"
                         android:textColor="@color/ink"
                         android:textSize="15sp"
@@ -240,15 +258,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/surface"
+                app:cardBackgroundColor="@color/water_soft"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
-                app:strokeColor="@color/line"
+                app:strokeColor="@color/water"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="138dp"
                     android:orientation="vertical"
                     android:padding="16dp">
 
@@ -296,15 +315,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/surface"
+                app:cardBackgroundColor="@color/study_soft"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
-                app:strokeColor="@color/line"
+                app:strokeColor="@color/study"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="138dp"
                     android:orientation="vertical"
                     android:padding="16dp">
 
@@ -352,7 +372,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="@color/primary_soft"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
@@ -387,7 +407,9 @@
                         android:text="+250 ml"
                         android:textAllCaps="false"
                         app:backgroundTint="@color/water"
-                        app:cornerRadius="8dp" />
+                        app:cornerRadius="8dp"
+                        app:icon="@drawable/ic_nav_water"
+                        app:iconTint="@color/white" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnQuickFocus"
@@ -398,7 +420,9 @@
                         android:text="Abrir foco"
                         android:textAllCaps="false"
                         app:backgroundTint="@color/study"
-                        app:cornerRadius="8dp" />
+                        app:cornerRadius="8dp"
+                        app:icon="@drawable/ic_nav_focus"
+                        app:iconTint="@color/white" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -407,7 +431,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="@color/surface_tint"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
@@ -496,6 +520,8 @@
                         android:layout_weight="1"
                         android:text="Baixo"
                         android:textAllCaps="false"
+                        android:textColor="@color/coral"
+                        app:backgroundTint="@color/coral_soft"
                         app:cornerRadius="8dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -508,6 +534,8 @@
                         android:layout_weight="1"
                         android:text="Ok"
                         android:textAllCaps="false"
+                        android:textColor="@color/primary"
+                        app:backgroundTint="@color/primary_soft"
                         app:cornerRadius="8dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -519,6 +547,8 @@
                         android:layout_weight="1"
                         android:text="Alto"
                         android:textAllCaps="false"
+                        android:textColor="@color/success"
+                        app:backgroundTint="@color/success_soft"
                         app:cornerRadius="8dp" />
                 </LinearLayout>
 
@@ -546,6 +576,8 @@
                         android:layout_weight="1"
                         android:text="Baixa"
                         android:textAllCaps="false"
+                        android:textColor="@color/coral"
+                        app:backgroundTint="@color/coral_soft"
                         app:cornerRadius="8dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -558,6 +590,8 @@
                         android:layout_weight="1"
                         android:text="Media"
                         android:textAllCaps="false"
+                        android:textColor="@color/primary"
+                        app:backgroundTint="@color/primary_soft"
                         app:cornerRadius="8dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -569,6 +603,8 @@
                         android:layout_weight="1"
                         android:text="Alta"
                         android:textAllCaps="false"
+                        android:textColor="@color/success"
+                        app:backgroundTint="@color/success_soft"
                         app:cornerRadius="8dp" />
                 </LinearLayout>
             </LinearLayout>

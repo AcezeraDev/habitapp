@@ -53,7 +53,7 @@
                 android:layout_width="54dp"
                 android:layout_height="54dp"
                 android:contentDescription="Criar habito"
-                app:backgroundTint="@color/primary"
+                app:backgroundTint="@color/coral"
                 app:cornerRadius="8dp"
                 app:icon="@drawable/ic_nav_goals"
                 app:iconGravity="textStart"
@@ -74,8 +74,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_score_gradient"
+                android:minHeight="154dp"
                 android:orientation="vertical"
-                android:padding="18dp">
+                android:padding="22dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -100,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="@color/surface_tint"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
@@ -176,7 +177,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:background="@drawable/bg_empty_state"
+            android:background="@drawable/bg_soft_panel"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="24dp"

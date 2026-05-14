@@ -102,6 +102,8 @@ public class MaisFragment extends Fragment {
         row.addView(arrow);
 
         com.google.android.material.card.MaterialCardView card = HabitUi.surfaceCard(requireContext());
+        card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), softFor(accent)));
+        card.setStrokeColor(ContextCompat.getColor(requireContext(), accent));
         card.addView(row);
         HabitUi.addWithBottomMargin(parent, card, 10);
     }

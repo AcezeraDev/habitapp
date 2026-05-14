@@ -120,9 +120,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void atualizarItemSelecionado() {
-        int selectedColor = ContextCompat.getColor(this, R.color.primary);
+        int selectedColor = ContextCompat.getColor(this, R.color.white);
         int defaultColor = ContextCompat.getColor(this, R.color.muted);
-        int selectedBackground = ContextCompat.getColor(this, R.color.nav_selected_background);
+        int selectedBackground = ContextCompat.getColor(this, R.color.primary);
         int transparent = ContextCompat.getColor(this, android.R.color.transparent);
 
         for (int i = 0; i < bottomNavContainer.getChildCount(); i++) {
@@ -137,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
             button.setIconTint(ColorStateList.valueOf(color));
             button.setBackgroundTintList(ColorStateList.valueOf(selected ? selectedBackground : transparent));
             button.animate()
-                    .scaleX(selected ? 1.02f : 1f)
-                    .scaleY(selected ? 1.02f : 1f)
+                    .scaleX(selected ? 1.05f : 1f)
+                    .scaleY(selected ? 1.05f : 1f)
                     .setDuration(160)
                     .start();
         }

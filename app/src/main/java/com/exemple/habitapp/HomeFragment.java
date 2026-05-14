@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -70,8 +71,21 @@ public class HomeFragment extends Fragment {
         atualizarGaleria();
         renderHabitosExtras();
         renderWeekBars(layoutWeekBarsHome);
+        configurarAtalhosDeTela(view);
+        UiAnimator.enter(view);
 
         return view;
+    }
+
+    private void configurarAtalhosDeTela(View view) {
+        View btnOpenHabits = view.findViewById(R.id.btnOpenHabits);
+        if (btnOpenHabits != null) {
+            btnOpenHabits.setOnClickListener(v -> {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).navigateTo(R.id.habitos);
+                }
+            });
+        }
     }
 
     private void configurarCamera(View view) {
@@ -163,6 +177,9 @@ public class HomeFragment extends Fragment {
         txtPlanoTitulo.setText("Plano inteligente para " + getMelhorHorario());
         txtPlanoDescricao.setText(criarPlanoDoDia(faltaAgua, faltaEstudos, checklistConcluido));
         txtCheckinResumo.setText("Humor: " + labelNivel(getMood()) + "  |  Energia: " + labelNivel(getEnergy()));
+        setTextIfPresent(view, R.id.txtMotivationHome, fraseMotivacional(score, streak));
+        setTextIfPresent(view, R.id.txtHomeCompleted, habitosConcluidos + "/" + habitos.size() + " habitos");
+        setTextIfPresent(view, R.id.txtHomeProgressBadge, score + "% hoje");
         txtHabitosResumo.setText(habitos.isEmpty()
                 ? "Crie hábitos pequenos para acompanhar hoje."
                 : habitosConcluidos + " de " + habitos.size() + " hábitos extras concluídos");
@@ -262,13 +279,24 @@ public class HomeFragment extends Fragment {
                 return;
             }
 
-            habitos.add(novoHabito.replace("\n", " ").replace("|", "/"));
-            salvarCustomHabits(habitos);
+            String nomeSeguro = HabitStore.sanitizeHabitName(novoHabito);
+            HabitRecord record = new HabitRecord(
+                    nomeSeguro,
+                    "Uma acao pequena para manter consistencia hoje.",
+                    "Rotina",
+                    "Diario",
+                    "",
+                    false,
+                    "Azul",
+                    "Estudo"
+            );
+            HabitStore.saveHabitRecord(prefs, null, record);
             inputNovoHabito.setText("");
             HabitStore.saveTodaySnapshot(prefs);
             renderHabitosExtras();
             atualizarResumo(rootView);
             renderWeekBars(layoutWeekBarsHome);
+            FeedbackHelper.snack(rootView, "Habito criado.");
         });
     }
 
@@ -276,7 +304,7 @@ public class HomeFragment extends Fragment {
         if (layoutHabitosExtras == null) return;
 
         layoutHabitosExtras.removeAllViews();
-        List<String> habitos = getCustomHabits();
+        List<HabitRecord> habitos = HabitStore.getHabitRecords(prefs);
 
         if (habitos.isEmpty()) {
             TextView vazio = new TextView(getContext());
@@ -287,7 +315,8 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-        for (String habito : habitos) {
+        for (HabitRecord habitRecord : habitos) {
+            String habito = habitRecord.name;
             LinearLayout row = new LinearLayout(getContext());
             row.setGravity(Gravity.CENTER_VERTICAL);
             row.setOrientation(LinearLayout.HORIZONTAL);
@@ -299,10 +328,13 @@ public class HomeFragment extends Fragment {
             checkBox.setTextSize(15f);
             checkBox.setChecked(isHabitoConcluido(habito));
             checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                prefs.edit().putBoolean(getHabitoKey(habito), isChecked).apply();
-                HabitStore.saveTodaySnapshot(prefs);
+                HabitStore.setHabitDoneToday(prefs, habito, isChecked);
                 atualizarResumo(rootView);
                 renderWeekBars(layoutWeekBarsHome);
+                if (isChecked) {
+                    FeedbackHelper.success(requireContext());
+                    FeedbackHelper.snack(rootView, "Habito concluido.");
+                }
             });
 
             MaterialButton btnEdit = createIconButton(R.drawable.ic_edit, "Editar hábito");
@@ -315,7 +347,15 @@ public class HomeFragment extends Fragment {
             row.addView(checkBox, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
             row.addView(btnEdit);
             row.addView(btnDelete);
-            layoutHabitosExtras.addView(row);
+
+            MaterialCardView card = HabitUi.surfaceCard(requireContext());
+            LinearLayout content = HabitUi.paddedColumn(requireContext(), 12);
+            TextView meta = HabitUi.text(requireContext(), habitRecord.subtitle() + " | " + HabitStore.getHabitStreak(prefs, habitRecord.name) + "d streak", 12, R.color.muted, false);
+            meta.setPadding(dp(44), 0, 0, dp(6));
+            content.addView(row);
+            content.addView(meta);
+            card.addView(content);
+            HabitUi.addWithBottomMargin(layoutHabitosExtras, card, 10);
         }
     }
 
@@ -369,14 +409,18 @@ public class HomeFragment extends Fragment {
                     List<String> habitos = getCustomHabits();
                     int index = habitos.indexOf(habitoAtual);
                     if (index >= 0) {
-                        boolean concluidoHoje = isHabitoConcluido(habitoAtual);
-                        habitos.set(index, novoHabito);
-                        salvarCustomHabits(habitos);
-                        prefs.edit()
-                                .remove(getHabitoKey(habitoAtual))
-                                .putBoolean(getHabitoKey(novoHabito), concluidoHoje)
-                                .apply();
-                        HabitStore.saveTodaySnapshot(prefs);
+                        HabitRecord atual = HabitStore.getHabitRecord(prefs, habitoAtual);
+                        HabitRecord atualizado = new HabitRecord(
+                                novoHabito,
+                                atual.description,
+                                atual.category,
+                                atual.frequency,
+                                atual.time,
+                                atual.reminder,
+                                atual.colorName,
+                                atual.iconName
+                        );
+                        HabitStore.saveHabitRecord(prefs, habitoAtual, atualizado);
                         renderHabitosExtras();
                         atualizarResumo(rootView);
                         renderWeekBars(layoutWeekBarsHome);
@@ -395,11 +439,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void removerHabito(String habito) {
-        List<String> habitos = getCustomHabits();
-        habitos.remove(habito);
-        salvarCustomHabits(habitos);
-        prefs.edit().remove(getHabitoKey(habito)).apply();
-        HabitStore.saveTodaySnapshot(prefs);
+        HabitStore.removeHabitRecord(prefs, habito);
         renderHabitosExtras();
         atualizarResumo(rootView);
         renderWeekBars(layoutWeekBarsHome);
@@ -494,7 +534,7 @@ public class HomeFragment extends Fragment {
     }
 
     private boolean isHabitoConcluido(String habito) {
-        return prefs.getBoolean(getHabitoKey(habito), false);
+        return HabitStore.isHabitDoneToday(prefs, habito);
     }
 
     private String getHabitoKey(String habito) {
@@ -570,6 +610,18 @@ public class HomeFragment extends Fragment {
         if (hour < 12) return "Bom dia";
         if (hour < 18) return "Boa tarde";
         return "Boa noite";
+    }
+
+    private void setTextIfPresent(View view, int id, String value) {
+        TextView textView = view.findViewById(id);
+        if (textView != null) textView.setText(value);
+    }
+
+    private String fraseMotivacional(int score, int streak) {
+        if (score >= 90) return "Excelente. Agora transforme esse ritmo em padrao.";
+        if (streak >= 3) return "Sua sequencia esta criando tracao. Mantenha simples.";
+        if (score >= 60) return "O dia esta encaminhado. Feche mais um bloco.";
+        return "Uma acao pequena agora ja muda o placar.";
     }
 
     private boolean jaTirouFotoHoje() {

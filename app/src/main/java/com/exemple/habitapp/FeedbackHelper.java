@@ -6,6 +6,11 @@ import android.media.ToneGenerator;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.view.View;
+
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public final class FeedbackHelper {
 
@@ -28,5 +33,12 @@ public final class FeedbackHelper {
         } else {
             vibrator.vibrate(50);
         }
+    }
+
+    public static void snack(View anchor, String message) {
+        Snackbar snackbar = Snackbar.make(anchor, message, Snackbar.LENGTH_SHORT);
+        snackbar.setBackgroundTint(ContextCompat.getColor(anchor.getContext(), R.color.ink));
+        snackbar.setTextColor(ContextCompat.getColor(anchor.getContext(), R.color.surface));
+        snackbar.show();
     }
 }

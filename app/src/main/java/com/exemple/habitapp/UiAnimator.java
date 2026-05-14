@@ -36,6 +36,17 @@ public final class UiAnimator {
                 .start();
     }
 
+    public static void enterDelayed(View view, long delayMs) {
+        view.setAlpha(0f);
+        view.setTranslationY(20f);
+        view.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setStartDelay(delayMs)
+                .setDuration(300)
+                .start();
+    }
+
     public static void pulse(View view) {
         view.animate()
                 .scaleX(1.04f)
@@ -45,6 +56,21 @@ public final class UiAnimator {
                         .scaleX(1f)
                         .scaleY(1f)
                         .setDuration(120)
+                        .start())
+                .start();
+    }
+
+    public static void complete(View view) {
+        view.animate()
+                .scaleX(1.08f)
+                .scaleY(1.08f)
+                .alpha(0.92f)
+                .setDuration(110)
+                .withEndAction(() -> view.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .alpha(1f)
+                        .setDuration(180)
                         .start())
                 .start();
     }

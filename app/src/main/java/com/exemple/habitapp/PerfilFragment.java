@@ -89,6 +89,7 @@ public class PerfilFragment extends Fragment {
 
         carregarAvatar();
         atualizarTela();
+        UiAnimator.enter(view);
         return view;
     }
 

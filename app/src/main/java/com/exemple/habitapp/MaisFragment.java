@@ -35,6 +35,7 @@ public class MaisFragment extends Fragment {
         resumo.setText("Score hoje " + HabitStore.getTodayScore(prefs) + "% | XP nivel " + XpEngine.getLevel(prefs) + " | sequencia " + HabitStore.getStreak(prefs) + " dias");
 
         LinearLayout layout = view.findViewById(R.id.layoutMaisAcoes);
+        addAction(layout, R.drawable.ic_nav_goals, "Habitos", "Cards modernos, filtros, streaks e edicao completa.", R.id.habitos);
         addAction(layout, R.drawable.ic_nav_goals, "Missoes", "Tarefas diarias com XP para subir de nivel.", R.id.missoes);
         addAction(layout, R.drawable.ic_nav_chart, "Relatorio semanal", "Resumo automatico e PDF do seu progresso.", R.id.relatorio);
         addAction(layout, R.drawable.ic_nav_chart, "Progresso", "Graficos, conquistas e leitura da semana.", R.id.progresso);
@@ -50,6 +51,7 @@ public class MaisFragment extends Fragment {
         addAction(layout, R.drawable.ic_settings, "Lembretes", "Configure horarios e notificacoes do app.", R.id.configuracoes);
         addAction(layout, R.drawable.ic_backup, "Backup", "Exporte, restaure ou salve na nuvem.", R.id.backup);
         addAction(layout, R.drawable.ic_nav_profile, "Perfil", "Nome, objetivo e resumo geral do usuario.", R.id.perfil);
+        UiAnimator.enter(view);
     }
 
     private void addAction(LinearLayout parent, int iconRes, String title, String subtitle, int destinationId) {
@@ -96,7 +98,9 @@ public class MaisFragment extends Fragment {
         arrow.setTextSize(22f);
         row.addView(arrow);
 
-        parent.addView(row, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        com.google.android.material.card.MaterialCardView card = HabitUi.surfaceCard(requireContext());
+        card.addView(row);
+        HabitUi.addWithBottomMargin(parent, card, 10);
     }
 
     private int dp(int value) {

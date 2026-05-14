@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
             return currentItemId == R.id.progresso
                     || currentItemId == R.id.metas
                     || currentItemId == R.id.perfil
+                    || currentItemId == R.id.habitos
                     || currentItemId == R.id.historico
                     || currentItemId == R.id.configuracoes
                     || currentItemId == R.id.backup
@@ -177,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
             loadFragment(new RotinaFragment());
         } else if (id == R.id.mais) {
             loadFragment(new MaisFragment());
+        } else if (id == R.id.habitos) {
+            loadFragment(new HabitosFragment());
         } else if (id == R.id.metas) {
             loadFragment(new MetasFragment());
         } else if (id == R.id.perfil) {

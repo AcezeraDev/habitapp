@@ -37,6 +37,9 @@ public class ProgressoFragment extends Fragment {
         TextView txtHabitos = view.findViewById(R.id.txtHabitosProgresso);
         TextView txtResumoSemana = view.findViewById(R.id.txtResumoSemana);
         TextView txtNivelProgresso = view.findViewById(R.id.txtNivelProgresso);
+        TextView txtMonthlyAverage = view.findViewById(R.id.txtMonthlyAverage);
+        TextView txtStrongDays = view.findViewById(R.id.txtStrongDays);
+        TextView txtBestScore = view.findViewById(R.id.txtBestScore);
         LinearLayout layoutConquistas = view.findViewById(R.id.layoutConquistas);
         LinearLayout layoutWeekBars = view.findViewById(R.id.layoutWeekBarsProgresso);
         LinearLayout layoutWeekChart = view.findViewById(R.id.layoutWeekChartProgresso);
@@ -69,8 +72,12 @@ public class ProgressoFragment extends Fragment {
         int score = HabitStore.getTodayScore(prefs);
         int streak = HabitStore.getStreak(prefs);
         int weeklyAverage = HabitStore.getWeeklyAverage(prefs);
+        int[] monthlyStats = getMonthlyStats(prefs);
 
         UiAnimator.animatePercentText(txtScore, score);
+        txtMonthlyAverage.setText(monthlyStats[0] + "%\nmes");
+        txtStrongDays.setText(monthlyStats[1] + "\ndias fortes");
+        txtBestScore.setText(monthlyStats[2] + "%\nmelhor");
         txtResumoSemana.setText("Média " + weeklyAverage + "% | sequência " + streak + (streak == 1 ? " dia" : " dias") + " | " + totalFoco + " min foco total");
         txtNivelProgresso.setText("Nível: " + HabitStore.getLevelName(prefs));
         txtResumo.setText(aguaMl + " ml / " + metaMl + " ml");
@@ -92,7 +99,21 @@ public class ProgressoFragment extends Fragment {
         renderWeekChart(layoutWeekChart, prefs);
         renderConquistas(layoutConquistas, score, aguaPercent, estudoPercent, checklistPercent, habitos, habitosConcluidos, sessoes, streak, weeklyAverage, totalAgua, totalFoco);
 
+        UiAnimator.enter(view);
         return view;
+    }
+
+    private int[] getMonthlyStats(SharedPreferences prefs) {
+        int best = 0;
+        int strong = 0;
+        int total = 0;
+        for (int offset = 0; offset > -30; offset--) {
+            int score = HabitStore.getScoreForDay(prefs, HabitStore.dayKey(offset));
+            best = Math.max(best, score);
+            if (score >= 80) strong++;
+            total += score;
+        }
+        return new int[]{Math.round(total / 30f), strong, best};
     }
 
     private int getChecklistConcluido(SharedPreferences prefs) {
@@ -176,6 +197,9 @@ public class ProgressoFragment extends Fragment {
             drawable.setCornerRadius(dp(8));
             bar.setBackground(drawable);
             column.addView(bar, new LinearLayout.LayoutParams(dp(22), barHeight));
+            bar.setPivotY(barHeight);
+            bar.setScaleY(0f);
+            bar.animate().scaleY(1f).setStartDelay(i * 45L).setDuration(360).start();
 
             TextView label = new TextView(requireContext());
             label.setText(i == 6 ? "Hoje" : "-" + (6 - i));

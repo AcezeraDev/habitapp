@@ -11,6 +11,7 @@ public final class HabitStore {
 
     public static final String CUSTOM_HABITS_KEY = "custom_habits";
     private static final long DAY_MILLIS = 1000L * 60L * 60L * 24L;
+    private static final String META_PREFIX = "habit_meta_";
 
     private HabitStore() {
     }
@@ -175,6 +176,95 @@ public final class HabitStore {
         prefs.edit().putString(CUSTOM_HABITS_KEY, TextUtils.join("|", habitos)).apply();
     }
 
+    public static List<HabitRecord> getHabitRecords(SharedPreferences prefs) {
+        List<String> names = getCustomHabits(prefs);
+        List<HabitRecord> records = new ArrayList<>();
+        for (String name : names) {
+            records.add(getHabitRecord(prefs, name));
+        }
+        return records;
+    }
+
+    public static HabitRecord getHabitRecord(SharedPreferences prefs, String habitName) {
+        String name = sanitizeHabitName(habitName);
+        String category = prefs.getString(getHabitMetaKey(name, "category"), inferCategory(name));
+        String frequency = prefs.getString(getHabitMetaKey(name, "frequency"), "Diario");
+        String description = prefs.getString(getHabitMetaKey(name, "description"), defaultDescription(name, category));
+        String time = prefs.getString(getHabitMetaKey(name, "time"), "");
+        boolean reminder = prefs.getBoolean(getHabitMetaKey(name, "reminder"), false);
+        String color = prefs.getString(getHabitMetaKey(name, "color"), defaultColorForCategory(category));
+        String icon = prefs.getString(getHabitMetaKey(name, "icon"), defaultIconForCategory(category));
+        return new HabitRecord(name, description, category, frequency, time, reminder, color, icon);
+    }
+
+    public static void saveHabitRecord(SharedPreferences prefs, String oldName, HabitRecord record) {
+        String newName = sanitizeHabitName(record.name);
+        List<String> habits = getCustomHabits(prefs);
+        String oldSafeName = sanitizeHabitName(oldName);
+
+        if (!TextUtils.isEmpty(oldSafeName) && habits.contains(oldSafeName)) {
+            int index = habits.indexOf(oldSafeName);
+            habits.set(index, newName);
+        } else if (!habits.contains(newName)) {
+            habits.add(newName);
+        }
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(CUSTOM_HABITS_KEY, TextUtils.join("|", habits));
+        putHabitMeta(editor, newName, "description", record.description);
+        putHabitMeta(editor, newName, "category", record.category);
+        putHabitMeta(editor, newName, "frequency", record.frequency);
+        putHabitMeta(editor, newName, "time", record.time);
+        editor.putBoolean(getHabitMetaKey(newName, "reminder"), record.reminder);
+        putHabitMeta(editor, newName, "color", record.colorName);
+        putHabitMeta(editor, newName, "icon", record.iconName);
+
+        if (!TextUtils.isEmpty(oldSafeName) && !oldSafeName.equals(newName)) {
+            boolean doneToday = prefs.getBoolean(getHabitoKey(oldSafeName, todayKey()), false);
+            editor.remove(getHabitoKey(oldSafeName, todayKey()));
+            editor.putBoolean(getHabitoKey(newName, todayKey()), doneToday);
+            removeHabitMeta(editor, oldSafeName);
+        }
+
+        editor.apply();
+        saveTodaySnapshot(prefs);
+    }
+
+    public static void removeHabitRecord(SharedPreferences prefs, String habitName) {
+        String name = sanitizeHabitName(habitName);
+        List<String> habits = getCustomHabits(prefs);
+        habits.remove(name);
+
+        SharedPreferences.Editor editor = prefs.edit()
+                .putString(CUSTOM_HABITS_KEY, TextUtils.join("|", habits))
+                .remove(getHabitoKey(name, todayKey()));
+        removeHabitMeta(editor, name);
+        editor.apply();
+        saveTodaySnapshot(prefs);
+    }
+
+    public static boolean isHabitDoneToday(SharedPreferences prefs, String habitName) {
+        return prefs.getBoolean(getHabitoKey(sanitizeHabitName(habitName), todayKey()), false);
+    }
+
+    public static void setHabitDoneToday(SharedPreferences prefs, String habitName, boolean done) {
+        prefs.edit().putBoolean(getHabitoKey(sanitizeHabitName(habitName), todayKey()), done).apply();
+        saveTodaySnapshot(prefs);
+    }
+
+    public static int getHabitStreak(SharedPreferences prefs, String habitName) {
+        String name = sanitizeHabitName(habitName);
+        int streak = 0;
+        for (int i = 0; i < 90; i++) {
+            if (prefs.getBoolean(getHabitoKey(name, dayKey(-i)), false)) {
+                streak++;
+            } else {
+                break;
+            }
+        }
+        return streak;
+    }
+
     public static int getHabitosExtrasConcluidos(SharedPreferences prefs, List<String> habitos, long day) {
         int total = 0;
         for (String habito : habitos) {
@@ -185,6 +275,58 @@ public final class HabitStore {
 
     public static String getHabitoKey(String habito, long day) {
         return "custom_habit_" + day + "_" + habito.hashCode();
+    }
+
+    public static String sanitizeHabitName(String habitName) {
+        if (habitName == null) return "";
+        return habitName.trim().replace("\n", " ").replace("|", "/");
+    }
+
+    private static String getHabitMetaKey(String habitName, String field) {
+        return META_PREFIX + field + "_" + habitName.hashCode();
+    }
+
+    private static void putHabitMeta(SharedPreferences.Editor editor, String habitName, String field, String value) {
+        editor.putString(getHabitMetaKey(habitName, field), value == null ? "" : value.trim());
+    }
+
+    private static void removeHabitMeta(SharedPreferences.Editor editor, String habitName) {
+        editor.remove(getHabitMetaKey(habitName, "description"));
+        editor.remove(getHabitMetaKey(habitName, "category"));
+        editor.remove(getHabitMetaKey(habitName, "frequency"));
+        editor.remove(getHabitMetaKey(habitName, "time"));
+        editor.remove(getHabitMetaKey(habitName, "reminder"));
+        editor.remove(getHabitMetaKey(habitName, "color"));
+        editor.remove(getHabitMetaKey(habitName, "icon"));
+    }
+
+    private static String inferCategory(String name) {
+        String value = name == null ? "" : name.toLowerCase();
+        if (value.contains("agua") || value.contains("beber") || value.contains("hidrata")) return "Saude";
+        if (value.contains("estud") || value.contains("foco") || value.contains("ler")) return "Foco";
+        if (value.contains("trein") || value.contains("caminh") || value.contains("corpo")) return "Movimento";
+        if (value.contains("sono") || value.contains("dorm")) return "Sono";
+        return "Rotina";
+    }
+
+    private static String defaultDescription(String name, String category) {
+        return "Pequena acao de " + category.toLowerCase() + " para manter consistencia hoje.";
+    }
+
+    private static String defaultColorForCategory(String category) {
+        if ("Saude".equals(category)) return "Agua";
+        if ("Foco".equals(category)) return "Roxo";
+        if ("Movimento".equals(category)) return "Coral";
+        if ("Sono".equals(category)) return "Verde";
+        return "Azul";
+    }
+
+    private static String defaultIconForCategory(String category) {
+        if ("Saude".equals(category)) return "Agua";
+        if ("Foco".equals(category)) return "Foco";
+        if ("Movimento".equals(category)) return "Movimento";
+        if ("Sono".equals(category)) return "Historico";
+        return "Estudo";
     }
 
     private static void migrateLegacyCurrentDay(SharedPreferences prefs, long legacyDay, long today) {

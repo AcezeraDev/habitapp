@@ -68,6 +68,7 @@ public class ConfiguracoesFragment extends Fragment {
             updateThemeSummary();
             Toast.makeText(requireContext(), isChecked ? "Modo escuro ativado." : "Modo claro ativado.", Toast.LENGTH_SHORT).show();
         });
+        UiAnimator.enter(view);
     }
 
     private void loadSavedValues() {

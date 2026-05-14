@@ -22,7 +22,7 @@ HabitApp e um app Android para acompanhar rotina, hidratacao, foco, metas e prog
 
 ## Download
 
-APK debug atual: [`dist/HabitApp-v1.7-debug.apk`](dist/HabitApp-v1.7-debug.apk)
+APK debug atual: [`dist/HabitApp-v2.0-debug.apk`](dist/HabitApp-v2.0-debug.apk)
 
 ## Build
 
@@ -40,4 +40,4 @@ Para gerar uma APK de release local:
 
 ## Versao
 
-Versao atual: `1.7`
+Versao atual: `2.0`

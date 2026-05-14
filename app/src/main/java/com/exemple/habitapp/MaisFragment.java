@@ -36,6 +36,7 @@ public class MaisFragment extends Fragment {
 
         LinearLayout layout = view.findViewById(R.id.layoutMaisAcoes);
         addAction(layout, R.drawable.ic_nav_goals, "Habitos", "Cards modernos, filtros, streaks e edicao completa.", R.id.habitos);
+        addAction(layout, R.drawable.ic_nav_routine, "Rotina", "Acompanhe seu ritmo e mantenha seus blocos do dia.", R.id.rotina);
         addAction(layout, R.drawable.ic_nav_goals, "Missoes", "Tarefas diarias com XP para subir de nivel.", R.id.missoes);
         addAction(layout, R.drawable.ic_nav_chart, "Relatorio semanal", "Resumo automatico e PDF do seu progresso.", R.id.relatorio);
         addAction(layout, R.drawable.ic_nav_chart, "Progresso", "Graficos, conquistas e leitura da semana.", R.id.progresso);

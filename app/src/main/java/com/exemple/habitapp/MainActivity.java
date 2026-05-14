@@ -69,10 +69,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configurarNavegacaoInferior() {
-        adicionarItemNav("Hoje", R.id.home, R.drawable.ic_nav_home);
+        adicionarItemNav("Início", R.id.home, R.drawable.ic_nav_home);
         adicionarItemNav("Água", R.id.agua, R.drawable.ic_nav_water);
         adicionarItemNav("Foco", R.id.estudos, R.drawable.ic_nav_focus);
-        adicionarItemNav("Ritmo", R.id.rotina, R.drawable.ic_nav_routine);
+        adicionarItemNav("Relatórios", R.id.progresso, R.drawable.ic_nav_chart);
         adicionarItemNav("Mais", R.id.mais, R.drawable.ic_nav_more);
     }
 
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
     private void atualizarItemSelecionado() {
         int selectedColor = ContextCompat.getColor(this, R.color.white);
         int defaultColor = ContextCompat.getColor(this, R.color.muted);
-        int selectedBackground = ContextCompat.getColor(this, R.color.primary);
+        int selectedBackground = ContextCompat.getColor(this, R.color.nav_selected_background);
         int transparent = ContextCompat.getColor(this, android.R.color.transparent);
 
         for (int i = 0; i < bottomNavContainer.getChildCount(); i++) {

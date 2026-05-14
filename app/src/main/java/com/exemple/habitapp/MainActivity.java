@@ -99,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
         button.setMinimumHeight(0);
         button.setInsetTop(0);
         button.setInsetBottom(0);
-        button.setCornerRadius(dp(8));
+        button.setCornerRadius(dp(20));
+        HabitUi.press(button);
         button.setStrokeWidth(0);
         button.setOnClickListener(v -> {
             Object tag = v.getTag();
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void atualizarItemSelecionado() {
-        int selectedColor = ContextCompat.getColor(this, R.color.white);
+        int selectedColor = ContextCompat.getColor(this, R.color.primary_dark);
         int defaultColor = ContextCompat.getColor(this, R.color.muted);
         int selectedBackground = ContextCompat.getColor(this, R.color.nav_selected_background);
         int transparent = ContextCompat.getColor(this, android.R.color.transparent);
@@ -215,7 +216,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadFragment(Fragment fragment) {
         frameContainer.setAlpha(0f);
-        frameContainer.setTranslationY(dp(10));
+        frameContainer.setTranslationY(dp(18));
+        frameContainer.setScaleX(0.985f);
+        frameContainer.setScaleY(0.985f);
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
@@ -224,7 +227,9 @@ public class MainActivity extends AppCompatActivity {
         frameContainer.animate()
                 .alpha(1f)
                 .translationY(0f)
-                .setDuration(180)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(260)
                 .start();
     }
 

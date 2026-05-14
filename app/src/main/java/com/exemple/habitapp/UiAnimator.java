@@ -29,9 +29,13 @@ public final class UiAnimator {
     public static void enter(View view) {
         view.setAlpha(0f);
         view.setTranslationY(16f);
+        view.setScaleX(0.985f);
+        view.setScaleY(0.985f);
         view.animate()
                 .alpha(1f)
                 .translationY(0f)
+                .scaleX(1f)
+                .scaleY(1f)
                 .setDuration(260)
                 .start();
     }
@@ -64,11 +68,13 @@ public final class UiAnimator {
         view.animate()
                 .scaleX(1.08f)
                 .scaleY(1.08f)
+                .rotation(2f)
                 .alpha(0.92f)
                 .setDuration(110)
                 .withEndAction(() -> view.animate()
                         .scaleX(1f)
                         .scaleY(1f)
+                        .rotation(0f)
                         .alpha(1f)
                         .setDuration(180)
                         .start())

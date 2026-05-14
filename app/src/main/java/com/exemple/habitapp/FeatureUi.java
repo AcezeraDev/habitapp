@@ -19,14 +19,14 @@ public final class FeatureUi {
     public static void addCard(Context context, LinearLayout parent, String title, String subtitle, int progress, int colorRes) {
         MaterialCardView card = new MaterialCardView(context);
         card.setCardBackgroundColor(ContextCompat.getColor(context, softForColor(colorRes)));
-        card.setRadius(dp(context, 8));
-        card.setCardElevation(dp(context, 3));
+        card.setRadius(dp(context, 22));
+        card.setCardElevation(dp(context, 5));
         card.setStrokeWidth(dp(context, 1));
         card.setStrokeColor(ContextCompat.getColor(context, colorRes));
 
         LinearLayout content = new LinearLayout(context);
         content.setOrientation(LinearLayout.VERTICAL);
-        content.setPadding(dp(context, 18), dp(context, 16), dp(context, 18), dp(context, 16));
+        content.setPadding(dp(context, 20), dp(context, 18), dp(context, 20), dp(context, 18));
 
         TextView titleView = new TextView(context);
         titleView.setText(title);

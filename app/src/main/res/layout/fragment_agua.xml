@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="8dp"
             app:strokeWidth="0dp">
 
@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/water_soft"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/water"
             app:strokeWidth="1dp">
@@ -169,7 +169,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/water"
-                app:cornerRadius="8dp"
+                app:cornerRadius="18dp"
                 app:icon="@drawable/ic_nav_water"
                 app:iconTint="@color/white" />
 
@@ -185,7 +185,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/primary"
-                app:cornerRadius="8dp"
+                app:cornerRadius="18dp"
                 app:icon="@drawable/ic_garrafa"
                 app:iconTint="@color/white" />
 
@@ -200,7 +200,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/success"
-                app:cornerRadius="8dp"
+                app:cornerRadius="18dp"
                 app:icon="@drawable/ic_nav_water"
                 app:iconTint="@color/white" />
         </LinearLayout>
@@ -210,7 +210,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@color/surface_tint"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -263,7 +263,7 @@
                         android:text="Adicionar"
                         android:textAllCaps="false"
                         app:backgroundTint="@color/water"
-                        app:cornerRadius="8dp" />
+                        app:cornerRadius="18dp" />
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -306,7 +306,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface_tint"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">

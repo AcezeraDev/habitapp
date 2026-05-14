@@ -162,73 +162,22 @@ public class HabitosFragment extends Fragment {
 
     private void addHabitCard(HabitRecord habit, int index) {
         boolean done = HabitStore.isHabitDoneToday(prefs, habit.name);
-        int colorRes = habit.colorRes();
-
-        com.google.android.material.card.MaterialCardView card = HabitUi.surfaceCard(requireContext());
-        card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), softForColor(colorRes)));
-        card.setStrokeColor(ContextCompat.getColor(requireContext(), colorRes));
-        LinearLayout content = HabitUi.paddedColumn(requireContext(), 16);
-
-        LinearLayout header = new LinearLayout(requireContext());
-        header.setGravity(Gravity.CENTER_VERTICAL);
-        header.setOrientation(LinearLayout.HORIZONTAL);
-        header.addView(HabitUi.iconBox(requireContext(), habit.iconRes(), colorRes));
-
-        LinearLayout texts = new LinearLayout(requireContext());
-        texts.setOrientation(LinearLayout.VERTICAL);
-        texts.setPadding(HabitUi.dp(requireContext(), 12), 0, 0, 0);
-        TextView title = HabitUi.text(requireContext(), habit.name, 17, R.color.ink, true);
-        TextView subtitle = HabitUi.text(requireContext(), habit.subtitle(), 13, R.color.muted, false);
-        texts.addView(title);
-        texts.addView(subtitle);
-        header.addView(texts, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        header.addView(HabitUi.badge(requireContext(), HabitStore.getHabitStreak(prefs, habit.name) + "d streak", colorRes));
-        content.addView(header);
-
-        TextView description = HabitUi.text(requireContext(), habit.description, 14, R.color.muted, false);
-        description.setPadding(0, HabitUi.dp(requireContext(), 12), 0, HabitUi.dp(requireContext(), 8));
-        content.addView(description);
-
-        LinearProgressIndicator progress = new LinearProgressIndicator(requireContext());
-        progress.setMax(100);
-        progress.setTrackThickness(HabitUi.dp(requireContext(), 8));
-        progress.setTrackCornerRadius(HabitUi.dp(requireContext(), 8));
-        progress.setTrackColor(ContextCompat.getColor(requireContext(), R.color.line));
-        progress.setIndicatorColor(ContextCompat.getColor(requireContext(), colorRes));
-        content.addView(progress, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        UiAnimator.animateProgress(progress, done ? 100 : 0);
-
-        LinearLayout actions = new LinearLayout(requireContext());
-        actions.setGravity(Gravity.CENTER_VERTICAL);
-        actions.setOrientation(LinearLayout.HORIZONTAL);
-        actions.setPadding(0, HabitUi.dp(requireContext(), 14), 0, 0);
-
-        MaterialButton doneButton = new MaterialButton(requireContext());
-        doneButton.setText(done ? "Concluido" : "Concluir");
-        doneButton.setAllCaps(false);
-        doneButton.setIconResource(done ? R.drawable.check_circle : R.drawable.ic_nav_goals);
-        doneButton.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white)));
-        doneButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), done ? R.color.success : colorRes)));
-        doneButton.setCornerRadius(HabitUi.dp(requireContext(), 8));
-        doneButton.setOnClickListener(v -> {
-            HabitStore.setHabitDoneToday(prefs, habit.name, !done);
-            FeedbackHelper.success(requireContext());
-            FeedbackHelper.snack(rootView, !done ? "Habito concluido." : "Habito reaberto.");
-            UiAnimator.complete(card);
-            renderHabits();
-        });
-        actions.addView(doneButton, new LinearLayout.LayoutParams(0, HabitUi.dp(requireContext(), 48), 1f));
-
-        MaterialButton editButton = iconAction(R.drawable.ic_edit, R.color.primary, "Editar habito");
-        editButton.setOnClickListener(v -> showHabitDialog(habit));
-        actions.addView(editButton);
-
-        MaterialButton deleteButton = iconAction(R.drawable.ic_delete, R.color.danger, "Excluir habito");
-        deleteButton.setOnClickListener(v -> confirmDelete(habit));
-        actions.addView(deleteButton);
-
-        content.addView(actions);
-        card.addView(content);
+        com.google.android.material.card.MaterialCardView card = HabitComponents.habitCard(
+                requireContext(),
+                habit,
+                done,
+                HabitStore.getHabitStreak(prefs, habit.name),
+                v -> {
+                    HabitStore.setHabitDoneToday(prefs, habit.name, !done);
+                    FeedbackHelper.success(requireContext());
+                    if (!done) CelebrationView.burst(rootView);
+                    FeedbackHelper.snack(rootView, !done ? "Habito concluido." : "Habito reaberto.");
+                    UiAnimator.complete(v);
+                    renderHabits();
+                },
+                v -> showHabitDialog(habit),
+                v -> confirmDelete(habit)
+        );
         HabitUi.addWithBottomMargin(listLayout, card, 12);
         UiAnimator.enterDelayed(card, Math.min(index, 8) * 40L);
     }
@@ -267,7 +216,16 @@ public class HabitosFragment extends Fragment {
         form.setOrientation(LinearLayout.VERTICAL);
         int padding = HabitUi.dp(requireContext(), 20);
         form.setPadding(padding, padding, padding, padding);
+        form.setBackground(HabitUi.rounded(requireContext(), R.color.surface, R.color.line, 1, 24));
         scroll.addView(form);
+
+        form.addView(HabitComponents.sectionTitle(
+                requireContext(),
+                isEditing ? "Editar habito" : "Novo habito",
+                "Defina nome, cor, icone e frequencia sem sair do fluxo.",
+                R.drawable.ic_nav_goals,
+                R.color.primary
+        ));
 
         TextInputLayout nameLayout = input(form, "Nome do habito", isEditing ? editing.name : "");
         TextInputLayout descriptionLayout = input(form, "Descricao", isEditing ? editing.description : "");
@@ -280,6 +238,8 @@ public class HabitosFragment extends Fragment {
         SwitchMaterial reminder = new SwitchMaterial(requireContext());
         reminder.setText("Ativar lembrete deste habito");
         reminder.setTextColor(ContextCompat.getColor(requireContext(), R.color.ink));
+        reminder.setPadding(HabitUi.dp(requireContext(), 12), HabitUi.dp(requireContext(), 8), HabitUi.dp(requireContext(), 12), HabitUi.dp(requireContext(), 8));
+        reminder.setBackground(HabitUi.rounded(requireContext(), R.color.primary_soft, R.color.line, 1, 18));
         reminder.setChecked(isEditing && editing.reminder);
         form.addView(reminder);
 
@@ -332,7 +292,8 @@ public class HabitosFragment extends Fragment {
         TextInputLayout layout = new TextInputLayout(requireContext());
         layout.setHint(hint);
         layout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
-        layout.setBoxCornerRadii(8, 8, 8, 8);
+        float radius = HabitUi.dp(requireContext(), 18);
+        layout.setBoxCornerRadii(radius, radius, radius, radius);
 
         TextInputEditText editText = new TextInputEditText(requireContext());
         editText.setSingleLine(!"Descricao".equals(hint));
@@ -353,6 +314,8 @@ public class HabitosFragment extends Fragment {
         parent.addView(text);
 
         Spinner spinner = new Spinner(requireContext());
+        spinner.setPadding(HabitUi.dp(requireContext(), 10), HabitUi.dp(requireContext(), 8), HabitUi.dp(requireContext(), 10), HabitUi.dp(requireContext(), 8));
+        spinner.setBackground(HabitUi.rounded(requireContext(), R.color.surface_tint, R.color.line, 1, 18));
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, values);
         spinner.setAdapter(adapter);
         spinner.setSelection(Math.max(0, adapter.getPosition(selected)));

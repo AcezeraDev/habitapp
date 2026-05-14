@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="8dp"
             app:strokeWidth="0dp">
 
@@ -71,6 +71,12 @@
                     android:textSize="42sp"
                     android:textStyle="bold" />
 
+                <com.exemple.habitapp.ProgressRingView
+                    android:id="@+id/ringScoreProgresso"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_marginTop="8dp" />
+
                 <TextView
                     android:id="@+id/txtInsights"
                     android:layout_width="wrap_content"
@@ -92,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface_tint"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -116,7 +122,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Média 0% | streak 0 dias"
+                    android:text="MÃ©dia 0% | streak 0 dias"
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
 
@@ -125,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Nível: Inicial"
+                    android:text="NÃ­vel: Inicial"
                     android:textColor="@color/ink"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -137,6 +143,12 @@
                     android:layout_marginTop="14dp"
                     android:gravity="bottom"
                     android:orientation="horizontal" />
+
+                <com.exemple.habitapp.HeatmapView
+                    android:id="@+id/heatmapProgresso"
+                    android:layout_width="match_parent"
+                    android:layout_height="132dp"
+                    android:layout_marginTop="14dp" />
 
                 <LinearLayout
                     android:id="@+id/layoutWeekBarsProgresso"
@@ -208,7 +220,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface_tint"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -232,7 +244,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Humor: ainda não registrado"
+                    android:text="Humor: ainda nÃ£o registrado"
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
 
@@ -241,7 +253,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Energia: ainda não registrada"
+                    android:text="Energia: ainda nÃ£o registrada"
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -252,7 +264,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/water_soft"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -266,7 +278,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Água"
+                    android:text="Ãgua"
                     android:textColor="@color/water"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -298,7 +310,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/study_soft"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -332,7 +344,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="0 sessões concluídas"
+                    android:text="0 sessÃµes concluÃ­das"
                     android:textColor="@color/muted"
                     android:textSize="13sp" />
 
@@ -353,7 +365,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -377,7 +389,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="0 de 3 concluídos"
+                    android:text="0 de 3 concluÃ­dos"
                     android:textColor="@color/ink"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -399,7 +411,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -413,7 +425,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Hábitos extras"
+                    android:text="HÃ¡bitos extras"
                     android:textColor="@color/warning"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -423,7 +435,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Nenhum hábito extra criado"
+                    android:text="Nenhum hÃ¡bito extra criado"
                     android:textColor="@color/ink"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -445,7 +457,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">

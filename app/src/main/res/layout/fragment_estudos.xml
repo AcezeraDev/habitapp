@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="8dp"
             app:strokeWidth="0dp">
 
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/study_soft"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/study"
             app:strokeWidth="1dp">
@@ -132,7 +132,7 @@
                     android:text="Marcar +10 min já estudados"
                     android:textAllCaps="false"
                     app:backgroundTint="@color/surface"
-                    app:cornerRadius="8dp" />
+                    app:cornerRadius="18dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -162,7 +162,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/study"
-                app:cornerRadius="8dp"
+                app:cornerRadius="18dp"
                 app:icon="@drawable/ic_nav_focus"
                 app:iconTint="@color/white" />
 
@@ -178,7 +178,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/primary"
-                app:cornerRadius="8dp"
+                app:cornerRadius="18dp"
                 app:icon="@drawable/ic_nav_focus"
                 app:iconTint="@color/white" />
 
@@ -193,7 +193,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/coral"
-                app:cornerRadius="8dp"
+                app:cornerRadius="18dp"
                 app:icon="@drawable/ic_nav_focus"
                 app:iconTint="@color/white" />
         </LinearLayout>
@@ -203,7 +203,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -248,7 +248,7 @@
                         android:layout_weight="1"
                         android:text="Resetar"
                         android:textAllCaps="false"
-                        app:cornerRadius="8dp" />
+                        app:cornerRadius="18dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnStart"
@@ -259,7 +259,7 @@
                         android:text="Iniciar"
                         android:textAllCaps="false"
                         app:backgroundTint="@color/coral"
-                        app:cornerRadius="8dp" />
+                        app:cornerRadius="18dp" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -269,7 +269,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">

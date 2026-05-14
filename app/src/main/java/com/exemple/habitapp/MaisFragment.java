@@ -55,10 +55,11 @@ public class MaisFragment extends Fragment {
     }
 
     private void addAction(LinearLayout parent, int iconRes, String title, String subtitle, int destinationId) {
+        int accent = accentFor(destinationId);
         LinearLayout row = new LinearLayout(requireContext());
         row.setGravity(Gravity.CENTER_VERTICAL);
         row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setPadding(dp(12), dp(12), dp(12), dp(12));
+        row.setPadding(dp(14), dp(14), dp(14), dp(14));
         row.setClickable(true);
         row.setFocusable(true);
         row.setOnClickListener(v -> {
@@ -69,8 +70,10 @@ public class MaisFragment extends Fragment {
 
         ImageView icon = new ImageView(requireContext());
         icon.setImageResource(iconRes);
-        icon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.primary));
-        row.addView(icon, new LinearLayout.LayoutParams(dp(30), dp(30)));
+        icon.setColorFilter(ContextCompat.getColor(requireContext(), accent));
+        icon.setPadding(dp(9), dp(9), dp(9), dp(9));
+        icon.setBackground(HabitUi.rounded(requireContext(), softFor(accent), accent, 1, 8));
+        row.addView(icon, new LinearLayout.LayoutParams(dp(44), dp(44)));
 
         LinearLayout texts = new LinearLayout(requireContext());
         texts.setOrientation(LinearLayout.VERTICAL);
@@ -94,7 +97,7 @@ public class MaisFragment extends Fragment {
 
         TextView arrow = new TextView(requireContext());
         arrow.setText(">");
-        arrow.setTextColor(ContextCompat.getColor(requireContext(), R.color.muted));
+        arrow.setTextColor(ContextCompat.getColor(requireContext(), accent));
         arrow.setTextSize(22f);
         row.addView(arrow);
 
@@ -105,5 +108,29 @@ public class MaisFragment extends Fragment {
 
     private int dp(int value) {
         return Math.round(value * getResources().getDisplayMetrics().density);
+    }
+
+    private int accentFor(int destinationId) {
+        if (destinationId == R.id.backup || destinationId == R.id.configuracoes || destinationId == R.id.aparencia) {
+            return R.color.primary;
+        }
+        if (destinationId == R.id.progresso || destinationId == R.id.relatorio || destinationId == R.id.estatisticas) {
+            return R.color.study;
+        }
+        if (destinationId == R.id.calendario || destinationId == R.id.historico || destinationId == R.id.diario) {
+            return R.color.coral;
+        }
+        if (destinationId == R.id.metas || destinationId == R.id.missoes || destinationId == R.id.conquistas) {
+            return R.color.success;
+        }
+        return R.color.water;
+    }
+
+    private int softFor(int accent) {
+        if (accent == R.color.study) return R.color.study_soft;
+        if (accent == R.color.coral) return R.color.coral_soft;
+        if (accent == R.color.success) return R.color.success_soft;
+        if (accent == R.color.water) return R.color.water_soft;
+        return R.color.primary_soft;
     }
 }

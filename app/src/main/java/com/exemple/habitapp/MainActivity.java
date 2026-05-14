@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         button.setId(View.generateViewId());
         button.setTag(id);
         button.setText(titulo);
-        button.setTextSize(9.5f);
+        button.setTextSize(10.5f);
         button.setSingleLine(true);
         button.setMaxLines(1);
         button.setEllipsize(TextUtils.TruncateAt.END);
@@ -90,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
         button.setGravity(Gravity.CENTER);
         button.setAllCaps(false);
         button.setIconResource(iconRes);
-        button.setIconSize(dp(22));
+        button.setIconSize(dp(24));
         button.setIconGravity(MaterialButton.ICON_GRAVITY_TOP);
-        button.setIconPadding(dp(2));
+        button.setIconPadding(dp(4));
         button.setMinWidth(0);
         button.setMinimumWidth(0);
         button.setMinHeight(0);
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
-        params.setMargins(2, 6, 2, 6);
+        params.setMargins(dp(2), dp(3), dp(2), dp(3));
         bottomNavContainer.addView(button, params);
     }
 

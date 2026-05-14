@@ -20,13 +20,13 @@ public final class FeatureUi {
         MaterialCardView card = new MaterialCardView(context);
         card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.surface));
         card.setRadius(dp(context, 8));
-        card.setCardElevation(0);
+        card.setCardElevation(dp(context, 2));
         card.setStrokeWidth(dp(context, 1));
         card.setStrokeColor(ContextCompat.getColor(context, R.color.line));
 
         LinearLayout content = new LinearLayout(context);
         content.setOrientation(LinearLayout.VERTICAL);
-        content.setPadding(dp(context, 16), dp(context, 14), dp(context, 16), dp(context, 14));
+        content.setPadding(dp(context, 18), dp(context, 16), dp(context, 18), dp(context, 16));
 
         TextView titleView = new TextView(context);
         titleView.setText(title);
@@ -39,7 +39,7 @@ public final class FeatureUi {
         subtitleView.setText(subtitle);
         subtitleView.setTextColor(ContextCompat.getColor(context, R.color.muted));
         subtitleView.setTextSize(13f);
-        subtitleView.setPadding(0, dp(context, 5), 0, progress >= 0 ? dp(context, 10) : 0);
+        subtitleView.setPadding(0, dp(context, 6), 0, progress >= 0 ? dp(context, 12) : 0);
         content.addView(subtitleView);
 
         if (progress >= 0) {
@@ -48,7 +48,7 @@ public final class FeatureUi {
             bar.setProgressCompat(progress, false);
             bar.setIndicatorColor(ContextCompat.getColor(context, colorRes));
             bar.setTrackColor(ContextCompat.getColor(context, R.color.line));
-            bar.setTrackThickness(dp(context, 6));
+            bar.setTrackThickness(dp(context, 8));
             bar.setTrackCornerRadius(dp(context, 8));
             content.addView(bar, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }

@@ -24,7 +24,7 @@ public final class HabitUi {
         MaterialCardView card = new MaterialCardView(context);
         card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.surface));
         card.setRadius(dp(context, 8));
-        card.setCardElevation(dp(context, 1));
+        card.setCardElevation(dp(context, 2));
         card.setStrokeWidth(dp(context, 1));
         card.setStrokeColor(ContextCompat.getColor(context, R.color.line));
         card.setUseCompatPadding(true);
@@ -54,7 +54,7 @@ public final class HabitUi {
         TextView view = text(context, value, 12, colorRes, true);
         view.setGravity(Gravity.CENTER);
         view.setPadding(dp(context, 10), dp(context, 6), dp(context, 10), dp(context, 6));
-        view.setBackground(rounded(context, R.color.surface_soft, colorRes, 1, 8));
+        view.setBackground(rounded(context, R.color.surface_tint, colorRes, 1, 8));
         return view;
     }
 
@@ -63,7 +63,7 @@ public final class HabitUi {
         icon.setImageResource(iconRes);
         icon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(context, colorRes)));
         icon.setPadding(dp(context, 10), dp(context, 10), dp(context, 10), dp(context, 10));
-        icon.setBackground(rounded(context, R.color.surface_soft, colorRes, 1, 8));
+        icon.setBackground(rounded(context, R.color.surface_tint, colorRes, 1, 8));
         icon.setContentDescription(null);
         icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         icon.setLayoutParams(new LinearLayout.LayoutParams(dp(context, 46), dp(context, 46)));

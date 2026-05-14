@@ -10,12 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="18dp">
+        android:paddingStart="18dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="18dp"
+        android:paddingBottom="28dp">
 
         <TextView
             android:id="@+id/txtGreeting"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_soft_primary"
+            android:paddingStart="10dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="6dp"
             android:text="Bom dia"
             android:textColor="@color/primary"
             android:textSize="12sp"
@@ -35,9 +43,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            app:cardBackgroundColor="@color/surface"
+            app:cardBackgroundColor="@color/surface_tint"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
+            app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 
@@ -83,7 +91,7 @@
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
+            app:cardElevation="8dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -155,7 +163,7 @@
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
+            app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 
@@ -234,7 +242,7 @@
                 android:layout_weight="1"
                 app:cardBackgroundColor="@color/surface"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="0dp"
+                app:cardElevation="2dp"
                 app:strokeColor="@color/line"
                 app:strokeWidth="1dp">
 
@@ -290,7 +298,7 @@
                 android:layout_weight="1"
                 app:cardBackgroundColor="@color/surface"
                 app:cardCornerRadius="8dp"
-                app:cardElevation="0dp"
+                app:cardElevation="2dp"
                 app:strokeColor="@color/line"
                 app:strokeWidth="1dp">
 
@@ -346,7 +354,7 @@
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
+            app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 
@@ -373,7 +381,7 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnQuickWater"
                         android:layout_width="0dp"
-                        android:layout_height="54dp"
+                        android:layout_height="56dp"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
                         android:text="+250 ml"
@@ -384,7 +392,7 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnQuickFocus"
                         android:layout_width="0dp"
-                        android:layout_height="54dp"
+                        android:layout_height="56dp"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:text="Abrir foco"
@@ -401,7 +409,7 @@
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
+            app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 
@@ -437,7 +445,7 @@
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
+            app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 
@@ -572,7 +580,7 @@
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
+            app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 
@@ -639,7 +647,7 @@
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
+            app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 
@@ -763,7 +771,7 @@
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
+            app:cardElevation="8dp"
             app:strokeWidth="0dp">
 
             <LinearLayout

@@ -467,6 +467,18 @@
                     android:text="Uma ação pequena agora deixa o dia mais fácil."
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNextActionHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="14dp"
+                    android:text="Comecar proximo passo"
+                    android:textAllCaps="false"
+                    app:backgroundTint="@color/primary"
+                    app:cornerRadius="18dp"
+                    app:icon="@drawable/ic_nav_goals"
+                    app:iconTint="@color/white" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

@@ -133,6 +133,7 @@ public class HomeFragment extends Fragment {
         TextView txtStreakHome = view.findViewById(R.id.txtStreakHome);
         TextView txtMediaHome = view.findViewById(R.id.txtMediaHome);
         TextView txtNivelHome = view.findViewById(R.id.txtNivelHome);
+        MaterialButton btnNextActionHome = view.findViewById(R.id.btnNextActionHome);
         ProgressRingView ringDaily = view.findViewById(R.id.ringDaily);
         LinearProgressIndicator progressDaily = view.findViewById(R.id.progressDaily);
         LinearProgressIndicator progressAguaHome = view.findViewById(R.id.progressAguaHome);
@@ -164,7 +165,7 @@ public class HomeFragment extends Fragment {
         List<Mission> missions = MissionEngine.getDailyMissions(prefs);
 
         txtGreeting.setText(getSaudacao() + ", " + nome);
-        txtHomeXp.setText("Nivel " + XpEngine.getLevel(prefs) + " | " + XpEngine.getBaseXp(prefs) + " XP");
+        txtHomeXp.setText("Nivel " + XpEngine.getLevel(prefs) + " | " + XpEngine.getBaseXp(prefs) + " XP | faltam " + XpEngine.getXpToNextLevel(prefs));
         txtHomeMission.setText("Missao em foco: " + MissionEngine.getNextMissionTitle(missions));
             txtHomeTheme.setText("Tema ativo: " + ThemeController.getAccentTheme(requireContext()) + " | " + ThemeController.getModeLabel(requireContext()));
         UiAnimator.animatePercentText(txtScore, score);
@@ -177,6 +178,15 @@ public class HomeFragment extends Fragment {
         txtChallengeStatus.setText("Dia " + Math.min(diaAtual, metaDias) + " de " + metaDias);
         txtPlanoTitulo.setText("Plano inteligente para " + getMelhorHorario());
         txtPlanoDescricao.setText(criarPlanoDoDia(faltaAgua, faltaEstudos, checklistConcluido));
+        if (btnNextActionHome != null) {
+            btnNextActionHome.setText(nextActionLabel(faltaAgua, faltaEstudos));
+            btnNextActionHome.setIconResource(nextActionIcon(faltaAgua, faltaEstudos));
+            btnNextActionHome.setOnClickListener(v -> {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).navigateTo(nextActionDestination(faltaAgua, faltaEstudos));
+                }
+            });
+        }
         txtCheckinResumo.setText("Humor: " + labelNivel(getMood()) + "  |  Energia: " + labelNivel(getEnergy()));
         setTextIfPresent(view, R.id.txtMotivationHome, fraseMotivacional(score, streak));
         setTextIfPresent(view, R.id.txtHomeCompleted, habitosConcluidos + "/" + habitos.size() + " habitos");
@@ -282,16 +292,7 @@ public class HomeFragment extends Fragment {
             }
 
             String nomeSeguro = HabitStore.sanitizeHabitName(novoHabito);
-            HabitRecord record = new HabitRecord(
-                    nomeSeguro,
-                    "Uma acao pequena para manter consistencia hoje.",
-                    "Rotina",
-                    "Diario",
-                    "",
-                    false,
-                    "Azul",
-                    "Estudo"
-            );
+            HabitRecord record = HabitStore.buildSuggestedRecord(nomeSeguro);
             HabitStore.saveHabitRecord(prefs, null, record);
             inputNovoHabito.setText("");
             HabitStore.saveTodaySnapshot(prefs);
@@ -376,7 +377,12 @@ public class HomeFragment extends Fragment {
                     renderHabitosExtras();
                 },
                 v -> editarHabito(habito),
-                v -> confirmarRemocaoHabito(habito)
+                v -> confirmarRemocaoHabito(habito),
+                v -> HabitDetailDialog.show(requireContext(), prefs, rootView, habitRecord, () -> {
+                    atualizarResumo(rootView);
+                    renderWeekBars(layoutWeekBarsHome);
+                    renderHabitosExtras();
+                })
         );
         HabitUi.addWithBottomMargin(layoutHabitosExtras, card, 10);
     }
@@ -595,6 +601,30 @@ public class HomeFragment extends Fragment {
         if (getChecklistConcluido() < 3) return "finalizar checklist";
         if (getCustomHabits().size() > getHabitosExtrasConcluidos(getCustomHabits())) return "hábito extra";
         return "registrar progresso";
+    }
+
+    private String nextActionLabel(int faltaAgua, int faltaEstudos) {
+        if (faltaAgua > 0) return "Registrar agua agora";
+        if (faltaEstudos > 0) return "Abrir bloco de foco";
+        if (getChecklistConcluido() < 3) return "Fechar checklist";
+        if (getCustomHabits().size() > getHabitosExtrasConcluidos(getCustomHabits())) return "Ver habitos pendentes";
+        return "Ver progresso";
+    }
+
+    private int nextActionDestination(int faltaAgua, int faltaEstudos) {
+        if (faltaAgua > 0) return R.id.agua;
+        if (faltaEstudos > 0) return R.id.estudos;
+        if (getChecklistConcluido() < 3) return R.id.home;
+        if (getCustomHabits().size() > getHabitosExtrasConcluidos(getCustomHabits())) return R.id.habitos;
+        return R.id.progresso;
+    }
+
+    private int nextActionIcon(int faltaAgua, int faltaEstudos) {
+        if (faltaAgua > 0) return R.drawable.ic_premium_drop;
+        if (faltaEstudos > 0) return R.drawable.ic_nav_focus;
+        if (getChecklistConcluido() < 3) return R.drawable.check_circle;
+        if (getCustomHabits().size() > getHabitosExtrasConcluidos(getCustomHabits())) return R.drawable.ic_nav_goals;
+        return R.drawable.ic_nav_chart;
     }
 
     private String criarPlanoDoDia(int faltaAgua, int faltaEstudos, int checklistConcluido) {

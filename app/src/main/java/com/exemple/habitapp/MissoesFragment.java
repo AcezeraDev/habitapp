@@ -43,11 +43,13 @@ public class MissoesFragment extends Fragment {
         ((TextView) view.findViewById(R.id.txtFeatureTitle)).setText("Missoes diarias");
         ((TextView) view.findViewById(R.id.txtFeatureSubtitle)).setText("Tarefas pequenas que viram XP e deixam o dia andando.");
         ((TextView) view.findViewById(R.id.txtFeatureHeroTitle)).setText("Nivel " + level + " | " + XpEngine.getBaseXp(prefs) + " XP");
-        ((TextView) view.findViewById(R.id.txtFeatureHeroSubtitle)).setText(done + " de " + missions.size() + " missoes completas. Proxima: " + MissionEngine.getNextMissionTitle(missions));
+        ((TextView) view.findViewById(R.id.txtFeatureHeroSubtitle)).setText(done + " de " + missions.size() + " missoes completas. Faltam " + XpEngine.getXpToNextLevel(prefs) + " XP para o proximo nivel.");
         ((LinearProgressIndicator) view.findViewById(R.id.progressFeatureHero)).setProgressCompat(XpEngine.getLevelProgress(prefs), true);
 
         LinearLayout list = view.findViewById(R.id.layoutFeatureContent);
         list.removeAllViews();
+        FeatureUi.addCard(requireContext(), list, "Proxima missao", MissionEngine.getNextMissionTitle(missions), -1, R.color.primary);
+        FeatureUi.addCard(requireContext(), list, "Bonus de streak", "+" + XpEngine.getStreakBonus(prefs) + " XP pelo ritmo atual.", HabitStore.getStreak(prefs) >= 7 ? 100 : HabitStore.percent(HabitStore.getStreak(prefs), 7), R.color.coral);
         for (Mission mission : missions) {
             FeatureUi.addCard(requireContext(), list, mission.title + " +" + mission.xpReward + " XP", mission.subtitle, mission.progress, mission.isComplete() ? R.color.success : R.color.primary);
         }

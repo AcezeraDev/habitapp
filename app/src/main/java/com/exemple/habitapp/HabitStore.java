@@ -197,6 +197,36 @@ public final class HabitStore {
         return new HabitRecord(name, description, category, frequency, time, reminder, color, icon);
     }
 
+    public static HabitRecord buildSuggestedRecord(String habitName) {
+        String name = sanitizeHabitName(habitName);
+        String category = inferCategory(name);
+        return new HabitRecord(
+                name,
+                defaultDescription(name, category),
+                category,
+                defaultFrequencyForCategory(category),
+                defaultTimeForCategory(category),
+                "Saude".equals(category) || "Foco".equals(category) || "Sono".equals(category),
+                defaultColorForCategory(category),
+                defaultIconForCategory(category)
+        );
+    }
+
+    public static void ensureStarterHabits(SharedPreferences prefs, String objective) {
+        List<String> habits = getCustomHabits(prefs);
+        if (!habits.isEmpty()) return;
+
+        String target = objective == null ? "" : objective.toLowerCase();
+        List<HabitRecord> starters = new ArrayList<>();
+        starters.add(buildSuggestedRecord(target.contains("agua") ? "Beber 2L de agua" : "Planejar o dia"));
+        starters.add(buildSuggestedRecord(target.contains("estud") ? "Estudar 30 min" : "Fazer 15 min de foco"));
+        starters.add(buildSuggestedRecord(target.contains("agua") ? "Alongar por 5 min" : "Beber agua"));
+
+        for (HabitRecord starter : starters) {
+            saveHabitRecord(prefs, null, starter);
+        }
+    }
+
     public static void saveHabitRecord(SharedPreferences prefs, String oldName, HabitRecord record) {
         String newName = sanitizeHabitName(record.name);
         List<String> habits = getCustomHabits(prefs);
@@ -265,6 +295,41 @@ public final class HabitStore {
         return streak;
     }
 
+    public static int getHabitBestStreak(SharedPreferences prefs, String habitName, int days) {
+        String name = sanitizeHabitName(habitName);
+        int best = 0;
+        int current = 0;
+        for (int i = days - 1; i >= 0; i--) {
+            boolean done = prefs.getBoolean(getHabitoKey(name, dayKey(-i)), false);
+            if (done) {
+                current++;
+                best = Math.max(best, current);
+            } else {
+                current = 0;
+            }
+        }
+        return best;
+    }
+
+    public static int getHabitCompletedTotal(SharedPreferences prefs, String habitName, int days) {
+        String name = sanitizeHabitName(habitName);
+        int total = 0;
+        for (int i = 0; i < days; i++) {
+            if (prefs.getBoolean(getHabitoKey(name, dayKey(-i)), false)) {
+                total++;
+            }
+        }
+        return total;
+    }
+
+    public static int getHabitWeekCompletionPercent(SharedPreferences prefs, String habitName) {
+        return percent(getHabitCompletedTotal(prefs, habitName, 7), 7);
+    }
+
+    public static boolean wasHabitDoneOnDay(SharedPreferences prefs, String habitName, long day) {
+        return prefs.getBoolean(getHabitoKey(sanitizeHabitName(habitName), day), false);
+    }
+
     public static int getHabitosExtrasConcluidos(SharedPreferences prefs, List<String> habitos, long day) {
         int total = 0;
         for (String habito : habitos) {
@@ -301,16 +366,52 @@ public final class HabitStore {
     }
 
     private static String inferCategory(String name) {
-        String value = name == null ? "" : name.toLowerCase();
+        String value = normalize(name);
         if (value.contains("agua") || value.contains("beber") || value.contains("hidrata")) return "Saude";
         if (value.contains("estud") || value.contains("foco") || value.contains("ler")) return "Foco";
-        if (value.contains("trein") || value.contains("caminh") || value.contains("corpo")) return "Movimento";
+        if (value.contains("trein") || value.contains("exerc") || value.contains("along") || value.contains("caminh") || value.contains("corpo")) return "Movimento";
         if (value.contains("sono") || value.contains("dorm")) return "Sono";
         return "Rotina";
     }
 
     private static String defaultDescription(String name, String category) {
+        String value = normalize(name);
+        if ("Saude".equals(category)) return "Cuide da energia do corpo com uma meta simples e visivel.";
+        if ("Foco".equals(category)) return value.contains("ler")
+                ? "Leia algumas paginas e marque a vitoria sem complicar."
+                : "Proteja um bloco curto de atencao profunda.";
+        if ("Movimento".equals(category)) return "Movimente o corpo por poucos minutos para manter constancia.";
+        if ("Sono".equals(category)) return "Prepare uma noite melhor com uma rotina pequena.";
         return "Pequena acao de " + category.toLowerCase() + " para manter consistencia hoje.";
+    }
+
+    private static String normalize(String value) {
+        if (value == null) return "";
+        return value.toLowerCase()
+                .replace("á", "a")
+                .replace("à", "a")
+                .replace("ã", "a")
+                .replace("â", "a")
+                .replace("é", "e")
+                .replace("ê", "e")
+                .replace("í", "i")
+                .replace("ó", "o")
+                .replace("ô", "o")
+                .replace("õ", "o")
+                .replace("ú", "u")
+                .replace("ç", "c");
+    }
+
+    private static String defaultFrequencyForCategory(String category) {
+        if ("Movimento".equals(category)) return "3x semana";
+        return "Diario";
+    }
+
+    private static String defaultTimeForCategory(String category) {
+        if ("Saude".equals(category)) return "10:00";
+        if ("Foco".equals(category)) return "16:30";
+        if ("Sono".equals(category)) return "22:30";
+        return "";
     }
 
     private static String defaultColorForCategory(String category) {
@@ -325,7 +426,7 @@ public final class HabitStore {
         if ("Saude".equals(category)) return "Agua";
         if ("Foco".equals(category)) return "Foco";
         if ("Movimento".equals(category)) return "Movimento";
-        if ("Sono".equals(category)) return "Historico";
+        if ("Sono".equals(category)) return "Sono";
         return "Estudo";
     }
 

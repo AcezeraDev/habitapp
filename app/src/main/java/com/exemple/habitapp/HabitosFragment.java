@@ -39,7 +39,7 @@ public class HabitosFragment extends Fragment {
     private static final String[] CATEGORY_VALUES = {"Rotina", "Saude", "Foco", "Movimento", "Sono"};
     private static final String[] FREQUENCY_VALUES = {"Diario", "Dias uteis", "3x semana", "Semanal"};
     private static final String[] COLORS = {"Azul", "Agua", "Verde", "Roxo", "Amarelo", "Coral"};
-    private static final String[] ICONS = {"Estudo", "Agua", "Movimento", "Foco", "Sono", "Sol", "Lua", "Fogo", "Trofeu", "Historico", "Perfil"};
+    private static final String[] ICONS = {"Estudo", "Livro", "Agua", "Movimento", "Foco", "Sono", "Sol", "Lua", "Fogo", "Trofeu", "Historico", "Perfil"};
 
     private SharedPreferences prefs;
     private LinearLayout listLayout;
@@ -176,7 +176,8 @@ public class HabitosFragment extends Fragment {
                     renderHabits();
                 },
                 v -> showHabitDialog(habit),
-                v -> confirmDelete(habit)
+                v -> confirmDelete(habit),
+                v -> HabitDetailDialog.show(requireContext(), prefs, rootView, habit, this::renderHabits)
         );
         HabitUi.addWithBottomMargin(listLayout, card, 12);
         UiAnimator.enterDelayed(card, Math.min(index, 8) * 40L);
@@ -234,6 +235,9 @@ public class HabitosFragment extends Fragment {
         Spinner frequency = spinner(form, "Frequencia", FREQUENCY_VALUES, isEditing ? editing.frequency : "Diario");
         Spinner color = spinner(form, "Cor", COLORS, isEditing ? editing.colorName : "Azul");
         Spinner icon = spinner(form, "Icone", ICONS, isEditing ? editing.iconName : "Estudo");
+        if (!isEditing) {
+            addTemplates(form, nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon);
+        }
 
         SwitchMaterial reminder = new SwitchMaterial(requireContext());
         reminder.setText("Ativar lembrete deste habito");
@@ -267,7 +271,7 @@ public class HabitosFragment extends Fragment {
 
             String description = text(descriptionLayout);
             if (TextUtils.isEmpty(description)) {
-                description = "Uma acao pequena para manter consistencia hoje.";
+                description = HabitStore.buildSuggestedRecord(name).description;
             }
 
             HabitRecord record = new HabitRecord(
@@ -286,6 +290,76 @@ public class HabitosFragment extends Fragment {
             dialog.dismiss();
         }));
         dialog.show();
+    }
+
+    private void addTemplates(LinearLayout parent, TextInputLayout nameLayout, TextInputLayout descriptionLayout, TextInputLayout timeLayout,
+                              Spinner category, Spinner frequency, Spinner color, Spinner icon) {
+        TextView label = HabitUi.text(requireContext(), "Modelos inteligentes", 12, R.color.muted, true);
+        label.setPadding(0, HabitUi.dp(requireContext(), 4), 0, HabitUi.dp(requireContext(), 8));
+        parent.addView(label);
+
+        LinearLayout row = new LinearLayout(requireContext());
+        row.setOrientation(LinearLayout.VERTICAL);
+        row.setPadding(0, 0, 0, HabitUi.dp(requireContext(), 8));
+        parent.addView(row);
+
+        row.addView(templateButton("Beber agua", R.drawable.ic_premium_drop, R.color.water,
+                nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
+        row.addView(templateButton("Estudar 30 min", R.drawable.ic_nav_focus, R.color.study,
+                nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
+        row.addView(templateButton("Fazer exercicio", R.drawable.ic_premium_dumbbell, R.color.coral,
+                nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
+        row.addView(templateButton("Dormir cedo", R.drawable.ic_premium_sleep, R.color.success,
+                nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
+        row.addView(templateButton("Ler 10 paginas", R.drawable.ic_premium_book, R.color.primary,
+                nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
+    }
+
+    private MaterialButton templateButton(String title, int iconRes, int colorRes, TextInputLayout nameLayout,
+                                          TextInputLayout descriptionLayout, TextInputLayout timeLayout,
+                                          Spinner category, Spinner frequency, Spinner color, Spinner icon) {
+        MaterialButton button = new MaterialButton(requireContext(), null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
+        button.setText(title);
+        button.setAllCaps(false);
+        button.setIconResource(iconRes);
+        button.setIconTint(HabitUi.isPremiumIcon(iconRes) ? null : ColorStateList.valueOf(ContextCompat.getColor(requireContext(), colorRes)));
+        button.setTextColor(ContextCompat.getColor(requireContext(), R.color.ink));
+        button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), softForColor(colorRes))));
+        button.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), colorRes)));
+        button.setCornerRadius(HabitUi.dp(requireContext(), 18));
+        HabitUi.press(button);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, HabitUi.dp(requireContext(), 48));
+        params.setMargins(0, 0, 0, HabitUi.dp(requireContext(), 8));
+        button.setLayoutParams(params);
+        button.setOnClickListener(v -> applyTemplate(title, nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
+        return button;
+    }
+
+    private void applyTemplate(String title, TextInputLayout nameLayout, TextInputLayout descriptionLayout, TextInputLayout timeLayout,
+                               Spinner category, Spinner frequency, Spinner color, Spinner icon) {
+        HabitRecord suggestion = HabitStore.buildSuggestedRecord(title);
+        setText(nameLayout, suggestion.name);
+        setText(descriptionLayout, suggestion.description);
+        setText(timeLayout, suggestion.time);
+        selectSpinner(category, suggestion.category);
+        selectSpinner(frequency, suggestion.frequency);
+        selectSpinner(color, suggestion.colorName);
+        selectSpinner(icon, suggestion.iconName);
+    }
+
+    private void setText(TextInputLayout layout, String value) {
+        if (layout.getEditText() != null) {
+            layout.getEditText().setText(value);
+        }
+    }
+
+    private void selectSpinner(Spinner spinner, String value) {
+        if (!(spinner.getAdapter() instanceof ArrayAdapter)) return;
+        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+        int position = adapter.getPosition(value);
+        if (position >= 0) {
+            spinner.setSelection(position);
+        }
     }
 
     private TextInputLayout input(LinearLayout parent, String hint, String value) {

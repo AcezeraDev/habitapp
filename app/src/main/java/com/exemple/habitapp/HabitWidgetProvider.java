@@ -37,15 +37,25 @@ public class HabitWidgetProvider extends AppWidgetProvider {
         int metaAgua = HabitStore.getMetaAguaMl(prefs);
         int foco = prefs.getInt("estudos_concluidos_min", 0);
         int metaFoco = prefs.getInt("meta_estudos_min", 60);
+        int streak = HabitStore.getStreak(prefs);
+        int missingWater = Math.max(0, metaAgua - agua);
+        int missingFocus = Math.max(0, metaFoco - foco);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget_habit);
+        views.setTextViewText(R.id.widgetTitle, "HabitApp | " + streak + "d streak");
         views.setTextViewText(R.id.widgetScore, "Score " + score + "%");
-        views.setTextViewText(R.id.widgetDetails, "Agua " + agua + "/" + metaAgua + " ml | foco " + foco + "/" + metaFoco + " min");
+        views.setTextViewText(R.id.widgetDetails, nextWidgetText(missingWater, missingFocus, agua, metaAgua, foco, metaFoco));
         views.setProgressBar(R.id.widgetProgress, 100, score, false);
         views.setOnClickPendingIntent(R.id.widgetRoot, openAppIntent(context, R.id.home, 10));
         views.setOnClickPendingIntent(R.id.widgetAddWater, widgetAction(context, WidgetActionReceiver.ACTION_ADD_WATER, 20));
         views.setOnClickPendingIntent(R.id.widgetOpenFocus, openAppIntent(context, R.id.estudos, 30));
         manager.updateAppWidget(appWidgetId, views);
+    }
+
+    private static String nextWidgetText(int missingWater, int missingFocus, int agua, int metaAgua, int foco, int metaFoco) {
+        if (missingWater > 0) return "Proximo: +" + Math.min(250, missingWater) + " ml | agua " + agua + "/" + metaAgua + " ml";
+        if (missingFocus > 0) return "Proximo: foco 15 min | foco " + foco + "/" + metaFoco + " min";
+        return "Dia encaminhado. Abra o app para ver conquistas.";
     }
 
     private static PendingIntent openAppIntent(Context context, int destination, int requestCode) {

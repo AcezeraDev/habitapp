@@ -21,7 +21,7 @@ import com.google.android.material.textfield.TextInputLayout;
 public class OnboardingActivity extends AppCompatActivity {
 
     private static final int TOTAL_STEPS = 8;
-    private static final int ONBOARDING_VERSION = 2;
+    private static final int ONBOARDING_VERSION = 3;
 
     private SharedPreferences prefs;
     private int step = 0;
@@ -241,6 +241,8 @@ public class OnboardingActivity extends AppCompatActivity {
                 .putLong("daily_setup_day", HabitStore.todayKey())
                 .apply();
 
+        HabitStore.ensureStarterHabits(prefs, objetivo);
+        ReminderScheduler.scheduleDefaultReminders(this);
         abrirApp();
     }
 

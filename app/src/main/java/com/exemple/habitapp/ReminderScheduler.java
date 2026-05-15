@@ -72,6 +72,18 @@ public final class ReminderScheduler {
         alarmManager.cancel(getPendingIntent(context, type));
     }
 
+    public static void scheduleSnooze(Context context, String type, int minutes) {
+        if (type == null) type = TYPE_ROUTINE;
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager == null) return;
+        long triggerAt = System.currentTimeMillis() + Math.max(1, minutes) * 60L * 1000L;
+        alarmManager.set(
+                AlarmManager.RTC_WAKEUP,
+                triggerAt,
+                getPendingIntent(context, type, ("snooze_" + type).hashCode())
+        );
+    }
+
     private static void scheduleRepeating(Context context, String type, int hour, int minute, long interval) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
@@ -97,11 +109,15 @@ public final class ReminderScheduler {
     }
 
     private static PendingIntent getPendingIntent(Context context, String type) {
+        return getPendingIntent(context, type, type.hashCode());
+    }
+
+    private static PendingIntent getPendingIntent(Context context, String type, int requestCode) {
         Intent intent = new Intent(context, ReminderReceiver.class);
         intent.putExtra(EXTRA_TYPE, type);
         return PendingIntent.getBroadcast(
                 context,
-                type.hashCode(),
+                requestCode,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | NotificationHelper.immutableFlag()
         );

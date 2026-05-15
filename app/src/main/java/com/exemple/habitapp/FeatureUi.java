@@ -23,6 +23,7 @@ public final class FeatureUi {
         card.setCardElevation(dp(context, 5));
         card.setStrokeWidth(dp(context, 1));
         card.setStrokeColor(ContextCompat.getColor(context, colorRes));
+        HabitUi.press(card);
 
         LinearLayout content = new LinearLayout(context);
         content.setOrientation(LinearLayout.VERTICAL);
@@ -45,18 +46,20 @@ public final class FeatureUi {
         if (progress >= 0) {
             LinearProgressIndicator bar = new LinearProgressIndicator(context);
             bar.setMax(100);
-            bar.setProgressCompat(progress, false);
+            bar.setProgressCompat(0, false);
             bar.setIndicatorColor(ContextCompat.getColor(context, colorRes));
             bar.setTrackColor(ContextCompat.getColor(context, R.color.line));
             bar.setTrackThickness(dp(context, 8));
             bar.setTrackCornerRadius(dp(context, 8));
             content.addView(bar, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            UiAnimator.animateProgress(bar, progress);
         }
 
         card.addView(content);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, dp(context, 10));
         parent.addView(card, params);
+        UiAnimator.enterDelayed(card, Math.min(parent.getChildCount(), 8) * 35L);
     }
 
     public static TextView addText(Context context, LinearLayout parent, String text, int textSize, boolean bold) {

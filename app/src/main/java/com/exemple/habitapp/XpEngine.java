@@ -29,6 +29,15 @@ public final class XpEngine {
         return HabitStore.percent(getBaseXp(prefs) % 500, 500);
     }
 
+    public static int getXpToNextLevel(SharedPreferences prefs) {
+        int remainder = getBaseXp(prefs) % 500;
+        return remainder == 0 ? 500 : 500 - remainder;
+    }
+
+    public static int getStreakBonus(SharedPreferences prefs) {
+        return HabitStore.getStreak(prefs) * 120;
+    }
+
     public static boolean hasClaimedToday(SharedPreferences prefs) {
         return prefs.getLong(CLAIM_DAY, -1) == HabitStore.todayKey();
     }

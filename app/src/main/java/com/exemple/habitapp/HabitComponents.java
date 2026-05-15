@@ -30,12 +30,28 @@ public final class HabitComponents {
             View.OnClickListener editClick,
             View.OnClickListener deleteClick
     ) {
+        return habitCard(context, habit, done, streak, doneClick, editClick, deleteClick, null);
+    }
+
+    public static MaterialCardView habitCard(
+            Context context,
+            HabitRecord habit,
+            boolean done,
+            int streak,
+            View.OnClickListener doneClick,
+            View.OnClickListener editClick,
+            View.OnClickListener deleteClick,
+            View.OnClickListener detailClick
+    ) {
         int colorRes = habit.colorRes();
         MaterialCardView card = HabitUi.surfaceCard(context);
         card.setRadius(HabitUi.dp(context, 24));
         card.setCardBackgroundColor(ContextCompat.getColor(context, done ? R.color.success_soft : softForColor(colorRes)));
         card.setStrokeColor(ContextCompat.getColor(context, done ? R.color.success : colorRes));
         card.setCardElevation(HabitUi.dp(context, done ? 6 : 3));
+        if (detailClick != null) {
+            card.setOnClickListener(detailClick);
+        }
 
         LinearLayout content = HabitUi.paddedColumn(context, 16);
         content.addView(habitHeader(context, habit, streak, colorRes));
@@ -63,6 +79,12 @@ public final class HabitComponents {
         MaterialButton doneButton = animatedCheckButton(context, done, colorRes);
         doneButton.setOnClickListener(doneClick);
         actions.addView(doneButton, new LinearLayout.LayoutParams(0, HabitUi.dp(context, 50), 1f));
+
+        if (detailClick != null) {
+            MaterialButton detailButton = iconButton(context, R.drawable.ic_clock_history, colorRes, "Detalhes do habito");
+            detailButton.setOnClickListener(detailClick);
+            actions.addView(detailButton);
+        }
 
         MaterialButton editButton = iconButton(context, R.drawable.ic_edit, R.color.primary, "Editar habito");
         editButton.setOnClickListener(editClick);

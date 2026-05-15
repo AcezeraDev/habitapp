@@ -61,6 +61,7 @@ public final class NotificationHelper {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setColor(ContextCompat.getColor(context, getColor(type)))
                 .addAction(R.drawable.ic_notification, getActionLabel(type), getActionIntent(context, type))
+                .addAction(R.drawable.ic_clock_history, "Lembrar em 15 min", getSnoozeIntent(context, type))
                 .addAction(R.drawable.ic_notification, "Abrir app", pendingIntent);
 
         NotificationManagerCompat.from(context).notify(type.hashCode(), builder.build());
@@ -86,6 +87,18 @@ public final class NotificationHelper {
             return broadcastAction(context, WidgetActionReceiver.ACTION_ADD_FOCUS, 420);
         }
         return broadcastAction(context, WidgetActionReceiver.ACTION_COMPLETE_ROUTINE, 430);
+    }
+
+    private static PendingIntent getSnoozeIntent(Context context, String type) {
+        Intent intent = new Intent(context, WidgetActionReceiver.class);
+        intent.setAction(WidgetActionReceiver.ACTION_SNOOZE_REMINDER);
+        intent.putExtra(ReminderScheduler.EXTRA_TYPE, type);
+        return PendingIntent.getBroadcast(
+                context,
+                440 + type.hashCode(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | immutableFlag()
+        );
     }
 
     private static PendingIntent broadcastAction(Context context, String action, int requestCode) {
@@ -121,6 +134,11 @@ public final class NotificationHelper {
         }
 
         int checklist = HabitStore.getChecklistConcluido(prefs, HabitStore.todayKey());
+        int score = HabitStore.getTodayScore(prefs);
+        int streak = HabitStore.getStreak(prefs);
+        if (score < 80 && streak > 0) {
+            return "Sua sequencia de " + streak + " dias ainda precisa de mais " + (80 - score) + "% para ficar protegida hoje.";
+        }
         return checklist >= 3
                 ? "Checklist completo. Veja suas conquistas e prepare o proximo dia."
                 : "Faltam " + (3 - checklist) + " itens do checklist para fechar a rotina.";

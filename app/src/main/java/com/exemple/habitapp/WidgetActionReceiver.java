@@ -11,6 +11,7 @@ public class WidgetActionReceiver extends BroadcastReceiver {
     public static final String ACTION_ADD_WATER = "com.exemple.habitapp.ADD_WATER_FROM_WIDGET";
     public static final String ACTION_ADD_FOCUS = "com.exemple.habitapp.ADD_FOCUS_FROM_NOTIFICATION";
     public static final String ACTION_COMPLETE_ROUTINE = "com.exemple.habitapp.COMPLETE_ROUTINE_FROM_NOTIFICATION";
+    public static final String ACTION_SNOOZE_REMINDER = "com.exemple.habitapp.SNOOZE_REMINDER";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -27,6 +28,9 @@ public class WidgetActionReceiver extends BroadcastReceiver {
             addFocus(context, prefs);
         } else if (ACTION_COMPLETE_ROUTINE.equals(intent.getAction())) {
             completeRoutine(context, prefs);
+        } else if (ACTION_SNOOZE_REMINDER.equals(intent.getAction())) {
+            ReminderScheduler.scheduleSnooze(context, intent.getStringExtra(ReminderScheduler.EXTRA_TYPE), 15);
+            Toast.makeText(context, "Vou lembrar de novo em 15 min.", Toast.LENGTH_SHORT).show();
         }
     }
 

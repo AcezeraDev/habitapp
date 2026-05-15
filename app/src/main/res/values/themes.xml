@@ -13,9 +13,9 @@
         <item name="colorOutline">@color/line</item>
         <item name="colorControlHighlight">@color/tab_ripple</item>
         <item name="android:statusBarColor">@color/screen_start</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:navigationBarColor">@color/screen_start</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
         <item name="android:colorAccent">@color/primary</item>
         <item name="materialButtonStyle">@style/Widget.HabitApp.Button</item>
         <item name="materialCardViewStyle">@style/Widget.HabitApp.Card</item>

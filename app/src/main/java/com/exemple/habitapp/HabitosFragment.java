@@ -223,7 +223,7 @@ public class HabitosFragment extends Fragment {
                 requireContext(),
                 isEditing ? "Editar habito" : "Novo habito",
                 "Defina nome, cor, icone e frequencia sem sair do fluxo.",
-                R.drawable.ic_premium_trophy,
+                R.drawable.ic_nav_goals,
                 R.color.primary
         ));
 

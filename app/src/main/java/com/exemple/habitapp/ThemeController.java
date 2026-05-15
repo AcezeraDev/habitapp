@@ -21,7 +21,7 @@ public final class ThemeController {
 
     public static boolean isDarkMode(Context context) {
         SharedPreferences prefs = context.getSharedPreferences("habit_data", Context.MODE_PRIVATE);
-        return prefs.getBoolean(PREF_DARK_MODE, false);
+        return prefs.getBoolean(PREF_DARK_MODE, true);
     }
 
     public static String getModeLabel(Context context) {

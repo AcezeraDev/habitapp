@@ -313,7 +313,7 @@ public class HomeFragment extends Fragment {
                     requireContext(),
                     "Nenhum habito extra ainda",
                     "Crie um compromisso pequeno para o dia e acompanhe o streak aqui.",
-                    R.drawable.ic_premium_trophy
+                    R.drawable.ic_nav_goals
             ));
             return;
         }
@@ -326,7 +326,7 @@ public class HomeFragment extends Fragment {
                             requireContext(),
                             "Pendentes",
                             "O que ainda move seu dia para frente.",
-                            R.drawable.ic_premium_fire,
+                            R.drawable.ic_nav_goals,
                             R.color.coral
                     ));
                     hasPending = true;

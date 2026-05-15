@@ -33,10 +33,10 @@ public class HabitRecord {
     @DrawableRes
     public int iconRes() {
         if ("Agua".equals(iconName)) return R.drawable.ic_premium_drop;
-        if ("Foco".equals(iconName)) return R.drawable.ic_premium_equalizer;
+        if ("Foco".equals(iconName)) return R.drawable.ic_nav_focus;
         if ("Movimento".equals(iconName)) return R.drawable.ic_premium_dumbbell;
         if ("Perfil".equals(iconName)) return R.drawable.ic_nav_profile;
-        if ("Historico".equals(iconName)) return R.drawable.ic_history;
+        if ("Historico".equals(iconName)) return R.drawable.ic_clock_history;
         if ("Estudo".equals(iconName)) return R.drawable.ic_premium_book;
         if ("Livro".equals(iconName)) return R.drawable.ic_premium_book;
         if ("Sono".equals(iconName)) return R.drawable.ic_premium_sleep;

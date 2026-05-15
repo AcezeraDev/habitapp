@@ -163,8 +163,8 @@
                 android:textColor="@color/white"
                 app:backgroundTint="@color/study"
                 app:cornerRadius="18dp"
-                app:icon="@drawable/ic_premium_equalizer"
-                app:iconTint="@null" />
+                app:icon="@drawable/ic_nav_focus"
+                app:iconTint="@color/white" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPomodoro"
@@ -179,8 +179,8 @@
                 android:textColor="@color/white"
                 app:backgroundTint="@color/primary"
                 app:cornerRadius="18dp"
-                app:icon="@drawable/ic_premium_book"
-                app:iconTint="@null" />
+                app:icon="@drawable/ic_nav_focus"
+                app:iconTint="@color/white" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDeepWork"
@@ -194,8 +194,8 @@
                 android:textColor="@color/white"
                 app:backgroundTint="@color/coral"
                 app:cornerRadius="18dp"
-                app:icon="@drawable/ic_premium_fire"
-                app:iconTint="@null" />
+                app:icon="@drawable/ic_nav_focus"
+                app:iconTint="@color/white" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView

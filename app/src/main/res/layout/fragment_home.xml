@@ -428,8 +428,8 @@
                         android:textAllCaps="false"
                         app:backgroundTint="@color/study"
                         app:cornerRadius="18dp"
-                        app:icon="@drawable/ic_premium_equalizer"
-                        app:iconTint="@null" />
+                        app:icon="@drawable/ic_nav_focus"
+                        app:iconTint="@color/white" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -766,8 +766,8 @@
                     android:textAllCaps="false"
                     android:textColor="@color/primary"
                     app:cornerRadius="18dp"
-                    app:icon="@drawable/ic_premium_trophy"
-                    app:iconTint="@null"
+                    app:icon="@drawable/ic_nav_goals"
+                    app:iconTint="@color/primary"
                     app:strokeColor="@color/line" />
 
                 <LinearLayout

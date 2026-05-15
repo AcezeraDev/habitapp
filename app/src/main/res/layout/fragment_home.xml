@@ -415,8 +415,8 @@
                         android:textAllCaps="false"
                         app:backgroundTint="@color/water"
                         app:cornerRadius="18dp"
-                        app:icon="@drawable/ic_nav_water"
-                        app:iconTint="@color/white" />
+                        app:icon="@drawable/ic_premium_drop"
+                        app:iconTint="@null" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnQuickFocus"
@@ -428,8 +428,8 @@
                         android:textAllCaps="false"
                         app:backgroundTint="@color/study"
                         app:cornerRadius="18dp"
-                        app:icon="@drawable/ic_nav_focus"
-                        app:iconTint="@color/white" />
+                        app:icon="@drawable/ic_premium_equalizer"
+                        app:iconTint="@null" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -766,8 +766,8 @@
                     android:textAllCaps="false"
                     android:textColor="@color/primary"
                     app:cornerRadius="18dp"
-                    app:icon="@drawable/ic_nav_goals"
-                    app:iconTint="@color/primary"
+                    app:icon="@drawable/ic_premium_trophy"
+                    app:iconTint="@null"
                     app:strokeColor="@color/line" />
 
                 <LinearLayout

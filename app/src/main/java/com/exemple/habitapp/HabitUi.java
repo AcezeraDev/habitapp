@@ -61,13 +61,28 @@ public final class HabitUi {
     public static ImageView iconBox(Context context, int iconRes, int colorRes) {
         ImageView icon = new ImageView(context);
         icon.setImageResource(iconRes);
-        icon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(context, colorRes)));
-        icon.setPadding(dp(context, 10), dp(context, 10), dp(context, 10), dp(context, 10));
+        icon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        icon.setImageTintList(isPremiumIcon(iconRes) ? null : ColorStateList.valueOf(ContextCompat.getColor(context, colorRes)));
+        icon.setPadding(dp(context, 9), dp(context, 9), dp(context, 9), dp(context, 9));
         icon.setBackground(rounded(context, softForColor(colorRes), colorRes, 1, 18));
         icon.setContentDescription(null);
         icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         icon.setLayoutParams(new LinearLayout.LayoutParams(dp(context, 50), dp(context, 50)));
         return icon;
+    }
+
+    public static boolean isPremiumIcon(int iconRes) {
+        return iconRes == R.drawable.ic_premium_book
+                || iconRes == R.drawable.ic_premium_drop
+                || iconRes == R.drawable.ic_premium_dumbbell
+                || iconRes == R.drawable.ic_premium_equalizer
+                || iconRes == R.drawable.ic_premium_fire
+                || iconRes == R.drawable.ic_premium_moon
+                || iconRes == R.drawable.ic_premium_music
+                || iconRes == R.drawable.ic_premium_sleep
+                || iconRes == R.drawable.ic_premium_sun
+                || iconRes == R.drawable.ic_premium_trophy
+                || iconRes == R.drawable.ic_premium_video;
     }
 
     public static GradientDrawable rounded(Context context, int fillRes, int strokeRes, int strokeDp, int radiusDp) {

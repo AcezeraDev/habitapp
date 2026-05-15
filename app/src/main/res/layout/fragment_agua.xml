@@ -170,8 +170,8 @@
                 android:textColor="@color/white"
                 app:backgroundTint="@color/water"
                 app:cornerRadius="18dp"
-                app:icon="@drawable/ic_nav_water"
-                app:iconTint="@color/white" />
+                app:icon="@drawable/ic_premium_drop"
+                app:iconTint="@null" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnWater500"
@@ -186,8 +186,8 @@
                 android:textColor="@color/white"
                 app:backgroundTint="@color/primary"
                 app:cornerRadius="18dp"
-                app:icon="@drawable/ic_garrafa"
-                app:iconTint="@color/white" />
+                app:icon="@drawable/ic_premium_drop"
+                app:iconTint="@null" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnWater750"
@@ -201,8 +201,8 @@
                 android:textColor="@color/white"
                 app:backgroundTint="@color/success"
                 app:cornerRadius="18dp"
-                app:icon="@drawable/ic_nav_water"
-                app:iconTint="@color/white" />
+                app:icon="@drawable/ic_premium_drop"
+                app:iconTint="@null" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView

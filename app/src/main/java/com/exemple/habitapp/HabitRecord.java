@@ -32,13 +32,19 @@ public class HabitRecord {
 
     @DrawableRes
     public int iconRes() {
-        if ("Agua".equals(iconName)) return R.drawable.ic_nav_water;
-        if ("Foco".equals(iconName)) return R.drawable.ic_nav_focus;
-        if ("Movimento".equals(iconName)) return R.drawable.ic_nav_routine;
+        if ("Agua".equals(iconName)) return R.drawable.ic_premium_drop;
+        if ("Foco".equals(iconName)) return R.drawable.ic_premium_equalizer;
+        if ("Movimento".equals(iconName)) return R.drawable.ic_premium_dumbbell;
         if ("Perfil".equals(iconName)) return R.drawable.ic_nav_profile;
         if ("Historico".equals(iconName)) return R.drawable.ic_history;
-        if ("Estudo".equals(iconName)) return R.drawable.ic_nav_goals;
-        return R.drawable.ic_nav_goals;
+        if ("Estudo".equals(iconName)) return R.drawable.ic_premium_book;
+        if ("Livro".equals(iconName)) return R.drawable.ic_premium_book;
+        if ("Sono".equals(iconName)) return R.drawable.ic_premium_sleep;
+        if ("Sol".equals(iconName)) return R.drawable.ic_premium_sun;
+        if ("Lua".equals(iconName)) return R.drawable.ic_premium_moon;
+        if ("Fogo".equals(iconName)) return R.drawable.ic_premium_fire;
+        if ("Trofeu".equals(iconName)) return R.drawable.ic_premium_trophy;
+        return R.drawable.ic_premium_book;
     }
 
     public int colorRes() {

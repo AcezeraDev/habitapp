@@ -39,7 +39,7 @@ public class HabitosFragment extends Fragment {
     private static final String[] CATEGORY_VALUES = {"Rotina", "Saude", "Foco", "Movimento", "Sono"};
     private static final String[] FREQUENCY_VALUES = {"Diario", "Dias uteis", "3x semana", "Semanal"};
     private static final String[] COLORS = {"Azul", "Agua", "Verde", "Roxo", "Amarelo", "Coral"};
-    private static final String[] ICONS = {"Estudo", "Agua", "Foco", "Movimento", "Historico", "Perfil"};
+    private static final String[] ICONS = {"Estudo", "Agua", "Movimento", "Foco", "Sono", "Sol", "Lua", "Fogo", "Trofeu", "Historico", "Perfil"};
 
     private SharedPreferences prefs;
     private LinearLayout listLayout;
@@ -223,7 +223,7 @@ public class HabitosFragment extends Fragment {
                 requireContext(),
                 isEditing ? "Editar habito" : "Novo habito",
                 "Defina nome, cor, icone e frequencia sem sair do fluxo.",
-                R.drawable.ic_nav_goals,
+                R.drawable.ic_premium_trophy,
                 R.color.primary
         ));
 

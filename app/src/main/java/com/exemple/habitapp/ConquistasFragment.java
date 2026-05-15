@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -69,28 +70,41 @@ public class ConquistasFragment extends Fragment {
 
     private void addAchievementCard(LinearLayout parent, Achievement achievement) {
         MaterialCardView card = new MaterialCardView(requireContext());
-        card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.surface));
-        card.setRadius(dp(8));
-        card.setCardElevation(0);
+        card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), achievement.unlocked ? R.color.success_soft : R.color.surface));
+        card.setRadius(dp(24));
+        card.setCardElevation(dp(4));
         card.setStrokeWidth(dp(1));
         card.setStrokeColor(ContextCompat.getColor(requireContext(), achievement.unlocked ? achievement.colorRes : R.color.line));
+        HabitUi.press(card);
 
         LinearLayout content = new LinearLayout(requireContext());
         content.setGravity(Gravity.CENTER_VERTICAL);
         content.setOrientation(LinearLayout.HORIZONTAL);
         content.setPadding(dp(14), dp(14), dp(14), dp(14));
 
-        TextView badge = new TextView(requireContext());
-        badge.setText(achievement.unlocked ? "OK" : achievement.progress + "%");
+        LinearLayout badge = new LinearLayout(requireContext());
         badge.setGravity(Gravity.CENTER);
-        badge.setTextSize(12f);
-        badge.setTypeface(badge.getTypeface(), Typeface.BOLD);
-        badge.setTextColor(ContextCompat.getColor(requireContext(), achievement.unlocked ? R.color.white : achievement.colorRes));
+        badge.setOrientation(LinearLayout.VERTICAL);
         GradientDrawable badgeBg = new GradientDrawable();
-        badgeBg.setShape(GradientDrawable.OVAL);
-        badgeBg.setColor(ContextCompat.getColor(requireContext(), achievement.unlocked ? achievement.colorRes : R.color.surface_soft));
+        badgeBg.setShape(GradientDrawable.RECTANGLE);
+        badgeBg.setCornerRadius(dp(18));
+        badgeBg.setColor(ContextCompat.getColor(requireContext(), achievement.unlocked ? R.color.success_soft : R.color.surface_soft));
+        badgeBg.setStroke(dp(1), ContextCompat.getColor(requireContext(), achievement.unlocked ? achievement.colorRes : R.color.line));
         badge.setBackground(badgeBg);
-        content.addView(badge, new LinearLayout.LayoutParams(dp(54), dp(54)));
+
+        ImageView trophy = new ImageView(requireContext());
+        trophy.setImageResource(R.drawable.ic_premium_trophy);
+        trophy.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        badge.addView(trophy, new LinearLayout.LayoutParams(dp(34), dp(34)));
+
+        TextView percent = new TextView(requireContext());
+        percent.setText(achievement.unlocked ? "OK" : achievement.progress + "%");
+        percent.setGravity(Gravity.CENTER);
+        percent.setTextSize(10f);
+        percent.setTypeface(percent.getTypeface(), Typeface.BOLD);
+        percent.setTextColor(ContextCompat.getColor(requireContext(), achievement.unlocked ? achievement.colorRes : R.color.muted));
+        badge.addView(percent);
+        content.addView(badge, new LinearLayout.LayoutParams(dp(64), dp(64)));
 
         LinearLayout texts = new LinearLayout(requireContext());
         texts.setOrientation(LinearLayout.VERTICAL);

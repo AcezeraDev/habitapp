@@ -55,10 +55,10 @@
                 android:contentDescription="Criar habito"
                 app:backgroundTint="@color/coral"
                 app:cornerRadius="18dp"
-                app:icon="@drawable/ic_nav_goals"
+                app:icon="@drawable/ic_premium_trophy"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:iconTint="@color/white" />
+                app:iconTint="@null" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
@@ -188,7 +188,7 @@
                 android:layout_height="52dp"
                 android:contentDescription="@null"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_nav_goals"
+                android:src="@drawable/ic_premium_trophy"
                 app:tint="@color/primary" />
 
             <TextView

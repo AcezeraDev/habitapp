@@ -80,15 +80,15 @@ public class ProgressoFragment extends Fragment {
         txtMonthlyAverage.setText(monthlyStats[0] + "%\nmes");
         txtStrongDays.setText(monthlyStats[1] + "\ndias fortes");
         txtBestScore.setText(monthlyStats[2] + "%\nmelhor");
-        txtResumoSemana.setText("MÃ©dia " + weeklyAverage + "% | sequÃªncia " + streak + (streak == 1 ? " dia" : " dias") + " | " + totalFoco + " min foco total");
-        txtNivelProgresso.setText("NÃ­vel: " + HabitStore.getLevelName(prefs));
+        txtResumoSemana.setText("Média " + weeklyAverage + "% | sequência " + streak + (streak == 1 ? " dia" : " dias") + " | " + totalFoco + " min foco total");
+        txtNivelProgresso.setText("Nível: " + HabitStore.getLevelName(prefs));
         txtResumo.setText(aguaMl + " ml / " + metaMl + " ml");
         txtEstudos.setText(estudos + " min / " + metaEstudos + " min");
-        txtSessoes.setText(sessoes + (sessoes == 1 ? " sessÃ£o concluÃ­da" : " sessÃµes concluÃ­das"));
-        txtChecklist.setText(checklist + " de 3 concluÃ­dos");
+        txtSessoes.setText(sessoes + (sessoes == 1 ? " sessão concluída" : " sessões concluídas"));
+        txtChecklist.setText(checklist + " de 3 concluídos");
         txtHabitos.setText(habitos.isEmpty()
-                ? "Nenhum hÃ¡bito extra criado"
-                : habitosConcluidos + " de " + habitos.size() + " concluÃ­dos");
+                ? "Nenhum hábito extra criado"
+                : habitosConcluidos + " de " + habitos.size() + " concluídos");
         txtHumor.setText("Humor: " + labelNivel(prefs.getInt("mood_" + HabitStore.todayKey(), -1)));
         txtEnergia.setText("Energia: " + labelNivel(prefs.getInt("energy_" + HabitStore.todayKey(), -1)));
         txtInsights.setText(criarInsight(aguaPercent, estudoPercent, checklistPercent, habitosPercent, habitos.isEmpty()));
@@ -167,16 +167,16 @@ public class ProgressoFragment extends Fragment {
     private void renderConquistas(LinearLayout layout, int score, int agua, int estudo, int checklist, List<String> habitos, int habitosConcluidos, int sessoes, int streak, int weeklyAverage, int totalAgua, int totalFoco) {
         layout.removeAllViews();
 
-        adicionarConquista(layout, agua >= 100, "Meta de Ã¡gua fechada");
+        adicionarConquista(layout, agua >= 100, "Meta de água fechada");
         adicionarConquista(layout, estudo >= 100, "Meta de foco fechada");
         adicionarConquista(layout, checklist >= 100, "Checklist completo");
         adicionarConquista(layout, score >= 80, "Score acima de 80%");
-        adicionarConquista(layout, sessoes >= 3, "3 sessÃµes de foco no dia");
-        adicionarConquista(layout, !habitos.isEmpty() && habitosConcluidos == habitos.size(), "Todos os hÃ¡bitos extras concluÃ­dos");
-        adicionarConquista(layout, streak >= 3, "3 dias fortes em sequÃªncia");
-        adicionarConquista(layout, streak >= 7, "7 dias de consistÃªncia");
-        adicionarConquista(layout, weeklyAverage >= 70, "MÃ©dia semanal acima de 70%");
-        adicionarConquista(layout, totalAgua >= 10000, "10 litros de Ã¡gua registrados");
+        adicionarConquista(layout, sessoes >= 3, "3 sessões de foco no dia");
+        adicionarConquista(layout, !habitos.isEmpty() && habitosConcluidos == habitos.size(), "Todos os hábitos extras concluídos");
+        adicionarConquista(layout, streak >= 3, "3 dias fortes em sequência");
+        adicionarConquista(layout, streak >= 7, "7 dias de consistência");
+        adicionarConquista(layout, weeklyAverage >= 70, "Média semanal acima de 70%");
+        adicionarConquista(layout, totalAgua >= 10000, "10 litros de água registrados");
         adicionarConquista(layout, totalFoco >= 300, "300 minutos de foco registrados");
     }
 
@@ -293,29 +293,29 @@ public class ProgressoFragment extends Fragment {
 
     private String criarInsight(int agua, int estudo, int checklist, int habitos, boolean semHabitos) {
         if (agua >= 100 && estudo >= 100 && checklist >= 100 && (semHabitos || habitos >= 100)) {
-            return "Dia completo. Agora o mais profissional Ã© repetir amanhÃ£.";
+            return "Dia completo. Agora o mais profissional é repetir amanhã.";
         }
 
         if (agua <= estudo && agua <= checklist && agua <= habitos) {
-            return "Seu melhor prÃ³ximo passo Ã© hidratar. Um copo jÃ¡ muda o painel.";
+            return "Seu melhor próximo passo é hidratar. Um copo já muda o painel.";
         }
 
         if (estudo <= agua && estudo <= checklist && estudo <= habitos) {
-            return "Abra uma sessÃ£o curta de foco para puxar o score para cima.";
+            return "Abra uma sessão curta de foco para puxar o score para cima.";
         }
 
         if (!semHabitos && habitos <= agua && habitos <= estudo && habitos <= checklist) {
-            return "Escolha um hÃ¡bito extra e marque uma vitÃ³ria pequena agora.";
+            return "Escolha um hábito extra e marque uma vitória pequena agora.";
         }
 
-        return "Feche um item do checklist para transformar intenÃ§Ã£o em rotina.";
+        return "Feche um item do checklist para transformar intenção em rotina.";
     }
 
     private String labelNivel(int nivel) {
         if (nivel == 0) return "baixo";
         if (nivel == 1) return "ok";
         if (nivel == 2) return "alto";
-        return "ainda nÃ£o registrado";
+        return "ainda não registrado";
     }
 
     private int dp(int value) {

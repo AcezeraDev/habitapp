@@ -122,7 +122,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="MÃ©dia 0% | streak 0 dias"
+                    android:text="Média 0% | streak 0 dias"
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
 
@@ -131,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="NÃ­vel: Inicial"
+                    android:text="Nível: Inicial"
                     android:textColor="@color/ink"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -244,7 +244,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Humor: ainda nÃ£o registrado"
+                    android:text="Humor: ainda não registrado"
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
 
@@ -253,7 +253,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Energia: ainda nÃ£o registrada"
+                    android:text="Energia: ainda não registrada"
                     android:textColor="@color/muted"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -278,7 +278,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ãgua"
+                    android:text="Água"
                     android:textColor="@color/water"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -344,7 +344,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="0 sessÃµes concluÃ­das"
+                    android:text="0 sessões concluídas"
                     android:textColor="@color/muted"
                     android:textSize="13sp" />
 
@@ -389,7 +389,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="0 de 3 concluÃ­dos"
+                    android:text="0 de 3 concluídos"
                     android:textColor="@color/ink"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -425,7 +425,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="HÃ¡bitos extras"
+                    android:text="Hábitos extras"
                     android:textColor="@color/warning"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -435,7 +435,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Nenhum hÃ¡bito extra criado"
+                    android:text="Nenhum hábito extra criado"
                     android:textColor="@color/ink"
                     android:textSize="18sp"
                     android:textStyle="bold" />

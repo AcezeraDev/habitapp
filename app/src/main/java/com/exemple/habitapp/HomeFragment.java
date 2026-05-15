@@ -106,7 +106,7 @@ public class HomeFragment extends Fragment {
 
         btnFoto.setOnClickListener(v -> {
             if (jaTirouFotoHoje()) {
-                Toast.makeText(getContext(), "VocÃª jÃ¡ registrou a foto de hoje.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Você já registrou a foto de hoje.", Toast.LENGTH_SHORT).show();
             } else {
                 cameraLauncher.launch(null);
             }
@@ -168,12 +168,12 @@ public class HomeFragment extends Fragment {
         txtHomeMission.setText("Missao em foco: " + MissionEngine.getNextMissionTitle(missions));
             txtHomeTheme.setText("Tema ativo: " + ThemeController.getAccentTheme(requireContext()) + " | " + ThemeController.getModeLabel(requireContext()));
         UiAnimator.animatePercentText(txtScore, score);
-        txtScoreLabel.setText(score >= 100 ? "Dia fechado com consistÃªncia" : "PrÃ³xima meta: " + proximaAcao(faltaAgua, faltaEstudos));
+        txtScoreLabel.setText(score >= 100 ? "Dia fechado com consistência" : "Próxima meta: " + proximaAcao(faltaAgua, faltaEstudos));
         txtAguaHome.setText(aguaMl + " / " + metaMl + " ml");
-        txtAguaFalta.setText(faltaAgua == 0 ? "Meta de Ã¡gua concluÃ­da" : "Faltam " + faltaAgua + " ml");
+        txtAguaFalta.setText(faltaAgua == 0 ? "Meta de água concluída" : "Faltam " + faltaAgua + " ml");
         txtEstudosHome.setText(estudosFeitos + " / " + metaEstudos + " min");
         txtEstudosFalta.setText(faltaEstudos == 0 ? "Meta de foco concluida" : "Faltam " + faltaEstudos + " min");
-        txtChecklistHome.setText(checklistConcluido + " de 3 concluÃ­dos");
+        txtChecklistHome.setText(checklistConcluido + " de 3 concluídos");
         txtChallengeStatus.setText("Dia " + Math.min(diaAtual, metaDias) + " de " + metaDias);
         txtPlanoTitulo.setText("Plano inteligente para " + getMelhorHorario());
         txtPlanoDescricao.setText(criarPlanoDoDia(faltaAgua, faltaEstudos, checklistConcluido));
@@ -182,11 +182,11 @@ public class HomeFragment extends Fragment {
         setTextIfPresent(view, R.id.txtHomeCompleted, habitosConcluidos + "/" + habitos.size() + " habitos");
         setTextIfPresent(view, R.id.txtHomeProgressBadge, score + "% hoje");
         txtHabitosResumo.setText(habitos.isEmpty()
-                ? "Crie hÃ¡bitos pequenos para acompanhar hoje."
-                : habitosConcluidos + " de " + habitos.size() + " hÃ¡bitos extras concluÃ­dos");
+                ? "Crie hábitos pequenos para acompanhar hoje."
+                : habitosConcluidos + " de " + habitos.size() + " hábitos extras concluídos");
         txtStreakHome.setText(streak + (streak == 1 ? " dia\nseguido" : " dias\nseguidos"));
-        txtMediaHome.setText(weeklyAverage + "%\nmÃ©dia");
-        txtNivelHome.setText(HabitStore.getLevelName(prefs) + "\nnÃ­vel");
+        txtMediaHome.setText(weeklyAverage + "%\nmédia");
+        txtNivelHome.setText(HabitStore.getLevelName(prefs) + "\nnível");
 
         UiAnimator.animateProgress(progressDaily, score);
         if (ringDaily != null) ringDaily.setProgressAnimated(score);
@@ -206,7 +206,7 @@ public class HomeFragment extends Fragment {
             int adicionadoMl = (int) Math.round(Math.max(0, novoValor - atual) * 1000);
 
             if (adicionadoMl == 0) {
-                Toast.makeText(getContext(), "Meta de Ã¡gua jÃ¡ concluÃ­da.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Meta de água já concluída.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -271,13 +271,13 @@ public class HomeFragment extends Fragment {
                     : "";
 
             if (TextUtils.isEmpty(novoHabito)) {
-                Toast.makeText(getContext(), "Digite um hÃ¡bito para adicionar.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Digite um hábito para adicionar.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             List<String> habitos = getCustomHabits();
             if (habitos.contains(novoHabito)) {
-                Toast.makeText(getContext(), "Esse hÃ¡bito jÃ¡ existe.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Esse hábito já existe.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -410,7 +410,7 @@ public class HomeFragment extends Fragment {
         input.setPadding(dp(18), dp(8), dp(18), dp(8));
 
         new AlertDialog.Builder(requireContext())
-                .setTitle("Editar hÃ¡bito")
+                .setTitle("Editar hábito")
                 .setView(input)
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Salvar", (dialog, which) -> {
@@ -419,12 +419,12 @@ public class HomeFragment extends Fragment {
                             : "";
 
                     if (TextUtils.isEmpty(novoHabito)) {
-                        Toast.makeText(getContext(), "Digite um nome para o hÃ¡bito.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Digite um nome para o hábito.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     if (!habitoAtual.equals(novoHabito) && getCustomHabits().contains(novoHabito)) {
-                        Toast.makeText(getContext(), "Esse hÃ¡bito jÃ¡ existe.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Esse hábito já existe.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -453,7 +453,7 @@ public class HomeFragment extends Fragment {
 
     private void confirmarRemocaoHabito(String habito) {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Remover hÃ¡bito")
+                .setTitle("Remover hábito")
                 .setMessage("Remover \"" + habito + "\" da sua lista?")
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Remover", (dialog, which) -> removerHabito(habito))
@@ -465,7 +465,7 @@ public class HomeFragment extends Fragment {
         renderHabitosExtras();
         atualizarResumo(rootView);
         renderWeekBars(layoutWeekBarsHome);
-        Toast.makeText(getContext(), "HÃ¡bito removido.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Hábito removido.", Toast.LENGTH_SHORT).show();
     }
 
     private void renderWeekBars(LinearLayout layout) {
@@ -590,10 +590,10 @@ public class HomeFragment extends Fragment {
     }
 
     private String proximaAcao(int faltaAgua, int faltaEstudos) {
-        if (faltaAgua > 0) return "beber Ã¡gua";
+        if (faltaAgua > 0) return "beber água";
         if (faltaEstudos > 0) return "abrir foco";
         if (getChecklistConcluido() < 3) return "finalizar checklist";
-        if (getCustomHabits().size() > getHabitosExtrasConcluidos(getCustomHabits())) return "hÃ¡bito extra";
+        if (getCustomHabits().size() > getHabitosExtrasConcluidos(getCustomHabits())) return "hábito extra";
         return "registrar progresso";
     }
 
@@ -606,14 +606,14 @@ public class HomeFragment extends Fragment {
         }
 
         if (faltaEstudos > 0) {
-            return objetivo + ": abra uma sessÃ£o curta de foco e proteja esse bloco.";
+            return objetivo + ": abra uma sessão curta de foco e proteja esse bloco.";
         }
 
         if (checklistConcluido < 3) {
             return objetivo + ": feche o checklist para consolidar o dia.";
         }
 
-        return "Dia muito bem encaminhado. Use o restante para manter o bÃ¡sico simples.";
+        return "Dia muito bem encaminhado. Use o restante para manter o básico simples.";
     }
 
     private String getMelhorHorario() {

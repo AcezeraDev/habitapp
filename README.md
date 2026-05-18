@@ -1,15 +1,16 @@
 # HabitApp
 
-HabitApp e um app Android para acompanhar rotina, hidratacao, foco, metas e progresso diario.
+HabitApp e um app Android para acompanhar rotina, hidratacao, foco, metas e progresso diario com uma interface moderna de bem-estar.
 
 ## Destaques
 
-- Navegacao inferior com icones para todas as areas principais.
-- Tela de login local com nome, e-mail e perfil com foto.
+- Visual premium em tons pastel, com cards arredondados, sombras suaves e nova identidade de lotus.
+- Navegacao inferior moderna com icones legiveis para todas as areas principais.
+- Tela de login local redesenhada com nome, e-mail e senha local.
+- Onboarding com perguntas em cards, progresso visual, icones e selecao animada.
 - Tela de abertura personalizada com identidade visual propria.
-- Painel de score com animacoes e cards em destaque.
-- Modo escuro com paleta dedicada.
-- Tela de aparencia para alternar entre modo claro e escuro.
+- Painel de score com animacoes, categorias de bem-estar e cards em destaque.
+- Paleta clara centralizada com gradientes suaves de lilas, rosa, azul e menta.
 - Grafico semanal, calendario mensal, conquistas e leitura rapida de progresso.
 - Widget Android com score, agua, foco e acao rapida de +250 ml.
 - Lembretes locais inteligentes para agua, foco e fechamento da rotina.
@@ -19,10 +20,11 @@ HabitApp e um app Android para acompanhar rotina, hidratacao, foco, metas e prog
 - Diario rapido e estatisticas avancadas de agua, foco, XP e score.
 - Backup local e opcao de salvar o arquivo na nuvem/Drive.
 - Metas ajustaveis para hidratacao, estudo e sessoes de foco.
+- Microinteracoes nos botoes, cards de habitos e transicoes entre telas.
 
 ## Download
 
-APK debug atual: [`dist/HabitApp-v2.0-debug.apk`](dist/HabitApp-v2.0-debug.apk)
+APK debug atual: [`dist/HabitApp-v2.8-debug.apk`](dist/HabitApp-v2.8-debug.apk)
 
 ## Build
 
@@ -40,4 +42,4 @@ Para gerar uma APK de release local:
 
 ## Versao
 
-Versao atual: `2.0`
+Versao atual: `2.8`

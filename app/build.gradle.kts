@@ -10,8 +10,8 @@ android {
         applicationId = "com.exemple.habitapp"
         minSdk = 21
         targetSdk = 36
-        versionCode = 16
-        versionName = "2.7"
+        versionCode = 17
+        versionName = "2.8"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

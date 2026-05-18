@@ -86,6 +86,57 @@ public class HomeFragment extends Fragment {
                 }
             });
         }
+
+        configurarCategoriasBemEstar(view);
+    }
+
+    private void configurarCategoriasBemEstar(View view) {
+        View foco = view.findViewById(R.id.cardCategoryFocus);
+        View agua = view.findViewById(R.id.cardCategoryWater);
+        View sono = view.findViewById(R.id.cardCategorySleep);
+        View exercicios = view.findViewById(R.id.cardCategoryExercise);
+        View diario = view.findViewById(R.id.cardCategoryDiary);
+
+        if (foco != null) {
+            HabitUi.press(foco);
+            foco.setOnClickListener(v -> abrirTela(R.id.estudos));
+        }
+
+        if (agua != null) {
+            HabitUi.press(agua);
+            agua.setOnClickListener(v -> abrirTela(R.id.agua));
+        }
+
+        if (sono != null) {
+            HabitUi.press(sono);
+            sono.setOnClickListener(v -> marcarChecklistPorCategoria(view, R.id.checkSono, "check_sono_", "Sono marcado no checklist."));
+        }
+
+        if (exercicios != null) {
+            HabitUi.press(exercicios);
+            exercicios.setOnClickListener(v -> marcarChecklistPorCategoria(view, R.id.checkTreino, "check_treino_", "Exercicios marcados no checklist."));
+        }
+
+        if (diario != null) {
+            HabitUi.press(diario);
+            diario.setOnClickListener(v -> abrirTela(R.id.diario));
+        }
+    }
+
+    private void abrirTela(int destinationId) {
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).navigateTo(destinationId);
+        }
+    }
+
+    private void marcarChecklistPorCategoria(View view, int checkboxId, String chave, String mensagem) {
+        CheckBox checkBox = view.findViewById(checkboxId);
+        if (checkBox != null) {
+            checkBox.setChecked(true);
+        } else {
+            salvarChecklist(chave, true);
+        }
+        FeedbackHelper.snack(rootView, mensagem);
     }
 
     private void configurarCamera(View view) {
@@ -115,6 +166,7 @@ public class HomeFragment extends Fragment {
 
     private void atualizarResumo(View view) {
         TextView txtGreeting = view.findViewById(R.id.txtGreeting);
+        TextView txtTodaySubtitle = view.findViewById(R.id.txtTodaySubtitle);
         TextView txtHomeXp = view.findViewById(R.id.txtHomeXp);
         TextView txtHomeMission = view.findViewById(R.id.txtHomeMission);
         TextView txtHomeTheme = view.findViewById(R.id.txtHomeTheme);
@@ -164,7 +216,10 @@ public class HomeFragment extends Fragment {
         int weeklyAverage = HabitStore.getWeeklyAverage(prefs);
         List<Mission> missions = MissionEngine.getDailyMissions(prefs);
 
-        txtGreeting.setText(getSaudacao() + ", " + nome);
+        txtGreeting.setText("Ola, " + nome + "!");
+        if (txtTodaySubtitle != null) {
+            txtTodaySubtitle.setText(getSaudacao() + ". Que bom te ver por aqui.");
+        }
         txtHomeXp.setText("Nivel " + XpEngine.getLevel(prefs) + " | " + XpEngine.getBaseXp(prefs) + " XP | faltam " + XpEngine.getXpToNextLevel(prefs));
         txtHomeMission.setText("Missao em foco: " + MissionEngine.getNextMissionTitle(missions));
             txtHomeTheme.setText("Tema ativo: " + ThemeController.getAccentTheme(requireContext()) + " | " + ThemeController.getModeLabel(requireContext()));

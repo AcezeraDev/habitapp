@@ -45,10 +45,10 @@ public final class HabitComponents {
     ) {
         int colorRes = habit.colorRes();
         MaterialCardView card = HabitUi.surfaceCard(context);
-        card.setRadius(HabitUi.dp(context, 24));
+        card.setRadius(HabitUi.dp(context, 28));
         card.setCardBackgroundColor(ContextCompat.getColor(context, done ? R.color.success_soft : softForColor(colorRes)));
         card.setStrokeColor(ContextCompat.getColor(context, done ? R.color.success : colorRes));
-        card.setCardElevation(HabitUi.dp(context, done ? 6 : 3));
+        card.setCardElevation(HabitUi.dp(context, done ? 8 : 5));
         if (detailClick != null) {
             card.setOnClickListener(detailClick);
         }
@@ -141,7 +141,7 @@ public final class HabitComponents {
     public static LinearLayout emptyState(Context context, String title, String subtitle, int iconRes) {
         LinearLayout content = HabitUi.paddedColumn(context, 24);
         content.setGravity(Gravity.CENTER);
-        content.setBackground(HabitUi.rounded(context, R.color.surface_tint, R.color.primary, 1, 24));
+        content.setBackground(HabitUi.rounded(context, R.color.surface_tint, R.color.line, 1, 28));
         content.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
@@ -170,7 +170,7 @@ public final class HabitComponents {
         button.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white)));
         button.setTextColor(ContextCompat.getColor(context, R.color.white));
         button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, done ? R.color.success : colorRes)));
-        button.setCornerRadius(HabitUi.dp(context, 18));
+        button.setCornerRadius(HabitUi.dp(context, 22));
         HabitUi.press(button);
         return button;
     }
@@ -190,7 +190,7 @@ public final class HabitComponents {
         button.setStrokeWidth(HabitUi.dp(context, 1));
         button.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(context, tintRes)));
         button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, softForColor(tintRes))));
-        button.setCornerRadius(HabitUi.dp(context, 18));
+        button.setCornerRadius(HabitUi.dp(context, 22));
         HabitUi.press(button);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(HabitUi.dp(context, 50), HabitUi.dp(context, 50));
         params.setMargins(HabitUi.dp(context, 8), 0, 0, 0);

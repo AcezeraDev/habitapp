@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
 public final class HabitUi {
@@ -23,11 +24,12 @@ public final class HabitUi {
     public static MaterialCardView surfaceCard(Context context) {
         MaterialCardView card = new MaterialCardView(context);
         card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.surface));
-        card.setRadius(dp(context, 24));
-        card.setCardElevation(dp(context, 4));
+        card.setRadius(dp(context, 28));
+        card.setCardElevation(dp(context, 6));
         card.setStrokeWidth(dp(context, 1));
         card.setStrokeColor(ContextCompat.getColor(context, R.color.line));
         card.setUseCompatPadding(true);
+        card.setPreventCornerOverlap(true);
         press(card);
         return card;
     }
@@ -53,8 +55,8 @@ public final class HabitUi {
     public static TextView badge(Context context, String value, int colorRes) {
         TextView view = text(context, value, 12, colorRes, true);
         view.setGravity(Gravity.CENTER);
-        view.setPadding(dp(context, 10), dp(context, 6), dp(context, 10), dp(context, 6));
-        view.setBackground(rounded(context, softForColor(colorRes), colorRes, 1, 18));
+        view.setPadding(dp(context, 11), dp(context, 7), dp(context, 11), dp(context, 7));
+        view.setBackground(rounded(context, softForColor(colorRes), colorRes, 1, 20));
         return view;
     }
 
@@ -63,11 +65,11 @@ public final class HabitUi {
         icon.setImageResource(iconRes);
         icon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         icon.setImageTintList(isPremiumIcon(iconRes) ? null : ColorStateList.valueOf(ContextCompat.getColor(context, colorRes)));
-        icon.setPadding(dp(context, 9), dp(context, 9), dp(context, 9), dp(context, 9));
-        icon.setBackground(rounded(context, softForColor(colorRes), colorRes, 1, 18));
+        icon.setPadding(dp(context, 10), dp(context, 10), dp(context, 10), dp(context, 10));
+        icon.setBackground(rounded(context, softForColor(colorRes), colorRes, 1, 20));
         icon.setContentDescription(null);
         icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-        icon.setLayoutParams(new LinearLayout.LayoutParams(dp(context, 50), dp(context, 50)));
+        icon.setLayoutParams(new LinearLayout.LayoutParams(dp(context, 52), dp(context, 52)));
         return icon;
     }
 
@@ -104,15 +106,39 @@ public final class HabitUi {
         parent.addView(child, params);
     }
 
+    public static void installPressFeedback(View root) {
+        if (root instanceof MaterialButton) {
+            press(root);
+        }
+
+        if (!(root instanceof ViewGroup)) return;
+
+        ViewGroup group = (ViewGroup) root;
+        for (int i = 0; i < group.getChildCount(); i++) {
+            installPressFeedback(group.getChildAt(i));
+        }
+    }
+
     public static void press(View view) {
         view.setOnTouchListener((v, event) -> {
             switch (event.getActionMasked()) {
                 case android.view.MotionEvent.ACTION_DOWN:
-                    v.animate().scaleX(0.985f).scaleY(0.985f).setDuration(90).start();
+                    v.animate().scaleX(0.965f).scaleY(0.965f).setDuration(80).start();
                     break;
                 case android.view.MotionEvent.ACTION_CANCEL:
-                case android.view.MotionEvent.ACTION_UP:
                     v.animate().scaleX(1f).scaleY(1f).setDuration(120).start();
+                    break;
+                case android.view.MotionEvent.ACTION_UP:
+                    v.animate()
+                            .scaleX(1.025f)
+                            .scaleY(1.025f)
+                            .setDuration(90)
+                            .withEndAction(() -> v.animate()
+                                    .scaleX(1f)
+                                    .scaleY(1f)
+                                    .setDuration(130)
+                                    .start())
+                            .start();
                     break;
                 default:
                     break;

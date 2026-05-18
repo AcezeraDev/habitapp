@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="8dp"
             app:strokeWidth="0dp">
 
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
                     app:indicatorColor="@color/white"
-                    app:trackColor="#5BD0FF"
+                    app:trackColor="@color/glass_on_dark"
                     app:trackCornerRadius="10dp"
                     app:trackThickness="12dp" />
 
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="Faltam 2000 ml"
-                    android:textColor="#ECFDF3"
+                    android:textColor="@color/hero_text_soft"
                     android:textSize="15sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/water_soft"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/water"
             app:strokeWidth="1dp">
@@ -169,7 +169,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/water"
-                app:cornerRadius="18dp"
+                app:cornerRadius="22dp"
                 app:icon="@drawable/ic_premium_drop"
                 app:iconTint="@null" />
 
@@ -185,7 +185,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/primary"
-                app:cornerRadius="18dp"
+                app:cornerRadius="22dp"
                 app:icon="@drawable/ic_premium_drop"
                 app:iconTint="@null" />
 
@@ -200,7 +200,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/success"
-                app:cornerRadius="18dp"
+                app:cornerRadius="22dp"
                 app:icon="@drawable/ic_premium_drop"
                 app:iconTint="@null" />
         </LinearLayout>
@@ -210,7 +210,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@color/surface_tint"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -243,10 +243,10 @@
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
                         android:hint="Quantidade em ml"
-                        app:boxCornerRadiusBottomEnd="8dp"
-                        app:boxCornerRadiusBottomStart="8dp"
-                        app:boxCornerRadiusTopEnd="8dp"
-                        app:boxCornerRadiusTopStart="8dp">
+                        app:boxCornerRadiusBottomEnd="18dp"
+                        app:boxCornerRadiusBottomStart="18dp"
+                        app:boxCornerRadiusTopEnd="18dp"
+                        app:boxCornerRadiusTopStart="18dp">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editQuantidade"
@@ -263,7 +263,7 @@
                         android:text="Adicionar"
                         android:textAllCaps="false"
                         app:backgroundTint="@color/water"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -273,10 +273,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:hint="Meta diária em litros"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusBottomEnd="18dp"
+                    app:boxCornerRadiusBottomStart="18dp"
+                    app:boxCornerRadiusTopEnd="18dp"
+                    app:boxCornerRadiusTopStart="18dp"
                     app:endIconDrawable="@android:drawable/ic_menu_save"
                     app:endIconMode="custom">
 
@@ -306,7 +306,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface_tint"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">

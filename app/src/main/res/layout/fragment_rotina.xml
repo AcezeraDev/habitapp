@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="4dp"
             app:strokeWidth="0dp">
 
@@ -49,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Score da rotina"
-                    android:textColor="#FFF3E0"
+                    android:textColor="@color/hero_text_soft"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="0dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -114,7 +114,7 @@
                         android:layout_weight="1"
                         android:text="Manhã"
                         android:textAllCaps="false"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnRotinaTarde"
@@ -126,7 +126,7 @@
                         android:layout_weight="1"
                         android:text="Tarde"
                         android:textAllCaps="false"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnRotinaNoite"
@@ -137,7 +137,7 @@
                         android:layout_weight="1"
                         android:text="Noite"
                         android:textAllCaps="false"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -147,7 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="0dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -202,7 +202,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface_soft"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="0dp">
 
             <TextView

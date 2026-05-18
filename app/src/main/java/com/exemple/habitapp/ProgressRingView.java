@@ -44,7 +44,7 @@ public class ProgressRingView extends View {
         progressPaint.setStyle(Paint.Style.STROKE);
         progressPaint.setStrokeWidth(stroke);
         progressPaint.setStrokeCap(Paint.Cap.ROUND);
-        progressPaint.setColor(ContextCompat.getColor(getContext(), R.color.success));
+        progressPaint.setColor(ContextCompat.getColor(getContext(), R.color.primary));
     }
 
     public void setProgressAnimated(int targetProgress) {

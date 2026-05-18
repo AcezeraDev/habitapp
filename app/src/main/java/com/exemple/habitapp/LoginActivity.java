@@ -6,16 +6,19 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
+    private TextInputLayout layoutNome;
+    private TextInputLayout layoutEmail;
+    private TextInputLayout layoutSenha;
     private TextInputEditText inputNome;
     private TextInputEditText inputEmail;
     private TextInputEditText inputSenha;
@@ -32,6 +35,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_login);
+        layoutNome = findViewById(R.id.layoutLoginNome);
+        layoutEmail = findViewById(R.id.layoutLoginEmail);
+        layoutSenha = findViewById(R.id.layoutLoginSenha);
         inputNome = findViewById(R.id.inputLoginNome);
         inputEmail = findViewById(R.id.inputLoginEmail);
         inputSenha = findViewById(R.id.inputLoginSenha);
@@ -40,25 +46,30 @@ public class LoginActivity extends AppCompatActivity {
         inputNome.setText(prefs.getString("nome_usuario", ""));
         inputEmail.setText(prefs.getString("email_usuario", ""));
         btnEntrar.setOnClickListener(v -> salvarLogin());
+        UiAnimator.enter(findViewById(R.id.rootLogin));
     }
 
     private void salvarLogin() {
+        layoutNome.setError(null);
+        layoutEmail.setError(null);
+        layoutSenha.setError(null);
+
         String nome = text(inputNome);
         String email = text(inputEmail);
         String senha = text(inputSenha);
 
         if (TextUtils.isEmpty(nome)) {
-            Toast.makeText(this, "Digite seu nome.", Toast.LENGTH_SHORT).show();
+            layoutNome.setError("Digite seu nome.");
             return;
         }
 
         if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Digite um e-mail válido.", Toast.LENGTH_SHORT).show();
+            layoutEmail.setError("Digite um e-mail valido.");
             return;
         }
 
         if (!TextUtils.isEmpty(senha) && senha.length() < 4) {
-            Toast.makeText(this, "Use pelo menos 4 caracteres na senha.", Toast.LENGTH_SHORT).show();
+            layoutSenha.setError("Use pelo menos 4 caracteres.");
             return;
         }
 

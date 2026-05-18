@@ -2,6 +2,7 @@ package com.exemple.habitapp;
 
 import android.animation.ValueAnimator;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 
 import com.google.android.material.progressindicator.BaseProgressIndicator;
@@ -27,6 +28,7 @@ public final class UiAnimator {
     }
 
     public static void enter(View view) {
+        HabitUi.installPressFeedback(view);
         view.setAlpha(0f);
         view.setTranslationY(16f);
         view.setScaleX(0.985f);
@@ -36,6 +38,7 @@ public final class UiAnimator {
                 .translationY(0f)
                 .scaleX(1f)
                 .scaleY(1f)
+                .setInterpolator(new OvershootInterpolator(1.05f))
                 .setDuration(260)
                 .start();
     }
@@ -43,10 +46,15 @@ public final class UiAnimator {
     public static void enterDelayed(View view, long delayMs) {
         view.setAlpha(0f);
         view.setTranslationY(20f);
+        view.setScaleX(0.98f);
+        view.setScaleY(0.98f);
         view.animate()
                 .alpha(1f)
                 .translationY(0f)
+                .scaleX(1f)
+                .scaleY(1f)
                 .setStartDelay(delayMs)
+                .setInterpolator(new OvershootInterpolator(1.02f))
                 .setDuration(300)
                 .start();
     }

@@ -45,6 +45,7 @@ public class AguaFragment extends Fragment {
         configurarObservadores();
         configurarBotoes();
         renderHistoricoAgua();
+        UiAnimator.enter(view);
     }
 
     private void configurarObservadores() {

@@ -1,12 +1,15 @@
 package com.exemple.habitapp;
 
-import android.content.res.ColorStateList;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +32,7 @@ public class OnboardingActivity extends AppCompatActivity {
     private String nome = "";
     private String objetivo = "Mais disciplina";
     private String rotina = "Equilibrada";
-    private String horario = "Manhã";
+    private String horario = "Manha";
     private double aguaAtual = 0.0;
     private double metaAgua = 2.0;
     private int metaEstudos = 60;
@@ -40,6 +43,8 @@ public class OnboardingActivity extends AppCompatActivity {
     private TextView txtStep;
     private TextView txtQuestion;
     private TextView txtSubtitle;
+    private TextView txtOnboardingHint;
+    private ImageView imgQuestionIcon;
     private TextInputLayout inputLayout;
     private TextInputEditText inputAnswer;
     private MaterialButton optionOne;
@@ -67,6 +72,7 @@ public class OnboardingActivity extends AppCompatActivity {
         bindViews();
         preencherValoresSalvos();
         renderStep();
+        UiAnimator.enter(findViewById(R.id.rootOnboarding));
     }
 
     private void bindViews() {
@@ -74,6 +80,8 @@ public class OnboardingActivity extends AppCompatActivity {
         txtStep = findViewById(R.id.txtStep);
         txtQuestion = findViewById(R.id.txtQuestion);
         txtSubtitle = findViewById(R.id.txtSubtitle);
+        txtOnboardingHint = findViewById(R.id.txtOnboardingHint);
+        imgQuestionIcon = findViewById(R.id.imgQuestionIcon);
         inputLayout = findViewById(R.id.inputLayout);
         inputAnswer = findViewById(R.id.inputAnswer);
         optionOne = findViewById(R.id.optionOne);
@@ -82,9 +90,9 @@ public class OnboardingActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         btnNext = findViewById(R.id.btnNext);
 
-        optionOne.setOnClickListener(v -> selecionarOpcao(0));
-        optionTwo.setOnClickListener(v -> selecionarOpcao(1));
-        optionThree.setOnClickListener(v -> selecionarOpcao(2));
+        optionOne.setOnClickListener(v -> selecionarOpcao(0, v));
+        optionTwo.setOnClickListener(v -> selecionarOpcao(1, v));
+        optionThree.setOnClickListener(v -> selecionarOpcao(2, v));
 
         btnBack.setOnClickListener(v -> {
             salvarRespostaAtual();
@@ -117,9 +125,14 @@ public class OnboardingActivity extends AppCompatActivity {
     private void renderStep() {
         progressOnboarding.setMax(TOTAL_STEPS);
         progressOnboarding.setProgress(step + 1);
-        txtStep.setText("Passo " + (step + 1) + " de " + TOTAL_STEPS);
+        txtStep.setText((step + 1) + " / " + TOTAL_STEPS);
+        txtOnboardingHint.setText(hintForStep());
+        imgQuestionIcon.setImageResource(iconForStep());
+        imgQuestionIcon.setImageTintList(iconTintForStep());
         btnBack.setVisibility(step == 0 ? View.INVISIBLE : View.VISIBLE);
         btnNext.setText(step == TOTAL_STEPS - 1 ? "Criar minha rotina" : "Continuar");
+        btnNext.setIconResource(step == TOTAL_STEPS - 1 ? R.drawable.check_circle : R.drawable.ic_nav_goals);
+        inputLayout.setError(null);
         inputAnswer.setText("");
         inputLayout.setVisibility(View.GONE);
 
@@ -128,44 +141,47 @@ public class OnboardingActivity extends AppCompatActivity {
         optionThree.setVisibility(View.GONE);
 
         if (step == 0) {
-            txtQuestion.setText("Como você quer ser chamado?");
-            txtSubtitle.setText("Vamos personalizar sua rotina diária com um toque mais seu.");
-            mostrarInput(nome, "Digite seu nome");
+            txtQuestion.setText("Como voce quer ser chamado?");
+            txtSubtitle.setText("Seu painel vai usar esse nome para deixar tudo mais pessoal.");
+            mostrarInput(nome, "Digite seu nome", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         } else if (step == 1) {
             txtQuestion.setText("Qual e seu foco principal agora?");
-            txtSubtitle.setText("Escolha o objetivo que mais combina com sua fase.");
-            mostrarOpcoes(objetivo, "Mais disciplina", "Beber mais água", "Estudar melhor");
+            txtSubtitle.setText("Escolha o objetivo que mais combina com sua fase atual.");
+            mostrarOpcoes(objetivo, "Mais disciplina", "Beber mais agua", "Estudar melhor");
         } else if (step == 2) {
             txtQuestion.setText("Como esta sua rotina hoje?");
-            txtSubtitle.setText("Isso ajuda o HabitApp a montar metas mais realistas.");
+            txtSubtitle.setText("Metas boas precisam caber no dia real, nao no dia perfeito.");
             mostrarOpcoes(rotina, "Corrida", "Equilibrada", "Tranquila");
         } else if (step == 3) {
-            txtQuestion.setText("Em qual período você rende melhor?");
-            txtSubtitle.setText("Seu foco pode começar no melhor horário do seu dia.");
-            mostrarOpcoes(horario, "Manhã", "Tarde", "Noite");
+            txtQuestion.setText("Em qual periodo voce rende melhor?");
+            txtSubtitle.setText("O app usa isso para sugerir seu melhor bloco de foco.");
+            mostrarOpcoes(horario, "Manha", "Tarde", "Noite");
         } else if (step == 4) {
-            txtQuestion.setText("Quantos litros de água você já bebeu hoje?");
-            txtSubtitle.setText("Pode ser aproximado. Exemplo: 0.5, 1 ou 1.5.");
-            mostrarInput(String.valueOf(aguaAtual), "Litros bebidos hoje");
+            txtQuestion.setText("Quanta agua voce ja bebeu hoje?");
+            txtSubtitle.setText("Pode ser aproximado. Exemplos: 0.5, 1 ou 1.5 litro.");
+            mostrarInput(String.valueOf(aguaAtual), "Litros bebidos hoje", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         } else if (step == 5) {
-            txtQuestion.setText("Qual meta de água parece boa para hoje?");
-            txtSubtitle.setText("Uma meta simples e clara fica mais fácil de cumprir.");
+            txtQuestion.setText("Qual meta de agua parece boa?");
+            txtSubtitle.setText("Uma meta clara deixa o acompanhamento mais leve.");
             mostrarOpcoes(String.valueOf(metaAgua), "1.5 L", "2.0 L", "2.5 L");
         } else if (step == 6) {
-            txtQuestion.setText("Quanto tempo você quer estudar hoje?");
-            txtSubtitle.setText("O app vai usar isso no resumo e no progresso diário.");
+            txtQuestion.setText("Quanto tempo voce quer estudar hoje?");
+            txtSubtitle.setText("Esse numero aparece no resumo diario e no progresso.");
             mostrarOpcoes(String.valueOf(metaEstudos), "30 min", "60 min", "90 min");
         } else {
-            txtQuestion.setText("Qual sessão de foco combina com você?");
-            txtSubtitle.setText("Também vamos manter o desafio de fotos em 30 dias.");
+            txtQuestion.setText("Qual sessao de foco combina com voce?");
+            txtSubtitle.setText("Escolha um bloco que pareca sustentavel hoje.");
             mostrarOpcoes(String.valueOf(focoMinutos), "15 min", "25 min", "45 min");
         }
     }
 
-    private void mostrarInput(String valor, String hint) {
+    private void mostrarInput(String valor, String hint, int inputType) {
         inputAnswer.setVisibility(View.VISIBLE);
         inputLayout.setVisibility(View.VISIBLE);
-        inputAnswer.setHint(hint);
+        inputLayout.setHint(hint);
+        inputLayout.setStartIconDrawable(iconForStep());
+        inputLayout.setStartIconTintList(iconTintForStep());
+        inputAnswer.setInputType(inputType);
         inputAnswer.setText(valor);
         inputAnswer.requestFocus();
     }
@@ -179,17 +195,26 @@ public class OnboardingActivity extends AppCompatActivity {
     private void configurarOpcao(MaterialButton button, String texto, String atual) {
         button.setVisibility(View.VISIBLE);
         button.setText(texto);
+        button.setIconResource(iconForOption(texto));
+        button.setIconSize(HabitUi.dp(this, 24));
+        button.setGravity(Gravity.CENTER_VERTICAL);
+        button.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+
         boolean selecionado = texto.equals(atual)
                 || texto.startsWith(atual + " ")
                 || atual.startsWith(texto.replace(" L", "").replace(" min", ""));
-        button.setStrokeWidth(selecionado ? 4 : 1);
         int background = ContextCompat.getColor(this, selecionado ? R.color.onboarding_selected : R.color.onboarding_option);
-        int text = ContextCompat.getColor(this, selecionado ? R.color.onboarding_selected_text : R.color.onboarding_option_text);
+        int text = ContextCompat.getColor(this, selecionado ? R.color.onboarding_selected_text : R.color.ink);
+        int stroke = ContextCompat.getColor(this, selecionado ? R.color.primary : R.color.line);
+
+        button.setStrokeWidth(HabitUi.dp(this, selecionado ? 2 : 1));
+        button.setStrokeColor(ColorStateList.valueOf(stroke));
         button.setBackgroundTintList(ColorStateList.valueOf(background));
         button.setTextColor(text);
+        button.setIconTint(ColorStateList.valueOf(text));
     }
 
-    private void selecionarOpcao(int index) {
+    private void selecionarOpcao(int index, View source) {
         String valor = index == 0 ? optionOne.getText().toString()
                 : index == 1 ? optionTwo.getText().toString()
                 : optionThree.getText().toString();
@@ -201,18 +226,20 @@ public class OnboardingActivity extends AppCompatActivity {
         if (step == 6) metaEstudos = extrairInt(valor, metaEstudos);
         if (step == 7) focoMinutos = extrairInt(valor, focoMinutos);
 
+        UiAnimator.pulse(source);
         renderStep();
     }
 
     private boolean salvarRespostaAtual() {
         String resposta = texto(inputAnswer);
+        inputLayout.setError(null);
 
         if (step == 0) {
             nome = resposta;
         } else if (step == 4) {
             Double litros = TextUtils.isEmpty(resposta) ? 0.0 : parseDoubleOrNull(resposta);
             if (litros == null || litros < 0) {
-                Toast.makeText(this, "Informe um valor válido.", Toast.LENGTH_SHORT).show();
+                inputLayout.setError("Informe um valor valido.");
                 return false;
             }
             aguaAtual = litros;
@@ -244,6 +271,49 @@ public class OnboardingActivity extends AppCompatActivity {
         HabitStore.ensureStarterHabits(prefs, objetivo);
         ReminderScheduler.scheduleDefaultReminders(this);
         abrirApp();
+    }
+
+    private int iconForStep() {
+        if (step == 0) return R.drawable.ic_nav_profile;
+        if (step == 1) return R.drawable.ic_nav_goals;
+        if (step == 2) return R.drawable.ic_nav_routine;
+        if (step == 3) return R.drawable.ic_clock_history;
+        if (step == 4 || step == 5) return R.drawable.ic_nav_water;
+        if (step == 6) return R.drawable.ic_nav_focus;
+        return R.drawable.ic_clock_history;
+    }
+
+    private ColorStateList iconTintForStep() {
+        int colorRes = R.color.primary;
+        if (step == 1 || step == 7) colorRes = R.color.coral;
+        if (step == 4 || step == 5) colorRes = R.color.water;
+        if (step == 6) colorRes = R.color.study;
+        return ColorStateList.valueOf(ContextCompat.getColor(this, colorRes));
+    }
+
+    private int iconForOption(String option) {
+        String value = option.toLowerCase();
+        if (value.contains("agua") || value.endsWith(" l")) return R.drawable.ic_nav_water;
+        if (value.contains("estudar") || value.contains("min")) return R.drawable.ic_nav_focus;
+        if (value.contains("disciplina")) return R.drawable.ic_nav_goals;
+        if (value.contains("corrida")) return R.drawable.ic_nav_routine;
+        if (value.contains("equilibrada")) return R.drawable.ic_theme_palette;
+        if (value.contains("tranquila")) return R.drawable.ic_nav_profile;
+        if (value.contains("manha")) return R.drawable.ic_clock_history;
+        if (value.contains("tarde")) return R.drawable.ic_theme_palette;
+        if (value.contains("noite")) return R.drawable.ic_nav_focus;
+        return R.drawable.check_circle;
+    }
+
+    private String hintForStep() {
+        if (step == 0) return "Comece pelo basico: seu nome aparece na saudacao da tela inicial.";
+        if (step == 1) return "Esse foco ajuda o app a criar habitos iniciais mais relevantes.";
+        if (step == 2) return "Use a resposta mais honesta. Rotina leve tambem conta.";
+        if (step == 3) return "O melhor horario vira sugestao no plano inteligente da home.";
+        if (step == 4) return "Nao precisa ser perfeito. Um valor aproximado ja ajuda o painel.";
+        if (step == 5) return "Voce pode mudar a meta de agua depois na tela de hidratacao.";
+        if (step == 6) return "Escolha uma meta possivel para criar consistencia.";
+        return "Blocos menores vencem quando o dia esta cheio.";
     }
 
     private String texto(TextInputEditText input) {

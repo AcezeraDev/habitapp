@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="4dp"
             app:strokeWidth="0dp">
 
@@ -93,7 +93,7 @@
             android:text="Acao principal"
             android:textAllCaps="false"
             app:backgroundTint="@color/primary"
-            app:cornerRadius="18dp" />
+            app:cornerRadius="22dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFeatureSecondary"
@@ -103,6 +103,6 @@
             android:layout_marginTop="10dp"
             android:text="Acao secundaria"
             android:textAllCaps="false"
-            app:cornerRadius="18dp" />
+            app:cornerRadius="22dp" />
     </LinearLayout>
 </ScrollView>

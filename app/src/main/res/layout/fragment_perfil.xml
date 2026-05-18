@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="0dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -110,7 +110,7 @@
                             android:text="Foto"
                             android:textAllCaps="false"
                             android:textColor="@color/primary"
-                            app:cornerRadius="18dp"
+                            app:cornerRadius="22dp"
                             app:icon="@drawable/ic_edit"
                             app:iconTint="@color/primary"
                             app:strokeColor="@color/line" />
@@ -122,7 +122,7 @@
                             android:layout_height="44dp"
                             android:layout_marginStart="8dp"
                             android:contentDescription="Remover foto"
-                            app:cornerRadius="18dp"
+                            app:cornerRadius="22dp"
                             app:icon="@drawable/ic_delete"
                             app:iconGravity="textStart"
                             app:iconPadding="0dp"
@@ -138,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="4dp"
             app:strokeWidth="0dp">
 
@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Streak 0 dias | média 0%"
-                    android:textColor="#ECFDF3"
+                    android:textColor="@color/hero_text_soft"
                     android:textSize="14sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -174,7 +174,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="0dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -191,10 +191,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nome"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp">
+                    app:boxCornerRadiusBottomEnd="18dp"
+                    app:boxCornerRadiusBottomStart="18dp"
+                    app:boxCornerRadiusTopEnd="18dp"
+                    app:boxCornerRadiusTopStart="18dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/inputPerfilNome"
@@ -210,10 +210,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:hint="E-mail"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp">
+                    app:boxCornerRadiusBottomEnd="18dp"
+                    app:boxCornerRadiusBottomStart="18dp"
+                    app:boxCornerRadiusTopEnd="18dp"
+                    app:boxCornerRadiusTopStart="18dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/inputPerfilEmail"
@@ -229,10 +229,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:hint="Objetivo principal"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp">
+                    app:boxCornerRadiusBottomEnd="18dp"
+                    app:boxCornerRadiusBottomStart="18dp"
+                    app:boxCornerRadiusTopEnd="18dp"
+                    app:boxCornerRadiusTopStart="18dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/inputPerfilObjetivo"
@@ -249,7 +249,7 @@
                     android:text="Salvar perfil"
                     android:textAllCaps="false"
                     app:backgroundTint="@color/coral"
-                    app:cornerRadius="18dp" />
+                    app:cornerRadius="22dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSairPerfil"
@@ -260,7 +260,7 @@
                     android:text="Sair da conta"
                     android:textAllCaps="false"
                     android:textColor="@color/danger"
-                    app:cornerRadius="18dp"
+                    app:cornerRadius="22dp"
                     app:strokeColor="@color/line" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -270,7 +270,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="0dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">

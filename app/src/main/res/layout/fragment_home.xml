@@ -15,37 +15,55 @@
         android:paddingEnd="18dp"
         android:paddingBottom="28dp">
 
-        <TextView
-            android:id="@+id/txtGreeting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_soft_primary"
-            android:paddingStart="10dp"
-            android:paddingTop="6dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="6dp"
-            android:text="Bom dia"
-            android:textColor="@color/primary"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/txtTodaySubtitle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="Seu painel de disciplina para hoje"
-            android:textColor="@color/ink"
-            android:textSize="26sp"
-            android:textStyle="bold" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtGreeting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bom dia"
+                    android:textColor="@color/ink"
+                    android:textSize="31sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtTodaySubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Que bom te ver por aqui."
+                    android:textColor="@color/muted"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="14dp"
+                android:background="@drawable/bg_soft_primary"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no"
+                android:padding="13dp"
+                android:src="@drawable/ic_app_icon" />
+        </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="18dp"
             app:cardBackgroundColor="@color/surface_tint"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="6dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 
@@ -89,26 +107,26 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="18dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="8dp"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="10dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_score_gradient"
-                android:minHeight="174dp"
+                android:minHeight="190dp"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="22dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Score do dia"
+                    android:text="Seu progresso de hoje"
                     android:textColor="@color/hero_text_soft"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -125,18 +143,18 @@
                         android:layout_weight="1"
                         android:text="0%"
                         android:textColor="@color/white"
-                        android:textSize="40sp"
+                        android:textSize="42sp"
                         android:textStyle="bold" />
 
                     <com.exemple.habitapp.ProgressRingView
                         android:id="@+id/ringDaily"
-                        android:layout_width="82dp"
-                        android:layout_height="82dp"
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
                         android:layout_marginEnd="10dp" />
 
                     <TextView
                         android:id="@+id/txtScoreLabel"
-                        android:layout_width="118dp"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_glass_on_dark"
                         android:gravity="center"
@@ -146,7 +164,7 @@
                         android:paddingEnd="12dp"
                         android:paddingBottom="8dp"
                         android:text="Comece com uma ação pequena"
-                        android:textColor="#ECFDF3"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -156,7 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     app:indicatorColor="@color/success"
-                    app:trackColor="#4B67A1"
+                    app:trackColor="@color/glass_on_dark"
                     app:trackCornerRadius="10dp"
                     app:trackThickness="10dp" />
 
@@ -166,18 +184,192 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="Uma acao pequena agora ja muda o placar."
-                    android:textColor="#ECFDF3"
+                    android:textColor="@color/hero_text_soft"
                     android:textSize="14sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Categorias do bem-estar"
+            android:textColor="@color/ink"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/cardCategoryFocus"
+                    android:layout_width="118dp"
+                    android:layout_height="116dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/bg_category_focus"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_nav_focus"
+                        app:tint="@color/study" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="Foco"
+                        android:textColor="@color/ink"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardCategorySleep"
+                    android:layout_width="118dp"
+                    android:layout_height="116dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/bg_category_sleep"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_premium_sleep" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="Sono"
+                        android:textColor="@color/ink"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardCategoryWater"
+                    android:layout_width="118dp"
+                    android:layout_height="116dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/bg_category_water"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_premium_drop" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="Agua"
+                        android:textColor="@color/ink"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardCategoryExercise"
+                    android:layout_width="118dp"
+                    android:layout_height="116dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/bg_category_mint"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_premium_dumbbell" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="Exercicios"
+                        android:textColor="@color/ink"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardCategoryDiary"
+                    android:layout_width="118dp"
+                    android:layout_height="116dp"
+                    android:background="@drawable/bg_category_rose"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_premium_book" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="Diario"
+                        android:textColor="@color/ink"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="20dp"
             app:cardBackgroundColor="@color/surface_tint"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="6dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 
@@ -266,7 +458,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 app:cardBackgroundColor="@color/water_soft"
-                app:cardCornerRadius="24dp"
+                app:cardCornerRadius="28dp"
                 app:cardElevation="2dp"
                 app:strokeColor="@color/water"
                 app:strokeWidth="1dp">
@@ -323,7 +515,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 app:cardBackgroundColor="@color/study_soft"
-                app:cardCornerRadius="24dp"
+                app:cardCornerRadius="28dp"
                 app:cardElevation="2dp"
                 app:strokeColor="@color/study"
                 app:strokeWidth="1dp">
@@ -380,7 +572,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/primary_soft"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -414,7 +606,7 @@
                         android:text="+250 ml"
                         android:textAllCaps="false"
                         app:backgroundTint="@color/water"
-                        app:cornerRadius="18dp"
+                        app:cornerRadius="22dp"
                         app:icon="@drawable/ic_premium_drop"
                         app:iconTint="@null" />
 
@@ -427,7 +619,7 @@
                         android:text="Abrir foco"
                         android:textAllCaps="false"
                         app:backgroundTint="@color/study"
-                        app:cornerRadius="18dp"
+                        app:cornerRadius="22dp"
                         app:icon="@drawable/ic_nav_focus"
                         app:iconTint="@color/white" />
                 </LinearLayout>
@@ -439,7 +631,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface_tint"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -476,7 +668,7 @@
                     android:text="Comecar proximo passo"
                     android:textAllCaps="false"
                     app:backgroundTint="@color/primary"
-                    app:cornerRadius="18dp"
+                    app:cornerRadius="22dp"
                     app:icon="@drawable/ic_nav_goals"
                     app:iconTint="@color/white" />
             </LinearLayout>
@@ -487,7 +679,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -541,7 +733,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/coral"
                         app:backgroundTint="@color/coral_soft"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnMoodOk"
@@ -555,7 +747,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/primary"
                         app:backgroundTint="@color/primary_soft"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnMoodHigh"
@@ -568,7 +760,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/success"
                         app:backgroundTint="@color/success_soft"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
                 </LinearLayout>
 
                 <TextView
@@ -597,7 +789,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/coral"
                         app:backgroundTint="@color/coral_soft"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnEnergyOk"
@@ -611,7 +803,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/primary"
                         app:backgroundTint="@color/primary_soft"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnEnergyHigh"
@@ -624,7 +816,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/success"
                         app:backgroundTint="@color/success_soft"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -634,7 +826,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -701,7 +893,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="2dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
@@ -777,7 +969,7 @@
                     android:text="Abrir painel de habitos"
                     android:textAllCaps="false"
                     android:textColor="@color/primary"
-                    app:cornerRadius="18dp"
+                    app:cornerRadius="22dp"
                     app:icon="@drawable/ic_nav_goals"
                     app:iconTint="@color/primary"
                     app:strokeColor="@color/line" />
@@ -796,10 +988,10 @@
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
                         android:hint="Novo hábito"
-                        app:boxCornerRadiusBottomEnd="8dp"
-                        app:boxCornerRadiusBottomStart="8dp"
-                        app:boxCornerRadiusTopEnd="8dp"
-                        app:boxCornerRadiusTopStart="8dp">
+                        app:boxCornerRadiusBottomEnd="18dp"
+                        app:boxCornerRadiusBottomStart="18dp"
+                        app:boxCornerRadiusTopEnd="18dp"
+                        app:boxCornerRadiusTopStart="18dp">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/inputNovoHabito"
@@ -815,7 +1007,7 @@
                         android:text="Add"
                         android:textAllCaps="false"
                         app:backgroundTint="@color/success"
-                        app:cornerRadius="18dp" />
+                        app:cornerRadius="22dp" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -825,7 +1017,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="8dp"
             app:strokeWidth="0dp">
 
@@ -840,7 +1032,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Desafio de evolução"
-                    android:textColor="#FFF3E0"
+                    android:textColor="@color/hero_text_soft"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -863,7 +1055,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/primary_dark"
                     app:backgroundTint="@color/white"
-                    app:cornerRadius="18dp" />
+                    app:cornerRadius="22dp" />
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"

@@ -76,6 +76,7 @@ public class EstudosFragment extends Fragment {
         atualizarTempo();
         atualizarStatus();
         renderHistoricoFoco();
+        UiAnimator.enter(view);
         return view;
     }
 

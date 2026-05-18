@@ -3,6 +3,7 @@ package com.exemple.habitapp;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,13 +11,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.material.button.MaterialButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,40 +70,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configurarNavegacaoInferior() {
-        adicionarItemNav("Início", R.id.home, R.drawable.ic_nav_home);
-        adicionarItemNav("Água", R.id.agua, R.drawable.ic_nav_water);
+        adicionarItemNav("Inicio", R.id.home, R.drawable.ic_nav_home);
+        adicionarItemNav("Agua", R.id.agua, R.drawable.ic_nav_water);
         adicionarItemNav("Foco", R.id.estudos, R.drawable.ic_nav_focus);
-        adicionarItemNav("Relatórios", R.id.progresso, R.drawable.ic_nav_chart);
+        adicionarItemNav("Progresso", R.id.progresso, R.drawable.ic_nav_chart);
         adicionarItemNav("Mais", R.id.mais, R.drawable.ic_nav_more);
     }
 
     private void adicionarItemNav(String titulo, int id, int iconRes) {
-        MaterialButton button = new MaterialButton(this, null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
-        button.setId(View.generateViewId());
-        button.setTag(id);
-        button.setText(titulo);
-        button.setTextSize(10.5f);
-        button.setSingleLine(true);
-        button.setMaxLines(1);
-        button.setEllipsize(TextUtils.TruncateAt.END);
-        button.setIncludeFontPadding(false);
-        button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        button.setGravity(Gravity.CENTER);
-        button.setAllCaps(false);
-        button.setIconResource(iconRes);
-        button.setIconSize(dp(24));
-        button.setIconGravity(MaterialButton.ICON_GRAVITY_TOP);
-        button.setIconPadding(dp(4));
-        button.setMinWidth(0);
-        button.setMinimumWidth(0);
-        button.setMinHeight(0);
-        button.setMinimumHeight(0);
-        button.setInsetTop(0);
-        button.setInsetBottom(0);
-        button.setCornerRadius(dp(20));
-        HabitUi.press(button);
-        button.setStrokeWidth(0);
-        button.setOnClickListener(v -> {
+        LinearLayout item = new LinearLayout(this);
+        item.setId(View.generateViewId());
+        item.setTag(id);
+        item.setGravity(Gravity.CENTER);
+        item.setOrientation(LinearLayout.VERTICAL);
+        item.setClickable(true);
+        item.setFocusable(true);
+        item.setPadding(dp(2), dp(8), dp(2), dp(6));
+        HabitUi.press(item);
+
+        ImageView icon = new ImageView(this);
+        icon.setImageResource(iconRes);
+        icon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        icon.setContentDescription(null);
+        icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        item.addView(icon, new LinearLayout.LayoutParams(dp(27), dp(27)));
+
+        TextView label = new TextView(this);
+        label.setText(titulo);
+        label.setTextSize(9.5f);
+        label.setSingleLine(true);
+        label.setMaxLines(1);
+        label.setEllipsize(TextUtils.TruncateAt.END);
+        label.setGravity(Gravity.CENTER);
+        label.setIncludeFontPadding(false);
+        LinearLayout.LayoutParams labelParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        labelParams.setMargins(0, dp(7), 0, 0);
+        item.addView(label, labelParams);
+
+        item.setOnClickListener(v -> {
             Object tag = v.getTag();
             if (tag instanceof Integer) {
                 navigateTo((Integer) tag);
@@ -110,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
-        params.setMargins(dp(2), dp(3), dp(2), dp(3));
-        bottomNavContainer.addView(button, params);
+        params.setMargins(dp(2), 0, dp(2), 0);
+        bottomNavContainer.addView(item, params);
     }
 
     public void navigateTo(int itemId) {
@@ -123,23 +131,32 @@ public class MainActivity extends AppCompatActivity {
     private void atualizarItemSelecionado() {
         int selectedColor = ContextCompat.getColor(this, R.color.primary_dark);
         int defaultColor = ContextCompat.getColor(this, R.color.muted);
-        int selectedBackground = ContextCompat.getColor(this, R.color.nav_selected_background);
-        int transparent = ContextCompat.getColor(this, android.R.color.transparent);
 
         for (int i = 0; i < bottomNavContainer.getChildCount(); i++) {
             View child = bottomNavContainer.getChildAt(i);
-            if (!(child instanceof MaterialButton)) continue;
+            if (!(child instanceof LinearLayout)) continue;
 
-            MaterialButton button = (MaterialButton) child;
-            boolean selected = button.getTag() instanceof Integer && isNavItemSelected((Integer) button.getTag());
+            LinearLayout item = (LinearLayout) child;
+            boolean selected = item.getTag() instanceof Integer && isNavItemSelected((Integer) item.getTag());
             int color = selected ? selectedColor : defaultColor;
+            View iconView = item.getChildAt(0);
+            View labelView = item.getChildAt(1);
 
-            button.setTextColor(color);
-            button.setIconTint(ColorStateList.valueOf(color));
-            button.setBackgroundTintList(ColorStateList.valueOf(selected ? selectedBackground : transparent));
-            button.animate()
-                    .scaleX(selected ? 1.05f : 1f)
-                    .scaleY(selected ? 1.05f : 1f)
+            if (iconView instanceof ImageView) {
+                ((ImageView) iconView).setImageTintList(ColorStateList.valueOf(color));
+            }
+            if (labelView instanceof TextView) {
+                TextView label = (TextView) labelView;
+                label.setTextColor(color);
+                label.setTypeface(label.getTypeface(), selected ? Typeface.BOLD : Typeface.NORMAL);
+            }
+
+            item.setBackground(selected
+                    ? HabitUi.rounded(this, R.color.nav_selected_background, R.color.nav_selected_background, 0, 26)
+                    : HabitUi.rounded(this, android.R.color.transparent, android.R.color.transparent, 0, 26));
+            item.animate()
+                    .scaleX(selected ? 1.02f : 1f)
+                    .scaleY(selected ? 1.02f : 1f)
                     .setDuration(160)
                     .start();
         }
@@ -148,8 +165,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isNavItemSelected(int navItemId) {
         if (navItemId == currentItemId) return true;
         if (navItemId == R.id.mais) {
-            return currentItemId == R.id.progresso
-                    || currentItemId == R.id.metas
+            return currentItemId == R.id.metas
                     || currentItemId == R.id.perfil
                     || currentItemId == R.id.habitos
                     || currentItemId == R.id.historico

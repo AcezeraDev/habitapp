@@ -1,3 +1,9 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="wellness_screen_padding">18dp</dimen>
+    <dimen name="wellness_card_radius">28dp</dimen>
+    <dimen name="wellness_hero_radius">30dp</dimen>
+    <dimen name="wellness_button_radius">22dp</dimen>
+    <dimen name="wellness_chip_radius">20dp</dimen>
+    <dimen name="wellness_card_padding">18dp</dimen>
 </resources>

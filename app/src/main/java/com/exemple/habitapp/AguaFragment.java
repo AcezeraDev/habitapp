@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,8 +19,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.exemple.habitapp.databinding.FragmentAguaBinding;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -45,6 +49,7 @@ public class AguaFragment extends Fragment {
         configurarObservadores();
         configurarBotoes();
         renderHistoricoAgua();
+        renderHistoricoSemanalAgua();
         UiAnimator.enter(view);
     }
 
@@ -89,9 +94,9 @@ public class AguaFragment extends Fragment {
     }
 
     private void configurarBotoes() {
+        binding.btnWater100.setOnClickListener(v -> adicionarQuantidade(100));
         binding.btnWater250.setOnClickListener(v -> adicionarQuantidade(250));
         binding.btnWater500.setOnClickListener(v -> adicionarQuantidade(500));
-        binding.btnWater750.setOnClickListener(v -> adicionarQuantidade(750));
 
         binding.btnAdd.setOnClickListener(v -> {
             String input = binding.editQuantidade.getText() != null
@@ -117,6 +122,7 @@ public class AguaFragment extends Fragment {
             prefs.edit().remove(getLogKey()).apply();
             HabitStore.saveTodaySnapshot(prefs);
             renderHistoricoAgua();
+            renderHistoricoSemanalAgua();
             Toast.makeText(requireContext(), "Água zerada para hoje.", Toast.LENGTH_SHORT).show();
         });
 
@@ -131,6 +137,7 @@ public class AguaFragment extends Fragment {
                 double novaMeta = parseDecimal(input);
                 viewModel.salvarNovaMeta(novaMeta);
                 HabitStore.saveTodaySnapshot(prefs);
+                renderHistoricoSemanalAgua();
                 binding.editMeta.clearFocus();
                 Toast.makeText(requireContext(), "Nova meta salva.", Toast.LENGTH_SHORT).show();
             } catch (NumberFormatException e) {
@@ -158,6 +165,7 @@ public class AguaFragment extends Fragment {
         registrarAgua(registradoMl);
         HabitStore.saveTodaySnapshot(prefs);
         renderHistoricoAgua();
+        renderHistoricoSemanalAgua();
         UiAnimator.pulse(binding.txtAgua);
         Toast.makeText(requireContext(), "+" + registradoMl + " ml adicionados.", Toast.LENGTH_SHORT).show();
     }
@@ -197,6 +205,62 @@ public class AguaFragment extends Fragment {
         for (int i = entradas.length - 1; i >= 0; i--) {
             adicionarLinhaHistorico(entradas[i]);
         }
+    }
+
+    private void renderHistoricoSemanalAgua() {
+        if (binding == null) return;
+
+        binding.layoutHistoricoSemanalAgua.removeAllViews();
+        int metaMl = Math.max(1, HabitStore.getMetaAguaMl(prefs));
+
+        for (int offset = 0; offset > -7; offset--) {
+            long day = HabitStore.dayKey(offset);
+            int aguaMl = offset == 0 ? HabitStore.getAguaMl(prefs) : prefs.getInt("agua_ml_day_" + day, 0);
+            adicionarLinhaHistoricoSemanal(formatDayLabel(offset), aguaMl, HabitStore.percent(aguaMl, metaMl));
+        }
+    }
+
+    private void adicionarLinhaHistoricoSemanal(String label, int aguaMl, int percentual) {
+        LinearLayout row = new LinearLayout(requireContext());
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setPadding(0, 8, 0, 8);
+
+        TextView day = new TextView(requireContext());
+        day.setText(label);
+        day.setTextColor(ContextCompat.getColor(requireContext(), R.color.ink));
+        day.setTextSize(13f);
+        day.setGravity(Gravity.START);
+        row.addView(day, new LinearLayout.LayoutParams(HabitUi.dp(requireContext(), 62), ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        LinearProgressIndicator progress = new LinearProgressIndicator(requireContext());
+        progress.setMax(100);
+        progress.setProgressCompat(percentual, false);
+        progress.setIndicatorColor(ContextCompat.getColor(requireContext(), percentual >= 100 ? R.color.success : R.color.water));
+        progress.setTrackColor(ContextCompat.getColor(requireContext(), R.color.line));
+        progress.setTrackThickness(HabitUi.dp(requireContext(), 8));
+        progress.setTrackCornerRadius(HabitUi.dp(requireContext(), 8));
+        LinearLayout.LayoutParams progressParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        progressParams.setMargins(HabitUi.dp(requireContext(), 8), 0, HabitUi.dp(requireContext(), 8), 0);
+        row.addView(progress, progressParams);
+
+        TextView amount = new TextView(requireContext());
+        amount.setText(aguaMl + " ml");
+        amount.setTextColor(ContextCompat.getColor(requireContext(), R.color.muted));
+        amount.setTextSize(13f);
+        amount.setGravity(Gravity.END);
+        row.addView(amount, new LinearLayout.LayoutParams(HabitUi.dp(requireContext(), 76), ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        binding.layoutHistoricoSemanalAgua.addView(row);
+    }
+
+    private String formatDayLabel(int offset) {
+        if (offset == 0) return "Hoje";
+        if (offset == -1) return "Ontem";
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, offset);
+        return new SimpleDateFormat("dd/MM", Locale.getDefault()).format(calendar.getTime());
     }
 
     private void adicionarLinhaHistorico(String texto) {

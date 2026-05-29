@@ -159,16 +159,32 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnWater250"
+                android:id="@+id/btnWater100"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="58dp"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
-                android:text="250 ml"
+                android:text="100 ml"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/water"
+                app:cornerRadius="22dp"
+                app:icon="@drawable/ic_premium_drop"
+                app:iconTint="@null" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnWater250"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="58dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:text="250 ml"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/primary"
                 app:cornerRadius="22dp"
                 app:icon="@drawable/ic_premium_drop"
                 app:iconTint="@null" />
@@ -179,24 +195,8 @@
                 android:layout_width="0dp"
                 android:layout_height="58dp"
                 android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
                 android:layout_weight="1"
                 android:text="500 ml"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/primary"
-                app:cornerRadius="22dp"
-                app:icon="@drawable/ic_premium_drop"
-                app:iconTint="@null" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnWater750"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="58dp"
-                android:layout_marginStart="6dp"
-                android:layout_weight="1"
-                android:text="750 ml"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/success"
@@ -327,6 +327,39 @@
 
                 <LinearLayout
                     android:id="@+id/layoutHistoricoAgua"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/surface_tint"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="2dp"
+            app:strokeColor="@color/line"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ultimos 7 dias"
+                    android:textColor="@color/ink"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/layoutHistoricoSemanalAgua"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"

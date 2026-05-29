@@ -26,6 +26,11 @@ import java.util.Locale;
 
 public class EstudosFragment extends Fragment {
 
+    private static final String PREF_FOCUS_RUNNING = "focus_timer_running";
+    private static final String PREF_FOCUS_TOTAL_MS = "focus_timer_total_ms";
+    private static final String PREF_FOCUS_REMAINING_MS = "focus_timer_remaining_ms";
+    private static final String PREF_FOCUS_END_AT_MS = "focus_timer_end_at_ms";
+
     private CountDownTimer timer;
     private boolean rodando = false;
 
@@ -64,7 +69,7 @@ public class EstudosFragment extends Fragment {
         layoutHistoricoFoco = view.findViewById(R.id.layoutHistoricoFoco);
 
         int focoMinutos = prefs.getInt("foco_minutos", 25);
-        configurarDuracao(focoMinutos);
+        restaurarEstadoTimer(focoMinutos);
 
         btnQuickStudy.setOnClickListener(v -> configurarDuracao(15));
         btnPomodoro.setOnClickListener(v -> configurarDuracao(25));
@@ -86,9 +91,12 @@ public class EstudosFragment extends Fragment {
             return;
         }
 
+        if (timer != null) timer.cancel();
         tempoTotal = minutos * 60 * 1000L;
         tempoRestante = tempoTotal;
         prefs.edit().putInt("foco_minutos", minutos).apply();
+        limparEstadoTimer();
+        btnStart.setText("Iniciar");
         inputTempo.setText(String.valueOf(minutos));
         atualizarTempo();
         atualizarStatus();
@@ -96,37 +104,110 @@ public class EstudosFragment extends Fragment {
 
     private void alternarTimer() {
         if (!rodando) {
+            if (tempoRestante <= 0) {
+                tempoRestante = tempoTotal;
+            }
             if (!atualizarDuracaoPeloInput()) return;
 
             rodando = true;
             btnStart.setText("Pausar");
             txtSessaoStatus.setText("Sessão em andamento. Mantenha uma única prioridade.");
-
-            timer = new CountDownTimer(tempoRestante, 500) {
-                @Override
-                public void onTick(long ms) {
-                    tempoRestante = ms;
-                    atualizarTempo();
-                }
-
-                @Override
-                public void onFinish() {
-                    tempoRestante = 0;
-                    rodando = false;
-                    btnStart.setText("Iniciar");
-                    salvarEstudoConcluido();
-                    atualizarTempo();
-                    atualizarStatus();
-                    renderHistoricoFoco();
-                    Toast.makeText(getContext(), "Sessão concluída.", Toast.LENGTH_SHORT).show();
-                }
-            }.start();
+            persistirEstadoTimer(true);
+            iniciarContagem();
         } else {
             if (timer != null) timer.cancel();
             rodando = false;
             btnStart.setText("Continuar");
             txtSessaoStatus.setText("Pausado. Volte quando estiver pronto.");
+            persistirEstadoTimer(false);
         }
+    }
+
+    private void restaurarEstadoTimer(int fallbackMinutos) {
+        long fallbackMs = fallbackMinutos * 60 * 1000L;
+        tempoTotal = prefs.getLong(PREF_FOCUS_TOTAL_MS, fallbackMs);
+        tempoRestante = prefs.getLong(PREF_FOCUS_REMAINING_MS, tempoTotal);
+        inputTempo.setText(String.valueOf(Math.max(1, tempoTotal / 60000L)));
+
+        if (prefs.getBoolean(PREF_FOCUS_RUNNING, false)) {
+            long endAt = prefs.getLong(PREF_FOCUS_END_AT_MS, 0L);
+            tempoRestante = endAt > 0L ? Math.max(0L, endAt - System.currentTimeMillis()) : tempoRestante;
+
+            if (tempoRestante <= 0L) {
+                concluirSessao();
+                return;
+            }
+
+            rodando = true;
+            btnStart.setText("Pausar");
+            txtSessaoStatus.setText("Sessão em andamento. Mantenha uma única prioridade.");
+            iniciarContagem();
+        } else {
+            rodando = false;
+            btnStart.setText(tempoRestante < tempoTotal ? "Continuar" : "Iniciar");
+        }
+
+        atualizarTempo();
+        atualizarStatus();
+    }
+
+    private void iniciarContagem() {
+        if (timer != null) timer.cancel();
+
+        if (tempoRestante <= 0L) {
+            concluirSessao();
+            return;
+        }
+
+        timer = new CountDownTimer(tempoRestante, 500) {
+            @Override
+            public void onTick(long ms) {
+                tempoRestante = ms;
+                atualizarTempo();
+            }
+
+            @Override
+            public void onFinish() {
+                tempoRestante = 0L;
+                concluirSessao();
+            }
+        }.start();
+    }
+
+    private void concluirSessao() {
+        if (timer != null) timer.cancel();
+        rodando = false;
+        btnStart.setText("Iniciar");
+        limparEstadoTimer();
+        salvarEstudoConcluido();
+        atualizarTempo();
+        atualizarStatus();
+        renderHistoricoFoco();
+        Toast.makeText(getContext(), "Sessão concluída.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void persistirEstadoTimer(boolean running) {
+        SharedPreferences.Editor editor = prefs.edit()
+                .putBoolean(PREF_FOCUS_RUNNING, running)
+                .putLong(PREF_FOCUS_TOTAL_MS, tempoTotal)
+                .putLong(PREF_FOCUS_REMAINING_MS, tempoRestante);
+
+        if (running) {
+            editor.putLong(PREF_FOCUS_END_AT_MS, System.currentTimeMillis() + tempoRestante);
+        } else {
+            editor.remove(PREF_FOCUS_END_AT_MS);
+        }
+
+        editor.apply();
+    }
+
+    private void limparEstadoTimer() {
+        prefs.edit()
+                .remove(PREF_FOCUS_RUNNING)
+                .remove(PREF_FOCUS_TOTAL_MS)
+                .remove(PREF_FOCUS_REMAINING_MS)
+                .remove(PREF_FOCUS_END_AT_MS)
+                .apply();
     }
 
     private boolean atualizarDuracaoPeloInput() {
@@ -158,6 +239,7 @@ public class EstudosFragment extends Fragment {
         rodando = false;
         btnStart.setText("Iniciar");
         tempoRestante = tempoTotal;
+        limparEstadoTimer();
         atualizarTempo();
         atualizarStatus();
     }
@@ -261,6 +343,9 @@ public class EstudosFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (rodando && prefs != null) {
+            persistirEstadoTimer(true);
+        }
         if (timer != null) timer.cancel();
     }
 }

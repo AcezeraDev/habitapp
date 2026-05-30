@@ -44,6 +44,8 @@ public class EstudosFragment extends Fragment {
     private SharedPreferences prefs;
     private TextView txtTempo;
     private TextView txtSessaoStatus;
+    private TextView txtFocusStatePill;
+    private TextView txtFocusGoalPill;
     private TextView txtFocoProgresso;
     private TextInputEditText inputTempo;
     private MaterialButton btnStart;
@@ -58,6 +60,8 @@ public class EstudosFragment extends Fragment {
 
         txtTempo = view.findViewById(R.id.txtTempo);
         txtSessaoStatus = view.findViewById(R.id.txtSessaoStatus);
+        txtFocusStatePill = view.findViewById(R.id.txtFocusStatePill);
+        txtFocusGoalPill = view.findViewById(R.id.txtFocusGoalPill);
         txtFocoProgresso = view.findViewById(R.id.txtFocoProgresso);
         btnStart = view.findViewById(R.id.btnStart);
         MaterialButton btnReset = view.findViewById(R.id.btnReset);
@@ -116,6 +120,7 @@ public class EstudosFragment extends Fragment {
             btnStart.setText("Pausar");
             txtSessaoStatus.setText("Sessão em andamento. Mantenha uma única prioridade.");
             persistirEstadoTimer(true);
+            atualizarEstadoVisual();
             iniciarContagem();
         } else {
             if (timer != null) timer.cancel();
@@ -123,6 +128,7 @@ public class EstudosFragment extends Fragment {
             btnStart.setText("Continuar");
             txtSessaoStatus.setText("Pausado. Volte quando estiver pronto.");
             persistirEstadoTimer(false);
+            atualizarEstadoVisual();
         }
     }
 
@@ -187,6 +193,7 @@ public class EstudosFragment extends Fragment {
         salvarEstudoConcluido();
         atualizarTempo();
         atualizarStatus();
+        atualizarEstadoVisual();
         renderHistoricoFoco();
         Toast.makeText(getContext(), "Sessão concluída.", Toast.LENGTH_SHORT).show();
     }
@@ -295,6 +302,7 @@ public class EstudosFragment extends Fragment {
             int progresso = (int) (((tempoTotal - tempoRestante) * 100) / tempoTotal);
             UiAnimator.animateProgress(progressIndicator, progresso);
         }
+        atualizarEstadoVisual();
     }
 
     private void atualizarStatus() {
@@ -305,7 +313,21 @@ public class EstudosFragment extends Fragment {
 
         txtSessaoStatus.setText("Hoje: " + estudos + "/" + meta + " min em " + sessoes + " sessões.");
         txtFocoProgresso.setText(estudos + " / " + meta + " min  |  " + percentual + "% da meta");
+        txtFocusGoalPill.setText("Meta " + meta + " min");
         UiAnimator.animateProgress(progressFocoDia, percentual);
+    }
+
+    private void atualizarEstadoVisual() {
+        if (txtFocusStatePill == null) return;
+        if (rodando) {
+            txtFocusStatePill.setText("Focando");
+        } else if (tempoRestante > 0 && tempoRestante < tempoTotal) {
+            txtFocusStatePill.setText("Pausado");
+        } else if (tempoRestante <= 0) {
+            txtFocusStatePill.setText("Finalizado");
+        } else {
+            txtFocusStatePill.setText("Pronto");
+        }
     }
 
     private void registrarFoco(int minutos, String origem) {

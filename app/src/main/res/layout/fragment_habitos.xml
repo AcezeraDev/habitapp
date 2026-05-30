@@ -28,7 +28,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Habitos"
+                    android:text="Hábitos"
                     android:textColor="@color/ink"
                     android:textSize="28sp"
                     android:textStyle="bold" />
@@ -52,7 +52,7 @@
                 android:id="@+id/btnCreateHabit"
                 android:layout_width="54dp"
                 android:layout_height="54dp"
-                android:contentDescription="Criar habito"
+                android:contentDescription="Criar hábito"
                 app:backgroundTint="@color/coral"
                 app:cornerRadius="22dp"
                 app:icon="@drawable/ic_nav_goals"
@@ -66,22 +66,22 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="8dp"
+            app:cardCornerRadius="32dp"
+            app:cardElevation="12dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_score_gradient"
-                android:minHeight="154dp"
+                android:background="@drawable/bg_habit_stage_redesign"
+                android:minHeight="188dp"
                 android:orientation="vertical"
                 android:padding="22dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Plano de hoje"
+                    android:text="Painel de hábitos"
                     android:textColor="@color/hero_text_soft"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -90,10 +90,54 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Escolha poucos habitos, conclua com intencao e acompanhe streaks sem perder contexto."
+                    android:text="Escolha poucos hábitos, conclua com intenção e acompanhe sequência sem perder contexto."
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_metric_panel_dark"
+                        android:gravity="center"
+                        android:text="Status"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_metric_panel_dark"
+                        android:gravity="center"
+                        android:text="Categoria"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_metric_panel_dark"
+                        android:gravity="center"
+                        android:text="Ritmo"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -101,17 +145,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/surface_tint"
+            app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="28dp"
-            app:cardElevation="2dp"
-            app:strokeColor="@color/line"
-            app:strokeWidth="1dp">
+            app:cardElevation="7dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_habit_filter_panel"
                 android:orientation="vertical"
-                android:padding="14dp">
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -177,17 +221,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:background="@drawable/bg_soft_panel"
+            android:background="@drawable/bg_empty_state_redesign"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="24dp"
             android:visibility="gone">
 
             <ImageView
-                android:layout_width="52dp"
-                android:layout_height="52dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_dashboard_panel"
                 android:contentDescription="@null"
                 android:importantForAccessibility="no"
+                android:padding="13dp"
                 android:src="@drawable/ic_nav_goals"
                 app:tint="@color/primary" />
 
@@ -196,7 +242,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:gravity="center"
-                android:text="Nenhum habito criado ainda"
+                android:text="Nenhum hábito criado ainda"
                 android:textColor="@color/ink"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -206,7 +252,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:gravity="center"
-                android:text="Crie um habito pequeno, escolha categoria, cor, icone e acompanhe o progresso diario."
+                android:text="Crie um hábito pequeno, escolha categoria, cor, ícone e acompanhe o progresso diário."
                 android:textColor="@color/muted"
                 android:textSize="14sp" />
 
@@ -215,7 +261,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:layout_marginTop="18dp"
-                android:text="Criar primeiro habito"
+                android:text="Criar primeiro hábito"
                 android:textAllCaps="false"
                 app:backgroundTint="@color/primary"
                 app:cornerRadius="22dp" />

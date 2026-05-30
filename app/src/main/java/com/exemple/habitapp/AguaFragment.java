@@ -74,6 +74,7 @@ public class AguaFragment extends Fragment {
 
         binding.txtAgua.setText(String.format(Locale.getDefault(), "%.2f L", litros));
         binding.txtMetaLabel.setText(String.format(Locale.getDefault(), "Meta: %d ml", metaMl));
+        binding.txtAguaPercent.setText(String.format(Locale.getDefault(), "%d%%", HabitStore.percent(aguaMl, metaMl)));
         binding.progressoAgua.setMax(100);
         UiAnimator.animateProgress(binding.progressoAgua, HabitStore.percent(aguaMl, metaMl));
         binding.txtCoposRestantes.setText(coposRestantes == 0

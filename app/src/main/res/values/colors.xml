@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="app_background">#F7F9FC</color>
+    <color name="app_background">#F3F6FB</color>
     <color name="surface">#FFFFFFFF</color>
     <color name="surface_elevated">#FFFFFF</color>
-    <color name="surface_soft">#EEF2F7</color>
-    <color name="surface_tint">#F8FAFC</color>
+    <color name="surface_soft">#EAF0F8</color>
+    <color name="surface_tint">#F6F8FC</color>
     <color name="surface_warm">#FFF7ED</color>
+    <color name="panel_start">#FFFFFF</color>
+    <color name="panel_center">#F8FAFF</color>
+    <color name="panel_end">#EDF4FF</color>
+    <color name="panel_line">#C8D3EA</color>
     <color name="ink">#111827</color>
     <color name="muted">#64748B</color>
-    <color name="line">#DDE5EF</color>
-    <color name="primary">#4F46E5</color>
-    <color name="primary_dark">#3730A3</color>
-    <color name="primary_soft">#EEF2FF</color>
+    <color name="line">#D3DBE8</color>
+    <color name="primary">#4353D8</color>
+    <color name="primary_dark">#263494</color>
+    <color name="primary_soft">#E9ECFF</color>
     <color name="water">#0EA5E9</color>
     <color name="water_soft">#E0F2FE</color>
     <color name="study">#7C3AED</color>
@@ -31,12 +35,12 @@
     <color name="tab_ripple">#1F4F46E5</color>
     <color name="nav_selected_background">#E0E7FF</color>
     <color name="nav_shell">#FFFFFFFF</color>
-    <color name="screen_start">#F7F9FC</color>
-    <color name="screen_center">#EEF2FF</color>
+    <color name="screen_start">#F3F6FB</color>
+    <color name="screen_center">#E9ECFF</color>
     <color name="screen_end">#FFFFFF</color>
-    <color name="score_start">#4F46E5</color>
-    <color name="score_center">#0EA5E9</color>
-    <color name="score_end">#14B8A6</color>
+    <color name="score_start">#263494</color>
+    <color name="score_center">#4353D8</color>
+    <color name="score_end">#0EA5E9</color>
     <color name="water_start">#0284C7</color>
     <color name="water_center">#38BDF8</color>
     <color name="water_end">#BAE6FD</color>

@@ -45,16 +45,16 @@ public final class HabitComponents {
     ) {
         int colorRes = habit.colorRes();
         MaterialCardView card = HabitUi.surfaceCard(context);
-        card.setRadius(HabitUi.dp(context, 28));
+        card.setRadius(HabitUi.dp(context, 26));
         card.setCardBackgroundColor(ContextCompat.getColor(context, done ? R.color.success_soft : softForColor(colorRes)));
         card.setStrokeColor(ContextCompat.getColor(context, done ? R.color.success : colorRes));
-        card.setCardElevation(HabitUi.dp(context, done ? 8 : 5));
+        card.setCardElevation(HabitUi.dp(context, done ? 3 : 8));
         if (detailClick != null) {
             card.setOnClickListener(detailClick);
         }
 
         LinearLayout content = HabitUi.paddedColumn(context, 16);
-        content.addView(habitHeader(context, habit, streak, colorRes));
+        content.addView(habitHeader(context, habit, done, streak, colorRes));
 
         if (!TextUtils.isEmpty(habit.description)) {
             TextView description = HabitUi.text(context, habit.description, 14, R.color.muted, false);
@@ -202,7 +202,7 @@ public final class HabitComponents {
         return HabitUi.badge(context, value, colorRes);
     }
 
-    private static LinearLayout habitHeader(Context context, HabitRecord habit, int streak, int colorRes) {
+    private static LinearLayout habitHeader(Context context, HabitRecord habit, boolean done, int streak, int colorRes) {
         LinearLayout header = new LinearLayout(context);
         header.setGravity(Gravity.CENTER_VERTICAL);
         header.setOrientation(LinearLayout.HORIZONTAL);
@@ -217,7 +217,16 @@ public final class HabitComponents {
         texts.addView(title);
         texts.addView(HabitUi.text(context, habit.subtitle(), 13, R.color.muted, false));
         header.addView(texts, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        header.addView(streakBadge(context, streak + "d sequência", colorRes));
+        LinearLayout badges = new LinearLayout(context);
+        badges.setGravity(Gravity.END);
+        badges.setOrientation(LinearLayout.VERTICAL);
+        TextView status = HabitUi.badge(context, done ? "Concluído" : "Pendente", done ? R.color.success : colorRes);
+        badges.addView(status);
+        TextView streakView = HabitUi.text(context, streak + "d sequência", 12, R.color.muted, true);
+        streakView.setGravity(Gravity.END);
+        streakView.setPadding(0, HabitUi.dp(context, 6), 0, 0);
+        badges.addView(streakView);
+        header.addView(badges);
         return header;
     }
 

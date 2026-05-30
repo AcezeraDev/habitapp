@@ -42,22 +42,53 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="8dp"
+            app:cardCornerRadius="32dp"
+            app:cardElevation="12dp"
             app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_water_gradient"
-                android:minHeight="214dp"
+                android:background="@drawable/bg_water_stage_redesign"
+                android:minHeight="256dp"
                 android:orientation="vertical"
                 android:padding="22dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Consumo de hoje"
+                        android:textColor="@color/hero_text_soft"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtAguaPercent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_metric_panel_dark"
+                        android:paddingStart="12dp"
+                        android:paddingTop="7dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="7dp"
+                        android:text="0%"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/txtAgua"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/bg_glass_on_dark"
                     android:paddingStart="14dp"
                     android:paddingTop="8dp"
@@ -86,6 +117,50 @@
                     android:text="Faltam 2000 ml"
                     android:textColor="@color/hero_text_soft"
                     android:textSize="15sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_metric_panel_dark"
+                        android:gravity="center"
+                        android:text="Meta"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_metric_panel_dark"
+                        android:gravity="center"
+                        android:text="Copos"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_metric_panel_dark"
+                        android:gravity="center"
+                        android:text="Histórico"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -93,17 +168,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/water_soft"
+            app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="28dp"
-            app:cardElevation="2dp"
-            app:strokeColor="@color/water"
-            app:strokeWidth="1dp">
+            app:cardElevation="7dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_water_control_panel"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="18dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -209,15 +284,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            app:cardBackgroundColor="@color/surface_tint"
+            app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="28dp"
-            app:cardElevation="2dp"
-            app:strokeColor="@color/line"
-            app:strokeWidth="1dp">
+            app:cardElevation="5dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_dashboard_panel"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -309,7 +384,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:background="@drawable/bg_metric_water"
+            android:background="@drawable/bg_water_control_panel"
             android:padding="14dp"
             android:text="Dica: beber em pequenas doses mantem a meta mais leve."
             android:textColor="@color/muted"
@@ -319,15 +394,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/surface_tint"
+            app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="28dp"
-            app:cardElevation="2dp"
-            app:strokeColor="@color/line"
-            app:strokeWidth="1dp">
+            app:cardElevation="5dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_dashboard_panel"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -352,9 +427,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/surface_tint"
+            app:cardBackgroundColor="@color/surface"
             app:cardCornerRadius="28dp"
-            app:cardElevation="2dp"
+            app:cardElevation="5dp"
             app:strokeColor="@color/line"
             app:strokeWidth="1dp">
 

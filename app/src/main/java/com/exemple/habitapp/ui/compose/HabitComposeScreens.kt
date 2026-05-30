@@ -3,7 +3,12 @@ package com.exemple.habitapp.ui.compose
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -58,6 +63,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -75,6 +82,9 @@ import com.exemple.habitapp.R
 import com.exemple.habitapp.data.HabitDashboardState
 import com.exemple.habitapp.data.HabitDraft
 import com.exemple.habitapp.data.HabitUiState
+import com.exemple.habitapp.data.ReportPdfExporter
+import com.exemple.habitapp.notifications.NotificationHelper
+import com.exemple.habitapp.notifications.ReminderScheduler
 import com.exemple.habitapp.ui.components.ElevatedPanel
 import com.exemple.habitapp.ui.components.EmptyPanel
 import com.exemple.habitapp.ui.components.HeroCard
@@ -95,20 +105,28 @@ import com.exemple.habitapp.ui.theme.Warning
 import com.exemple.habitapp.ui.theme.screenGradient
 import com.exemple.habitapp.viewmodel.FocusTimerState
 import com.exemple.habitapp.viewmodel.HabitMainViewModel
+import java.io.File
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
-fun HabitAppRoot(viewModel: HabitMainViewModel) {
+fun HabitAppRoot(
+    viewModel: HabitMainViewModel,
+    requestedRoute: String? = null,
+    onRouteConsumed: () -> Unit = {},
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val timer by viewModel.timer.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val navController = rememberNavController()
     val actions = remember(viewModel) {
         HabitActions(
+            login = viewModel::login,
+            completeDailySetup = viewModel::completeDailySetup,
             addWater = viewModel::addWater,
             undoWater = viewModel::undoWater,
+            resetWater = viewModel::resetWater,
             setWaterGoal = viewModel::setWaterGoal,
             setFocusGoal = viewModel::setFocusGoal,
             addManualFocus = viewModel::addManualFocus,
@@ -116,19 +134,29 @@ fun HabitAppRoot(viewModel: HabitMainViewModel) {
             toggleTimer = viewModel::toggleTimer,
             resetTimer = viewModel::resetTimer,
             setChecklist = viewModel::setChecklist,
+            setRoutinePeriod = viewModel::setRoutinePeriod,
+            setRoutineBlock = viewModel::setRoutineBlock,
+            completeRoutine = viewModel::completeRoutine,
             setMood = viewModel::setMood,
             setEnergy = viewModel::setEnergy,
             addHabit = viewModel::addHabit,
+            saveHabit = viewModel::saveHabit,
             toggleHabit = viewModel::toggleHabit,
             removeHabit = viewModel::removeHabit,
             saveProfile = viewModel::saveProfile,
             setTheme = viewModel::setTheme,
+            selectTheme = viewModel::selectTheme,
             setNotificationSettings = viewModel::setNotificationSettings,
+            setNotificationPlan = viewModel::setNotificationPlan,
             saveDiary = viewModel::saveDiary,
+            saveAvatarPath = viewModel::saveAvatarPath,
+            removeAvatar = viewModel::removeAvatar,
+            logout = viewModel::logout,
             setChallengeGoal = viewModel::setChallengeGoal,
             claimMissionXp = viewModel::claimMissionXp,
             importBackup = viewModel::importBackup,
             exportBackup = viewModel::exportBackup,
+            exportBackupJson = viewModel::exportBackupJson,
         )
     }
 
@@ -139,6 +167,18 @@ fun HabitAppRoot(viewModel: HabitMainViewModel) {
     }
 
     HabitTheme(darkTheme = state.darkMode) {
+        if (!state.loggedIn) {
+            AuthShell {
+                LoginScreen(state = state, actions = actions)
+            }
+            return@HabitTheme
+        }
+        if (!state.dailySetupComplete) {
+            AuthShell {
+                DailySetupScreen(state = state, actions = actions)
+            }
+            return@HabitTheme
+        }
         Scaffold(
             containerColor = MaterialTheme.colorScheme.background,
             bottomBar = {
@@ -169,9 +209,20 @@ fun HabitAppRoot(viewModel: HabitMainViewModel) {
                     .fillMaxSize()
                     .background(Brush.linearGradient(screenGradient(state.darkMode))),
             ) {
+                LaunchedEffect(requestedRoute) {
+                    val route = requestedRoute
+                    if (!route.isNullOrBlank()) {
+                        navController.navigate(route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                        onRouteConsumed()
+                    }
+                }
                 NavHost(navController = navController, startDestination = HabitRoute.Home.route) {
                     composable(HabitRoute.Home.route) { HomeScreen(state, actions, navController::navigate) }
                     composable(HabitRoute.Water.route) { WaterScreen(state, actions) }
+                    composable(HabitRoute.Routine.route) { RoutineScreen(state, actions) }
                     composable(HabitRoute.Focus.route) { FocusScreen(state, timer, actions) }
                     composable(HabitRoute.Habits.route) { HabitsScreen(state, actions) }
                     composable(HabitRoute.Progress.route) { ProgressScreen(state, actions, navController::navigate) }
@@ -186,6 +237,8 @@ fun HabitAppRoot(viewModel: HabitMainViewModel) {
                     composable(HabitRoute.Report.route) { ReportScreen(state) }
                     composable(HabitRoute.Backup.route) { BackupScreen(state, actions) }
                     composable(HabitRoute.Diary.route) { DiaryScreen(state, actions) }
+                    composable(HabitRoute.Appearance.route) { AppearanceScreen(state, actions, navController::navigate) }
+                    composable(HabitRoute.Themes.route) { ThemesScreen(state, actions, navController::navigate) }
                     composable(HabitRoute.Challenges.route) { ChallengesScreen(state, actions) }
                     composable(HabitRoute.Stats.route) { StatsScreen(state) }
                 }
@@ -196,8 +249,11 @@ fun HabitAppRoot(viewModel: HabitMainViewModel) {
 
 @Stable
 private data class HabitActions(
+    val login: (String, String, String) -> Unit,
+    val completeDailySetup: (String, String, String, String, Int, Int, Int, Int) -> Unit,
     val addWater: (Int) -> Unit,
     val undoWater: () -> Unit,
+    val resetWater: () -> Unit,
     val setWaterGoal: (Int) -> Unit,
     val setFocusGoal: (Int) -> Unit,
     val addManualFocus: (Int) -> Unit,
@@ -205,20 +261,132 @@ private data class HabitActions(
     val toggleTimer: () -> Unit,
     val resetTimer: () -> Unit,
     val setChecklist: (Int, Boolean) -> Unit,
+    val setRoutinePeriod: (String) -> Unit,
+    val setRoutineBlock: (Int, Boolean) -> Unit,
+    val completeRoutine: () -> Unit,
     val setMood: (Int) -> Unit,
     val setEnergy: (Int) -> Unit,
     val addHabit: (String) -> Unit,
+    val saveHabit: (HabitDraft, String?) -> Unit,
     val toggleHabit: (String) -> Unit,
     val removeHabit: (String) -> Unit,
     val saveProfile: (String, String, String, String, String) -> Unit,
     val setTheme: (Boolean, String) -> Unit,
+    val selectTheme: (String) -> Unit,
     val setNotificationSettings: (Boolean, Boolean, Boolean) -> Unit,
+    val setNotificationPlan: (Boolean, Boolean, Boolean, Boolean, String, Int, String, String) -> Unit,
     val saveDiary: (String) -> Unit,
+    val saveAvatarPath: (String) -> Unit,
+    val removeAvatar: () -> Unit,
+    val logout: () -> Unit,
     val setChallengeGoal: (Int) -> Unit,
     val claimMissionXp: () -> Unit,
     val importBackup: (String) -> Unit,
     val exportBackup: () -> String,
+    val exportBackupJson: () -> String,
 )
+
+@Composable
+private fun AuthShell(content: @Composable ColumnScope.() -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Brush.linearGradient(listOf(Color(0xFF263494), Color(0xFF0EA5E9), Color(0xFFF8FAFC)))),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(22.dp),
+            verticalArrangement = Arrangement.Center,
+            content = content,
+        )
+    }
+}
+
+@Composable
+private fun LoginScreen(state: HabitDashboardState, actions: HabitActions) {
+    var name by remember(state.name) { mutableStateOf(if (state.name == "Guerreiro") "" else state.name) }
+    var email by remember(state.email) { mutableStateOf(state.email) }
+    var password by remember { mutableStateOf("") }
+
+    HeroCard(
+        title = "HabitApp",
+        subtitle = "Entre para recuperar seu perfil, metas e rotina diária.",
+        icon = R.drawable.ic_app_icon_round,
+        gradient = listOf(Color(0xFF263494), Color(0xFF4353D8), Water),
+    ) {
+        Text("O fluxo de login voltou para manter a experiência completa da versão anterior.", color = Color.White.copy(alpha = 0.86f))
+    }
+    Spacer(Modifier.height(14.dp))
+    ElevatedPanel {
+        OutlinedTextField(name, { name = it.take(32) }, label = { Text("Nome") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(email, { email = it.take(64) }, label = { Text("E-mail") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(password, { password = it.take(32) }, label = { Text("Senha opcional") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(12.dp))
+        Button(onClick = { actions.login(name, email, password) }, modifier = Modifier.fillMaxWidth()) {
+            Text("Entrar")
+        }
+    }
+}
+
+@Composable
+private fun DailySetupScreen(state: HabitDashboardState, actions: HabitActions) {
+    var name by remember(state.name) { mutableStateOf(state.name) }
+    var objective by remember(state.objective) { mutableStateOf(state.objective) }
+    var routine by remember(state.routine) { mutableStateOf(state.routine) }
+    var period by remember(state.bestPeriod) { mutableStateOf(if (state.bestPeriod == "hoje") "Manhã" else state.bestPeriod) }
+    var currentWater by remember(state.waterMl) { mutableStateOf(state.waterMl.toString()) }
+    var waterGoal by remember(state.waterGoalMl) { mutableStateOf(state.waterGoalMl.toString()) }
+    var focusGoal by remember(state.focusGoalMinutes) { mutableStateOf(state.focusGoalMinutes.toString()) }
+    var session by remember(state.sessionMinutes) { mutableStateOf(state.sessionMinutes.toString()) }
+
+    HeroCard(
+        title = "Configuração do dia",
+        subtitle = "A versão antiga tinha onboarding diário; ele voltou em Compose.",
+        icon = R.drawable.ic_nav_routine,
+        gradient = listOf(Success, Water, Study),
+    ) {
+        Text("Defina metas realistas antes de abrir o dashboard.", color = Color.White.copy(alpha = 0.86f))
+    }
+    Spacer(Modifier.height(14.dp))
+    ElevatedPanel {
+        OutlinedTextField(name, { name = it.take(32) }, label = { Text("Como quer ser chamado?") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(objective, { objective = it.take(64) }, label = { Text("Foco principal") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+            listOf("Corrida", "Equilibrada", "Tranquila").forEach { value ->
+                FilterChip(selected = routine == value, onClick = { routine = value }, label = { Text(value) })
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+            listOf("Manhã", "Tarde", "Noite").forEach { value ->
+                FilterChip(selected = period == value, onClick = { period = value }, label = { Text(value) })
+            }
+        }
+        OutlinedTextField(currentWater, { currentWater = it.filter(Char::isDigit).take(4) }, label = { Text("Água já bebida em ml") }, singleLine = true, modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+        OutlinedTextField(waterGoal, { waterGoal = it.filter(Char::isDigit).take(4) }, label = { Text("Meta de água em ml") }, singleLine = true, modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+        OutlinedTextField(focusGoal, { focusGoal = it.filter(Char::isDigit).take(3) }, label = { Text("Meta de foco em min") }, singleLine = true, modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+        OutlinedTextField(session, { session = it.filter(Char::isDigit).take(3) }, label = { Text("Sessão de foco em min") }, singleLine = true, modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+        Spacer(Modifier.height(12.dp))
+        Button(
+            onClick = {
+                actions.completeDailySetup(
+                    name,
+                    objective,
+                    routine,
+                    period,
+                    currentWater.toIntOrNull() ?: 0,
+                    waterGoal.toIntOrNull() ?: 0,
+                    focusGoal.toIntOrNull() ?: 0,
+                    session.toIntOrNull() ?: 0,
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text("Criar minha rotina")
+        }
+    }
+}
 
 @Composable
 private fun HomeScreen(state: HabitDashboardState, actions: HabitActions, navigate: (String) -> Unit) {
@@ -279,6 +447,7 @@ private fun HomeScreen(state: HabitDashboardState, actions: HabitActions, naviga
 @Composable
 private fun WaterScreen(state: HabitDashboardState, actions: HabitActions) {
     var goalText by remember(state.waterGoalMl) { mutableStateOf(state.waterGoalMl.toString()) }
+    var customAmount by remember { mutableStateOf("") }
 
     ScreenColumn {
         HeroCard(
@@ -304,6 +473,21 @@ private fun WaterScreen(state: HabitDashboardState, actions: HabitActions) {
             Spacer(Modifier.height(14.dp))
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 OutlinedTextField(
+                    value = customAmount,
+                    onValueChange = { customAmount = it.filter(Char::isDigit).take(4) },
+                    label = { Text("Quantidade em ml") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true,
+                    modifier = Modifier.weight(1f),
+                )
+                Button(onClick = {
+                    actions.addWater(customAmount.toIntOrNull() ?: 0)
+                    customAmount = ""
+                }) { Text("Adicionar") }
+            }
+            Spacer(Modifier.height(14.dp))
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                OutlinedTextField(
                     value = goalText,
                     onValueChange = { goalText = it.filter(Char::isDigit).take(4) },
                     label = { Text("Meta em ml") },
@@ -313,10 +497,68 @@ private fun WaterScreen(state: HabitDashboardState, actions: HabitActions) {
                 )
                 Button(onClick = { actions.setWaterGoal(goalText.toIntOrNull() ?: 0) }) { Text("Salvar") }
             }
+            TextButton(onClick = actions.resetWater, modifier = Modifier.align(Alignment.End)) {
+                Text("Zerar água de hoje")
+            }
         }
 
         ScreenSection("Registros de hoje", "Últimos lançamentos de hidratação.")
         LogList(state.waterLog, emptyText = "Nenhum registro de água hoje.")
+    }
+}
+
+@Composable
+private fun RoutineScreen(state: HabitDashboardState, actions: HabitActions) {
+    ScreenColumn {
+        HeroCard(
+            title = "Rotina",
+            subtitle = "${state.routineBlocks.count { it }} de 4 blocos concluídos no período ${state.routinePeriod.lowercase(Locale.ROOT)}.",
+            icon = R.drawable.ic_nav_routine,
+            gradient = listOf(Success, Water, Color(0xFF14B8A6)),
+        ) {
+            ScoreRing(score = state.routinePercent, label = "rotina de hoje")
+            Spacer(Modifier.height(14.dp))
+            Text(state.routinePlan, color = Color.White.copy(alpha = 0.84f))
+        }
+
+        ElevatedPanel {
+            ScreenSection("Período principal", "O app usa isso para sugerir seu melhor bloco.")
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                listOf("Manhã", "Tarde", "Noite").forEach { period ->
+                    FilterChip(
+                        selected = state.routinePeriod == period,
+                        onClick = { actions.setRoutinePeriod(period) },
+                        label = { Text(period) },
+                    )
+                }
+            }
+        }
+
+        ElevatedPanel {
+            ScreenSection("Blocos do dia", "A função antiga de rotina voltou em Compose.")
+            val items = listOf(
+                "Manhã preparada" to "Abrir o dia com intenção.",
+                "Alimentação" to "Proteger energia e hidratação.",
+                "Movimento" to "Treino, caminhada ou alongamento.",
+                "Sono" to "Fechar telas e preparar descanso.",
+            )
+            items.forEachIndexed { index, item ->
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                    Checkbox(
+                        checked = state.routineBlocks.getOrElse(index) { false },
+                        onCheckedChange = { actions.setRoutineBlock(index, it) },
+                    )
+                    Column(Modifier.weight(1f)) {
+                        Text(item.first, fontWeight = FontWeight.Bold)
+                        Text(item.second, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
+                    }
+                }
+            }
+            Spacer(Modifier.height(10.dp))
+            Button(onClick = actions.completeRoutine, modifier = Modifier.fillMaxWidth()) {
+                Text("Marcar rotina completa")
+            }
+        }
     }
 }
 
@@ -387,26 +629,70 @@ private fun FocusScreen(state: HabitDashboardState, timer: FocusTimerState, acti
 @Composable
 private fun HabitsScreen(state: HabitDashboardState, actions: HabitActions) {
     var newHabit by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("Rotina") }
+    var frequency by remember { mutableStateOf("Diário") }
+    var time by remember { mutableStateOf("") }
+    var color by remember { mutableStateOf("Azul") }
+    var icon by remember { mutableStateOf("Livro") }
+    var editingName by remember { mutableStateOf<String?>(null) }
 
     ScreenColumn {
         HeroCard(
-            title = "Hábitos",
+            title = if (editingName == null) "Hábitos" else "Editando hábito",
             subtitle = "${state.habits.count { it.done }} de ${state.habits.size} concluídos hoje",
             icon = R.drawable.ic_nav_goals,
             gradient = listOf(Color(0xFF16A34A), Color(0xFF14B8A6), Color(0xFF4353D8)),
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                OutlinedTextField(
-                    value = newHabit,
-                    onValueChange = { newHabit = it.take(42) },
-                    label = { Text("Novo hábito") },
-                    singleLine = true,
-                    modifier = Modifier.weight(1f),
-                )
+            Text("Cadastro completo com descrição, categoria, frequência e horário voltou em Compose.", color = Color.White.copy(alpha = 0.84f))
+        }
+
+        ElevatedPanel {
+            OutlinedTextField(newHabit, { newHabit = it.take(42) }, label = { Text("Nome do hábito") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(description, { description = it.take(120) }, label = { Text("Descrição") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                listOf("Saúde", "Foco", "Movimento", "Sono", "Rotina").forEach { value ->
+                    FilterChip(selected = category == value, onClick = { category = value }, label = { Text(value) })
+                }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(frequency, { frequency = it.take(24) }, label = { Text("Frequência") }, singleLine = true, modifier = Modifier.weight(1f))
+                OutlinedTextField(time, { time = it.take(5) }, label = { Text("Horário") }, singleLine = true, modifier = Modifier.weight(1f))
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(color, { color = it.take(18) }, label = { Text("Cor") }, singleLine = true, modifier = Modifier.weight(1f))
+                OutlinedTextField(icon, { icon = it.take(18) }, label = { Text("Ícone") }, singleLine = true, modifier = Modifier.weight(1f))
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
                 Button(onClick = {
-                    actions.addHabit(newHabit)
+                    actions.saveHabit(
+                        HabitDraft(
+                            name = newHabit,
+                            description = description.ifBlank { "Pequena ação para manter consistência hoje." },
+                            category = category,
+                            frequency = frequency.ifBlank { "Diário" },
+                            time = time,
+                            colorName = color.ifBlank { "Azul" },
+                            iconName = icon.ifBlank { "Livro" },
+                        ),
+                        editingName,
+                    )
                     newHabit = ""
-                }) { Text("Criar") }
+                    description = ""
+                    category = "Rotina"
+                    frequency = "Diário"
+                    time = ""
+                    color = "Azul"
+                    icon = "Livro"
+                    editingName = null
+                }, modifier = Modifier.weight(1f)) { Text(if (editingName == null) "Criar" else "Salvar") }
+                if (editingName != null) {
+                    OutlinedButton(onClick = {
+                        newHabit = ""
+                        description = ""
+                        editingName = null
+                    }, modifier = Modifier.weight(1f)) { Text("Cancelar") }
+                }
             }
         }
 
@@ -418,11 +704,43 @@ private fun HabitsScreen(state: HabitDashboardState, actions: HabitActions) {
             val done = state.habits.filter { it.done }
             if (pending.isNotEmpty()) {
                 SmallLabel("Pendentes")
-                pending.forEach { habit -> HabitRow(habit, { actions.toggleHabit(habit.name) }, { actions.removeHabit(habit.name) }) }
+                pending.forEach { habit ->
+                    HabitRow(
+                        habit = habit,
+                        onToggle = { actions.toggleHabit(habit.name) },
+                        onEdit = {
+                            editingName = habit.name
+                            newHabit = habit.name
+                            description = habit.description
+                            category = habit.category
+                            frequency = habit.frequency
+                            time = habit.time
+                            color = habit.colorName
+                            icon = habit.iconName
+                        },
+                        onRemove = { actions.removeHabit(habit.name) },
+                    )
+                }
             }
             if (done.isNotEmpty()) {
                 SmallLabel("Concluídos")
-                done.forEach { habit -> HabitRow(habit, { actions.toggleHabit(habit.name) }, { actions.removeHabit(habit.name) }) }
+                done.forEach { habit ->
+                    HabitRow(
+                        habit = habit,
+                        onToggle = { actions.toggleHabit(habit.name) },
+                        onEdit = {
+                            editingName = habit.name
+                            newHabit = habit.name
+                            description = habit.description
+                            category = habit.category
+                            frequency = habit.frequency
+                            time = habit.time
+                            color = habit.colorName
+                            icon = habit.iconName
+                        },
+                        onRemove = { actions.removeHabit(habit.name) },
+                    )
+                }
             }
         }
     }
@@ -511,14 +829,33 @@ private fun GoalsScreen(state: HabitDashboardState, actions: HabitActions) {
 
 @Composable
 private fun ProfileScreen(state: HabitDashboardState, actions: HabitActions) {
+    val context = LocalContext.current
     var name by remember(state.name) { mutableStateOf(state.name) }
     var email by remember(state.email) { mutableStateOf(state.email) }
     var objective by remember(state.objective) { mutableStateOf(state.objective) }
     var routine by remember(state.routine) { mutableStateOf(state.routine) }
     var period by remember(state.bestPeriod) { mutableStateOf(state.bestPeriod) }
+    val avatarLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let { saveAvatarFromUri(context, it)?.let(actions.saveAvatarPath) }
+    }
 
     ScreenColumn {
         SimpleHero("Perfil", "Dados pessoais e contexto da rotina.", R.drawable.ic_nav_profile, listOf(Color(0xFF4353D8), Water))
+        ElevatedPanel {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                AvatarPreview(state.avatarPath)
+                Column(Modifier.weight(1f)) {
+                    Text("Perfil de ${state.name}", fontWeight = FontWeight.Black)
+                    Text("${state.achievements.count { it.unlocked }} medalhas | ${state.streak} dias | média ${state.weeklyAverage}%", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("${state.totalWaterMl} ml água | ${state.totalFocusMinutes} min foco", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                OutlinedButton(onClick = { avatarLauncher.launch("image/*") }, modifier = Modifier.weight(1f)) { Text("Trocar foto") }
+                OutlinedButton(onClick = actions.removeAvatar, modifier = Modifier.weight(1f)) { Text("Remover") }
+            }
+        }
         ElevatedPanel {
             OutlinedTextField(name, { name = it.take(32) }, label = { Text("Nome") }, singleLine = true, modifier = Modifier.fillMaxWidth())
             OutlinedTextField(email, { email = it.take(64) }, label = { Text("E-mail") }, singleLine = true, modifier = Modifier.fillMaxWidth())
@@ -529,17 +866,26 @@ private fun ProfileScreen(state: HabitDashboardState, actions: HabitActions) {
             Button(onClick = { actions.saveProfile(name, email, objective, routine, period) }, modifier = Modifier.fillMaxWidth()) {
                 Text("Salvar perfil")
             }
+            TextButton(onClick = actions.logout, modifier = Modifier.fillMaxWidth()) {
+                Text("Sair da conta")
+            }
         }
     }
 }
 
 @Composable
 private fun SettingsScreen(state: HabitDashboardState, actions: HabitActions) {
+    val context = LocalContext.current
     var dark by remember(state.darkMode) { mutableStateOf(state.darkMode) }
     var accent by remember(state.accentTheme) { mutableStateOf(state.accentTheme) }
     var notifications by remember(state.notificationsEnabled) { mutableStateOf(state.notificationsEnabled) }
     var waterReminder by remember(state.waterReminderEnabled) { mutableStateOf(state.waterReminderEnabled) }
     var focusReminder by remember(state.focusReminderEnabled) { mutableStateOf(state.focusReminderEnabled) }
+    var routineReminder by remember(state.routineReminderEnabled) { mutableStateOf(state.routineReminderEnabled) }
+    var waterTime by remember(state.waterReminderTime) { mutableStateOf(state.waterReminderTime) }
+    var waterInterval by remember(state.waterReminderIntervalHours) { mutableStateOf(state.waterReminderIntervalHours.toString()) }
+    var focusTime by remember(state.focusReminderTime) { mutableStateOf(state.focusReminderTime) }
+    var routineTime by remember(state.routineReminderTime) { mutableStateOf(state.routineReminderTime) }
 
     ScreenColumn {
         SimpleHero("Configurações", "Tema, lembretes e preferências persistidas.", R.drawable.ic_notification, listOf(Study, Coral))
@@ -550,18 +896,44 @@ private fun SettingsScreen(state: HabitDashboardState, actions: HabitActions) {
             }
             OutlinedTextField(accent, { accent = it.take(24) }, label = { Text("Tema/acento") }, singleLine = true, modifier = Modifier.fillMaxWidth())
             Button(onClick = { actions.setTheme(dark, accent) }, modifier = Modifier.fillMaxWidth()) { Text("Salvar tema") }
-            HorizontalDivider(Modifier.padding(vertical = 14.dp))
+        }
+        ElevatedPanel {
+            ScreenSection("Lembretes", "Água, foco e rotina com horários editáveis.")
             SettingSwitch("Notificações", "Liga ou desliga lembretes do app.", notifications) {
                 notifications = it
-                actions.setNotificationSettings(notifications, waterReminder, focusReminder)
             }
             SettingSwitch("Lembrete de água", "Sugestão diária de hidratação.", waterReminder) {
                 waterReminder = it
-                actions.setNotificationSettings(notifications, waterReminder, focusReminder)
             }
             SettingSwitch("Lembrete de foco", "Sugestão diária de Pomodoro.", focusReminder) {
                 focusReminder = it
-                actions.setNotificationSettings(notifications, waterReminder, focusReminder)
+            }
+            SettingSwitch("Lembrete de rotina", "Fechamento do dia e checklist.", routineReminder) {
+                routineReminder = it
+            }
+            HorizontalDivider(Modifier.padding(vertical = 14.dp))
+            OutlinedTextField(waterTime, { waterTime = it.take(5) }, label = { Text("Água a partir de HH:mm") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(waterInterval, { waterInterval = it.filter(Char::isDigit).take(1) }, label = { Text("Intervalo de água em horas") }, singleLine = true, modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+            OutlinedTextField(focusTime, { focusTime = it.take(5) }, label = { Text("Foco às HH:mm") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(routineTime, { routineTime = it.take(5) }, label = { Text("Rotina às HH:mm") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            Spacer(Modifier.height(12.dp))
+            Button(
+                onClick = {
+                    actions.setNotificationPlan(
+                        notifications,
+                        waterReminder,
+                        focusReminder,
+                        routineReminder,
+                        waterTime,
+                        waterInterval.toIntOrNull() ?: 0,
+                        focusTime,
+                        routineTime,
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+            ) { Text("Salvar lembretes") }
+            OutlinedButton(onClick = { NotificationHelper.showReminder(context, ReminderScheduler.TYPE_WATER) }, modifier = Modifier.fillMaxWidth()) {
+                Text("Enviar notificação de teste")
             }
         }
     }
@@ -652,13 +1024,23 @@ private fun MissionsScreen(state: HabitDashboardState, actions: HabitActions) {
 private fun ReportScreen(state: HabitDashboardState) {
     val context = LocalContext.current
     val report = remember(state) { buildReport(state) }
+    val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
+        if (uri != null) {
+            runCatching { ReportPdfExporter.exportWeeklyReport(context, state, uri) }
+                .onSuccess { Toast.makeText(context, "PDF exportado", Toast.LENGTH_SHORT).show() }
+                .onFailure { Toast.makeText(context, "Não consegui exportar o PDF", Toast.LENGTH_SHORT).show() }
+        }
+    }
     ScreenColumn {
-        SimpleHero("Relatório", "Resumo semanal pronto para copiar.", R.drawable.ic_nav_chart, listOf(Color(0xFF263494), Success))
+        SimpleHero("Relatório", "Resumo semanal pronto para copiar ou exportar em PDF.", R.drawable.ic_nav_chart, listOf(Color(0xFF263494), Success))
         ElevatedPanel {
             Text(report, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 22.sp)
             Spacer(Modifier.height(12.dp))
             Button(onClick = { copyToClipboard(context, "Relatório HabitApp", report) }, modifier = Modifier.fillMaxWidth()) {
                 Text("Copiar relatório")
+            }
+            OutlinedButton(onClick = { pdfLauncher.launch("habitapp-relatorio-${System.currentTimeMillis()}.pdf") }, modifier = Modifier.fillMaxWidth()) {
+                Text("Exportar PDF")
             }
         }
     }
@@ -668,8 +1050,21 @@ private fun ReportScreen(state: HabitDashboardState) {
 private fun BackupScreen(state: HabitDashboardState, actions: HabitActions) {
     val context = LocalContext.current
     var importText by remember { mutableStateOf("") }
+    val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+        if (uri != null) {
+            writeTextToUri(context, uri, actions.exportBackupJson())
+        }
+    }
+    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) {
+            readTextFromUri(context, uri)?.let {
+                importText = it
+                actions.importBackup(it)
+            }
+        }
+    }
     ScreenColumn {
-        SimpleHero("Backup", "Copie ou restaure dados locais do app.", R.drawable.ic_backup, listOf(Study, Water))
+        SimpleHero("Backup", "Exporte, restaure ou copie os dados locais do app.", R.drawable.ic_backup, listOf(Study, Water))
         ElevatedPanel {
             Text("Prévia", fontWeight = FontWeight.Black)
             Text(state.backupPreview.ifBlank { "Sem dados para exportar." }, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 8, overflow = TextOverflow.Ellipsis)
@@ -677,12 +1072,18 @@ private fun BackupScreen(state: HabitDashboardState, actions: HabitActions) {
             Button(onClick = { copyToClipboard(context, "Backup HabitApp", actions.exportBackup()) }, modifier = Modifier.fillMaxWidth()) {
                 Text("Copiar backup completo")
             }
+            OutlinedButton(onClick = { exportLauncher.launch("habitapp-backup-${System.currentTimeMillis()}.json") }, modifier = Modifier.fillMaxWidth()) {
+                Text("Exportar arquivo JSON")
+            }
         }
         ElevatedPanel {
             OutlinedTextField(importText, { importText = it }, label = { Text("Cole o backup aqui") }, minLines = 4, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
             Button(onClick = { actions.importBackup(importText) }, modifier = Modifier.fillMaxWidth()) {
                 Text("Restaurar backup")
+            }
+            OutlinedButton(onClick = { importLauncher.launch(arrayOf("application/json", "text/*")) }, modifier = Modifier.fillMaxWidth()) {
+                Text("Importar arquivo")
             }
         }
     }
@@ -697,6 +1098,70 @@ private fun DiaryScreen(state: HabitDashboardState, actions: HabitActions) {
             OutlinedTextField(note, { note = it.take(800) }, label = { Text("Nota do dia") }, minLines = 6, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
             Button(onClick = { actions.saveDiary(note) }, modifier = Modifier.fillMaxWidth()) { Text("Salvar diário") }
+        }
+    }
+}
+
+@Composable
+private fun AppearanceScreen(state: HabitDashboardState, actions: HabitActions, navigate: (String) -> Unit) {
+    ScreenColumn {
+        SimpleHero(
+            "Aparência",
+            "Modo ${if (state.darkMode) "escuro" else "claro"} com tema ${state.accentTheme}.",
+            R.drawable.ic_theme_palette,
+            listOf(Color(0xFF263494), Study),
+        )
+        ElevatedPanel {
+            SettingSwitch("Modo claro", "Visual limpo para usar durante o dia.", !state.darkMode) {
+                actions.setTheme(!it, state.accentTheme)
+            }
+            SettingSwitch("Modo escuro", "Menos brilho para usar à noite.", state.darkMode) {
+                actions.setTheme(it, state.accentTheme)
+            }
+            Spacer(Modifier.height(12.dp))
+            Button(onClick = { navigate(HabitRoute.Themes.route) }, modifier = Modifier.fillMaxWidth()) {
+                Text("Abrir loja de temas")
+            }
+        }
+    }
+}
+
+@Composable
+private fun ThemesScreen(state: HabitDashboardState, actions: HabitActions, navigate: (String) -> Unit) {
+    ScreenColumn {
+        SimpleHero(
+            "Loja de temas",
+            "Desbloqueie estilos conforme ganha XP.",
+            R.drawable.ic_theme_palette,
+            listOf(Warning, Success),
+        )
+        state.themeOptions.forEach { option ->
+            ElevatedPanel {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    StatusPill(
+                        text = when {
+                            option.selected -> "Ativo"
+                            option.unlocked -> "Liberado"
+                            else -> "Nível ${option.requiredLevel}"
+                        },
+                        color = if (option.unlocked) Success else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(Modifier.width(12.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(option.name, fontWeight = FontWeight.Black)
+                        Text(
+                            if (option.unlocked) "Toque para usar este estilo." else "Ganhe mais XP para desbloquear.",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Button(onClick = { actions.selectTheme(option.name) }, enabled = option.unlocked) {
+                        Text(if (option.selected) "Atual" else "Usar")
+                    }
+                }
+            }
+        }
+        TextButton(onClick = { navigate(HabitRoute.Appearance.route) }, modifier = Modifier.fillMaxWidth()) {
+            Text("Voltar para aparência")
         }
     }
 }
@@ -770,6 +1235,36 @@ private fun MoodEnergyCard(state: HabitDashboardState, actions: HabitActions) {
 }
 
 @Composable
+private fun AvatarPreview(path: String) {
+    val bitmap = remember(path) {
+        if (path.isBlank()) null else runCatching { BitmapFactory.decodeFile(path) }.getOrNull()
+    }
+    Box(
+        modifier = Modifier
+            .size(76.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primaryContainer),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (bitmap != null) {
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = "Foto do perfil",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+            )
+        } else {
+            Icon(
+                painterResource(R.drawable.ic_nav_profile),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(34.dp),
+            )
+        }
+    }
+}
+
+@Composable
 private fun LevelChips(selected: Int, onSelect: (Int) -> Unit) {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
         listOf("Baixo", "Ok", "Alto").forEachIndexed { index, label ->
@@ -779,7 +1274,12 @@ private fun LevelChips(selected: Int, onSelect: (Int) -> Unit) {
 }
 
 @Composable
-private fun HabitRow(habit: HabitUiState, onToggle: () -> Unit, onRemove: (() -> Unit)?) {
+private fun HabitRow(
+    habit: HabitUiState,
+    onToggle: () -> Unit,
+    onEdit: (() -> Unit)? = null,
+    onRemove: (() -> Unit)? = null,
+) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
@@ -806,6 +1306,11 @@ private fun HabitRow(habit: HabitUiState, onToggle: () -> Unit, onRemove: (() ->
                     AssistChip(onClick = {}, label = { Text(habit.category) })
                     AssistChip(onClick = {}, label = { Text("${habit.streak}d") })
                     AssistChip(onClick = {}, label = { Text("${habit.weekPercent}%") })
+                }
+            }
+            if (onEdit != null) {
+                IconButton(onClick = onEdit) {
+                    Icon(painterResource(R.drawable.ic_edit), contentDescription = "Editar")
                 }
             }
             if (onRemove != null) {
@@ -937,6 +1442,7 @@ private fun ScreenColumn(content: @Composable ColumnScope.() -> Unit) {
 
 private val moreItems = listOf(
     HabitRoute.Water,
+    HabitRoute.Routine,
     HabitRoute.Goals,
     HabitRoute.Profile,
     HabitRoute.Settings,
@@ -947,12 +1453,15 @@ private val moreItems = listOf(
     HabitRoute.Report,
     HabitRoute.Backup,
     HabitRoute.Diary,
+    HabitRoute.Appearance,
+    HabitRoute.Themes,
     HabitRoute.Challenges,
     HabitRoute.Stats,
 )
 
 private fun subtitleFor(route: HabitRoute): String = when (route) {
     HabitRoute.Water -> "Meta diária, histórico e ajuste em ml."
+    HabitRoute.Routine -> "Blocos do dia, período e plano rápido."
     HabitRoute.Goals -> "Água, foco e tempo de sessão."
     HabitRoute.Profile -> "Nome, e-mail e objetivo."
     HabitRoute.Settings -> "Tema escuro e notificações."
@@ -963,6 +1472,8 @@ private fun subtitleFor(route: HabitRoute): String = when (route) {
     HabitRoute.Report -> "Resumo semanal copiável."
     HabitRoute.Backup -> "Exportar e restaurar dados."
     HabitRoute.Diary -> "Nota rápida do dia."
+    HabitRoute.Appearance -> "Alternar claro/escuro."
+    HabitRoute.Themes -> "Temas desbloqueados por XP."
     HabitRoute.Challenges -> "Ciclos de consistência."
     HabitRoute.Stats -> "Leitura avançada do progresso."
     else -> "Abrir tela."
@@ -1040,6 +1551,36 @@ private fun buildReport(state: HabitDashboardState): String = buildString {
     appendLine("Checklist: ${state.checklistDone}/3")
     appendLine("Nível: ${state.levelName} | XP: ${state.xp}")
     appendLine("Insight: ${progressInsight(state)}")
+}
+
+private fun saveAvatarFromUri(context: Context, uri: Uri): String? {
+    return runCatching {
+        val avatar = File(context.filesDir, "profile_avatar.img")
+        context.contentResolver.openInputStream(uri)?.use { input ->
+            avatar.outputStream().use { output -> input.copyTo(output) }
+        } ?: return null
+        avatar.absolutePath
+    }.getOrNull()
+}
+
+private fun writeTextToUri(context: Context, uri: Uri, text: String) {
+    runCatching {
+        context.contentResolver.openOutputStream(uri)?.use { output ->
+            output.write(text.toByteArray(Charsets.UTF_8))
+        }
+    }.onSuccess {
+        Toast.makeText(context, "Arquivo exportado", Toast.LENGTH_SHORT).show()
+    }.onFailure {
+        Toast.makeText(context, "Não consegui exportar o arquivo", Toast.LENGTH_SHORT).show()
+    }
+}
+
+private fun readTextFromUri(context: Context, uri: Uri): String? {
+    return runCatching {
+        context.contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { it.readText() }
+    }.onFailure {
+        Toast.makeText(context, "Não consegui ler o arquivo", Toast.LENGTH_SHORT).show()
+    }.getOrNull()
 }
 
 private fun copyToClipboard(context: Context, label: String, text: String) {

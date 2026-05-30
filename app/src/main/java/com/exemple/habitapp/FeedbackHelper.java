@@ -1,5 +1,6 @@
 package com.exemple.habitapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
@@ -17,6 +18,7 @@ public final class FeedbackHelper {
     private FeedbackHelper() {
     }
 
+    @SuppressLint("MissingPermission")
     public static void success(Context context) {
         try {
             ToneGenerator tone = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 55);
@@ -31,8 +33,13 @@ public final class FeedbackHelper {
         if (Build.VERSION.SDK_INT >= 26) {
             vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
-            vibrator.vibrate(50);
+            vibrateLegacy(vibrator);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private static void vibrateLegacy(Vibrator vibrator) {
+        vibrator.vibrate(50);
     }
 
     public static void snack(View anchor, String message) {

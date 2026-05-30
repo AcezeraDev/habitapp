@@ -21,6 +21,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Locale;
+
 public class OnboardingActivity extends AppCompatActivity {
 
     private static final int TOTAL_STEPS = 8;
@@ -292,7 +294,7 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
     private int iconForOption(String option) {
-        String value = option.toLowerCase();
+        String value = option.toLowerCase(Locale.ROOT);
         if (value.contains("agua") || value.endsWith(" l")) return R.drawable.ic_nav_water;
         if (value.contains("estudar") || value.contains("min")) return R.drawable.ic_nav_focus;
         if (value.contains("disciplina")) return R.drawable.ic_nav_goals;

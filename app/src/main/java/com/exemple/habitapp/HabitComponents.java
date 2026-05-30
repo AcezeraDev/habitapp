@@ -81,16 +81,16 @@ public final class HabitComponents {
         actions.addView(doneButton, new LinearLayout.LayoutParams(0, HabitUi.dp(context, 50), 1f));
 
         if (detailClick != null) {
-            MaterialButton detailButton = iconButton(context, R.drawable.ic_clock_history, colorRes, "Detalhes do habito");
+            MaterialButton detailButton = iconButton(context, R.drawable.ic_clock_history, colorRes, "Detalhes do hábito");
             detailButton.setOnClickListener(detailClick);
             actions.addView(detailButton);
         }
 
-        MaterialButton editButton = iconButton(context, R.drawable.ic_edit, R.color.primary, "Editar habito");
+        MaterialButton editButton = iconButton(context, R.drawable.ic_edit, R.color.primary, "Editar hábito");
         editButton.setOnClickListener(editClick);
         actions.addView(editButton);
 
-        MaterialButton deleteButton = iconButton(context, R.drawable.ic_delete, R.color.danger, "Excluir habito");
+        MaterialButton deleteButton = iconButton(context, R.drawable.ic_delete, R.color.danger, "Excluir hábito");
         deleteButton.setOnClickListener(deleteClick);
         actions.addView(deleteButton);
 
@@ -179,7 +179,7 @@ public final class HabitComponents {
         MaterialButton button = new MaterialButton(context, null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
         button.setText("");
         button.setContentDescription(label);
-        button.setTooltipText(label);
+        HabitUi.tooltip(button, label);
         button.setIconResource(iconRes);
         button.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(context, tintRes)));
         button.setIconPadding(0);
@@ -217,7 +217,7 @@ public final class HabitComponents {
         texts.addView(title);
         texts.addView(HabitUi.text(context, habit.subtitle(), 13, R.color.muted, false));
         header.addView(texts, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        header.addView(streakBadge(context, streak + "d streak", colorRes));
+        header.addView(streakBadge(context, streak + "d sequência", colorRes));
         return header;
     }
 

@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import java.util.Locale;
+
 public class MaisFragment extends Fragment {
 
     @Override
@@ -32,27 +34,48 @@ public class MaisFragment extends Fragment {
         HabitStore.ensureToday(prefs);
 
         TextView resumo = view.findViewById(R.id.txtMaisResumo);
-        resumo.setText("Score hoje " + HabitStore.getTodayScore(prefs) + "% | XP nivel " + XpEngine.getLevel(prefs) + " | sequencia " + HabitStore.getStreak(prefs) + " dias");
+        resumo.setText(String.format(
+                Locale.getDefault(),
+                "Hoje: %d%%  |  Nível %d  |  Sequência %d dias",
+                HabitStore.getTodayScore(prefs),
+                XpEngine.getLevel(prefs),
+                HabitStore.getStreak(prefs)
+        ));
 
         LinearLayout layout = view.findViewById(R.id.layoutMaisAcoes);
-        addAction(layout, R.drawable.ic_nav_goals, "Habitos", "Cards modernos, filtros, streaks e edicao completa.", R.id.habitos);
+        addSection(layout, "Essenciais");
+        addAction(layout, R.drawable.ic_nav_water, "Água", "Meta diária, histórico semanal e ajuste em ml.", R.id.agua);
         addAction(layout, R.drawable.ic_nav_routine, "Rotina", "Acompanhe seu ritmo e mantenha seus blocos do dia.", R.id.rotina);
-        addAction(layout, R.drawable.ic_mission_flag, "Missoes", "Tarefas diarias com XP para subir de nivel.", R.id.missoes);
-        addAction(layout, R.drawable.ic_nav_chart, "Relatorio semanal", "Resumo automatico e PDF do seu progresso.", R.id.relatorio);
-        addAction(layout, R.drawable.ic_nav_chart, "Progresso", "Graficos, conquistas e leitura da semana.", R.id.progresso);
-        addAction(layout, R.drawable.ic_premium_trophy, "Conquistas", "Medalhas desbloqueadas por consistencia.", R.id.conquistas);
-        addAction(layout, R.drawable.ic_history, "Calendario", "Dias do mes coloridos por desempenho.", R.id.calendario);
-        addAction(layout, R.drawable.ic_theme_palette, "Aparencia", "Alterne entre modo claro e escuro.", R.id.aparencia);
-        addAction(layout, R.drawable.ic_theme_palette, "Loja de temas", "Temas desbloqueados conforme seu XP cresce.", R.id.temas);
+        addAction(layout, R.drawable.ic_nav_goals, "Metas", "Ajuste água, foco diário e tempo das sessões.", R.id.metas);
+        addAction(layout, R.drawable.ic_notification, "Lembretes", "Configure horários e notificações do app.", R.id.configuracoes);
+
+        addSection(layout, "Evolução");
+        addAction(layout, R.drawable.ic_mission_flag, "Missões", "Tarefas diárias com XP para subir de nível.", R.id.missoes);
+        addAction(layout, R.drawable.ic_nav_chart, "Relatório semanal", "Resumo automático e PDF do seu progresso.", R.id.relatorio);
+        addAction(layout, R.drawable.ic_premium_trophy, "Conquistas", "Medalhas desbloqueadas por consistência.", R.id.conquistas);
+        addAction(layout, R.drawable.ic_history, "Calendário", "Dias do mês coloridos por desempenho.", R.id.calendario);
+        addAction(layout, R.drawable.ic_clock_history, "Histórico", "Veja os últimos dias e entenda seu ritmo.", R.id.historico);
         addAction(layout, R.drawable.ic_premium_fire, "Desafios", "Ciclos de 7, 14 e 30 dias para manter ritmo.", R.id.desafios);
-        addAction(layout, R.drawable.ic_premium_book, "Diario", "Escreva uma nota rapida sobre o dia.", R.id.diario);
-        addAction(layout, R.drawable.ic_nav_chart, "Estatisticas", "Leitura avancada de agua, foco, XP e score.", R.id.estatisticas);
-        addAction(layout, R.drawable.ic_nav_goals, "Metas", "Ajuste agua, foco diario e tempo das sessoes.", R.id.metas);
-        addAction(layout, R.drawable.ic_clock_history, "Historico", "Veja os ultimos dias e entenda seu ritmo.", R.id.historico);
-        addAction(layout, R.drawable.ic_notification, "Lembretes", "Configure horarios e notificacoes do app.", R.id.configuracoes);
+        addAction(layout, R.drawable.ic_nav_chart, "Estatísticas", "Leitura avançada de água, foco, XP e score.", R.id.estatisticas);
+
+        addSection(layout, "Conta e personalização");
+        addAction(layout, R.drawable.ic_nav_profile, "Perfil", "Nome, objetivo e resumo geral do usuário.", R.id.perfil);
+        addAction(layout, R.drawable.ic_premium_book, "Diário", "Escreva uma nota rápida sobre o dia.", R.id.diario);
+        addAction(layout, R.drawable.ic_theme_palette, "Aparência", "Alterne entre modo claro e escuro.", R.id.aparencia);
+        addAction(layout, R.drawable.ic_theme_palette, "Loja de temas", "Temas desbloqueados conforme seu XP cresce.", R.id.temas);
         addAction(layout, R.drawable.ic_backup, "Backup", "Exporte, restaure ou salve na nuvem.", R.id.backup);
-        addAction(layout, R.drawable.ic_nav_profile, "Perfil", "Nome, objetivo e resumo geral do usuario.", R.id.perfil);
         UiAnimator.enter(view);
+    }
+
+    private void addSection(LinearLayout parent, String title) {
+        TextView section = new TextView(requireContext());
+        section.setText(title);
+        section.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_dark));
+        section.setTextSize(12f);
+        section.setTypeface(section.getTypeface(), Typeface.BOLD);
+        section.setAllCaps(true);
+        section.setPadding(dp(4), dp(12), dp(4), dp(8));
+        parent.addView(section);
     }
 
     private void addAction(LinearLayout parent, int iconRes, String title, String subtitle, int destinationId) {
@@ -99,7 +122,7 @@ public class MaisFragment extends Fragment {
         row.addView(texts, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
         TextView arrow = new TextView(requireContext());
-        arrow.setText(">");
+        arrow.setText("\u203A");
         arrow.setTextColor(ContextCompat.getColor(requireContext(), accent));
         arrow.setTextSize(22f);
         row.addView(arrow);
@@ -116,6 +139,9 @@ public class MaisFragment extends Fragment {
     }
 
     private int accentFor(int destinationId) {
+        if (destinationId == R.id.agua) {
+            return R.color.water;
+        }
         if (destinationId == R.id.backup || destinationId == R.id.configuracoes || destinationId == R.id.aparencia) {
             return R.color.primary;
         }

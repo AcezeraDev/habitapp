@@ -44,6 +44,21 @@
                     android:text="Que bom te ver por aqui."
                     android:textColor="@color/muted"
                     android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/txtTodayDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_soft_primary"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="Hoje"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <ImageView

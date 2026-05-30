@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public final class HabitStore {
 
@@ -216,11 +217,11 @@ public final class HabitStore {
         List<String> habits = getCustomHabits(prefs);
         if (!habits.isEmpty()) return;
 
-        String target = objective == null ? "" : objective.toLowerCase();
+        String target = objective == null ? "" : objective.toLowerCase(Locale.ROOT);
         List<HabitRecord> starters = new ArrayList<>();
-        starters.add(buildSuggestedRecord(target.contains("agua") ? "Beber 2L de agua" : "Planejar o dia"));
+        starters.add(buildSuggestedRecord(target.contains("agua") ? "Beber 2L de água" : "Planejar o dia"));
         starters.add(buildSuggestedRecord(target.contains("estud") ? "Estudar 30 min" : "Fazer 15 min de foco"));
-        starters.add(buildSuggestedRecord(target.contains("agua") ? "Alongar por 5 min" : "Beber agua"));
+        starters.add(buildSuggestedRecord(target.contains("agua") ? "Alongar por 5 min" : "Beber água"));
 
         for (HabitRecord starter : starters) {
             saveHabitRecord(prefs, null, starter);
@@ -376,18 +377,18 @@ public final class HabitStore {
 
     private static String defaultDescription(String name, String category) {
         String value = normalize(name);
-        if ("Saude".equals(category)) return "Cuide da energia do corpo com uma meta simples e visivel.";
+        if ("Saude".equals(category)) return "Cuide da energia do corpo com uma meta simples e visível.";
         if ("Foco".equals(category)) return value.contains("ler")
-                ? "Leia algumas paginas e marque a vitoria sem complicar."
-                : "Proteja um bloco curto de atencao profunda.";
-        if ("Movimento".equals(category)) return "Movimente o corpo por poucos minutos para manter constancia.";
+                ? "Leia algumas páginas e marque a vitória sem complicar."
+                : "Proteja um bloco curto de atenção profunda.";
+        if ("Movimento".equals(category)) return "Movimente o corpo por poucos minutos para manter constância.";
         if ("Sono".equals(category)) return "Prepare uma noite melhor com uma rotina pequena.";
-        return "Pequena acao de " + category.toLowerCase() + " para manter consistencia hoje.";
+        return "Pequena ação de " + category.toLowerCase(Locale.ROOT) + " para manter consistência hoje.";
     }
 
     private static String normalize(String value) {
         if (value == null) return "";
-        return value.toLowerCase()
+        return value.toLowerCase(Locale.ROOT)
                 .replace("á", "a")
                 .replace("à", "a")
                 .replace("ã", "a")

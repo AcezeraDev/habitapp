@@ -3,6 +3,7 @@
     <style name="Base.Theme.HabitApp.Common" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/app_background</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/study</item>
@@ -13,7 +14,6 @@
         <item name="colorOutline">@color/line</item>
         <item name="colorControlHighlight">@color/tab_ripple</item>
         <item name="android:statusBarColor">@color/screen_start</item>
-        <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@color/nav_shell</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>

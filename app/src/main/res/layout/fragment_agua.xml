@@ -266,13 +266,27 @@
                         app:cornerRadius="22dp" />
                 </LinearLayout>
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnUndoWater"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="4dp"
+                    android:text="Desfazer ultimo registro"
+                    android:textAllCaps="false"
+                    android:textColor="@color/danger"
+                    app:cornerRadius="20dp"
+                    app:icon="@drawable/ic_clock_history"
+                    app:iconTint="@color/danger"
+                    app:strokeColor="@color/danger" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutMetaInput"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Meta diária em litros"
+                    android:hint="Meta diaria em ml"
                     app:boxCornerRadiusBottomEnd="18dp"
                     app:boxCornerRadiusBottomStart="18dp"
                     app:boxCornerRadiusTopEnd="18dp"
@@ -284,8 +298,8 @@
                         android:id="@+id/editMeta"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:text="2.0" />
+                        android:inputType="number"
+                        android:text="2000" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

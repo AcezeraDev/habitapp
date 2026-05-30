@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configurarNavegacaoInferior() {
-        adicionarItemNav("Inicio", R.id.home, R.drawable.ic_nav_home);
-        adicionarItemNav("Agua", R.id.agua, R.drawable.ic_nav_water);
+        adicionarItemNav("Início", R.id.home, R.drawable.ic_nav_home);
+        adicionarItemNav("Hábitos", R.id.habitos, R.drawable.ic_nav_goals);
         adicionarItemNav("Foco", R.id.estudos, R.drawable.ic_nav_focus);
         adicionarItemNav("Progresso", R.id.progresso, R.drawable.ic_nav_chart);
         adicionarItemNav("Mais", R.id.mais, R.drawable.ic_nav_more);
@@ -165,9 +165,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean isNavItemSelected(int navItemId) {
         if (navItemId == currentItemId) return true;
         if (navItemId == R.id.mais) {
-            return currentItemId == R.id.metas
+            return currentItemId == R.id.agua
+                    || currentItemId == R.id.metas
                     || currentItemId == R.id.perfil
-                    || currentItemId == R.id.habitos
                     || currentItemId == R.id.historico
                     || currentItemId == R.id.configuracoes
                     || currentItemId == R.id.backup

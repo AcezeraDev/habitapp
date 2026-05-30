@@ -35,9 +35,9 @@ public class DiarioFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         prefs = requireActivity().getSharedPreferences("habit_data", Context.MODE_PRIVATE);
 
-        ((TextView) view.findViewById(R.id.txtFeatureTitle)).setText("Diario rapido");
+        ((TextView) view.findViewById(R.id.txtFeatureTitle)).setText("Diário rápido");
         ((TextView) view.findViewById(R.id.txtFeatureSubtitle)).setText("Registre uma nota curta sobre seu dia.");
-        ((TextView) view.findViewById(R.id.txtFeatureHeroTitle)).setText("Reflexao de hoje");
+        ((TextView) view.findViewById(R.id.txtFeatureHeroTitle)).setText("Reflexão de hoje");
         ((TextView) view.findViewById(R.id.txtFeatureHeroSubtitle)).setText(buildSummary());
         ((LinearProgressIndicator) view.findViewById(R.id.progressFeatureHero)).setProgressCompat(HabitStore.getTodayScore(prefs), true);
 
@@ -61,7 +61,7 @@ public class DiarioFragment extends Fragment {
         }
 
         MaterialButton primary = view.findViewById(R.id.btnFeaturePrimary);
-        primary.setText("Salvar diario");
+        primary.setText("Salvar diário");
         primary.setOnClickListener(v -> save(view));
         view.findViewById(R.id.btnFeatureSecondary).setVisibility(View.GONE);
     }
@@ -70,7 +70,7 @@ public class DiarioFragment extends Fragment {
         String text = input.getText() != null ? input.getText().toString().trim() : "";
         prefs.edit().putString(key(), text).apply();
         FeedbackHelper.success(requireContext());
-        Toast.makeText(requireContext(), "Diario salvo.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), "Diário salvo.", Toast.LENGTH_SHORT).show();
         onViewCreated(view, null);
     }
 

@@ -41,13 +41,13 @@ public class DesafiosFragment extends Fragment {
         ((TextView) view.findViewById(R.id.txtFeatureTitle)).setText("Modo desafio");
         ((TextView) view.findViewById(R.id.txtFeatureSubtitle)).setText("Escolha um ciclo de 7, 14 ou 30 dias fortes.");
         ((TextView) view.findViewById(R.id.txtFeatureHeroTitle)).setText("Desafio de " + goal + " dias");
-        ((TextView) view.findViewById(R.id.txtFeatureHeroSubtitle)).setText(streak + " dias fortes na sequencia atual. Trofeu final em " + Math.max(0, goal - streak) + " dias.");
+        ((TextView) view.findViewById(R.id.txtFeatureHeroSubtitle)).setText(streak + " dias fortes na sequência atual. Troféu final em " + Math.max(0, goal - streak) + " dias.");
         ((LinearProgressIndicator) view.findViewById(R.id.progressFeatureHero)).setProgressCompat(progress, true);
 
         LinearLayout list = view.findViewById(R.id.layoutFeatureContent);
         list.removeAllViews();
         addChallenge(view, list, 7, "Sprint de 7 dias", "Perfeito para voltar ao ritmo sem peso.");
-        addChallenge(view, list, 14, "Consistencia 14", "Duas semanas de base solida.");
+        addChallenge(view, list, 14, "Consistência 14", "Duas semanas de base sólida.");
         addChallenge(view, list, 30, "Projeto 30 dias", "Ciclo completo com trofeu final.");
 
         MaterialButton primary = view.findViewById(R.id.btnFeaturePrimary);

@@ -4,7 +4,6 @@
     android:initialLayout="@layout/app_widget_habit"
     android:minWidth="250dp"
     android:minHeight="130dp"
-    android:previewLayout="@layout/app_widget_habit"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen" />

@@ -33,9 +33,12 @@ import java.util.List;
 
 public class HabitosFragment extends Fragment {
 
-    private static final String[] STATUS = {"Todos", "Pendentes", "Concluidos"};
-    private static final String[] CATEGORIES = {"Todas", "Rotina", "Saude", "Foco", "Movimento", "Sono"};
-    private static final String[] FREQUENCIES = {"Todas", "Diario", "Dias uteis", "3x semana", "Semanal"};
+    private static final String[] STATUS_LABELS = {"Todos", "Pendentes", "Concluídos"};
+    private static final String[] STATUS_VALUES = {"Todos", "Pendentes", "Concluidos"};
+    private static final String[] CATEGORY_LABELS = {"Todas", "Rotina", "Saúde", "Foco", "Movimento", "Sono"};
+    private static final String[] CATEGORY_FILTER_VALUES = {"Todas", "Rotina", "Saude", "Foco", "Movimento", "Sono"};
+    private static final String[] FREQUENCY_LABELS = {"Todas", "Diário", "Dias úteis", "3x semana", "Semanal"};
+    private static final String[] FREQUENCY_FILTER_VALUES = {"Todas", "Diario", "Dias uteis", "3x semana", "Semanal"};
     private static final String[] CATEGORY_VALUES = {"Rotina", "Saude", "Foco", "Movimento", "Sono"};
     private static final String[] FREQUENCY_VALUES = {"Diario", "Dias uteis", "3x semana", "Semanal"};
     private static final String[] COLORS = {"Azul", "Agua", "Verde", "Roxo", "Amarelo", "Coral"};
@@ -46,9 +49,9 @@ public class HabitosFragment extends Fragment {
     private LinearLayout emptyLayout;
     private TextView summary;
     private View rootView;
-    private String statusFilter = STATUS[0];
-    private String categoryFilter = CATEGORIES[0];
-    private String frequencyFilter = FREQUENCIES[0];
+    private String statusFilter = STATUS_VALUES[0];
+    private String categoryFilter = CATEGORY_FILTER_VALUES[0];
+    private String frequencyFilter = FREQUENCY_FILTER_VALUES[0];
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,15 +69,15 @@ public class HabitosFragment extends Fragment {
         listLayout = view.findViewById(R.id.layoutHabitList);
         emptyLayout = view.findViewById(R.id.layoutHabitEmpty);
 
-        setupChips(view.findViewById(R.id.chipStatusGroup), STATUS, value -> {
+        setupChips(view.findViewById(R.id.chipStatusGroup), STATUS_LABELS, STATUS_VALUES, value -> {
             statusFilter = value;
             renderHabits();
         });
-        setupChips(view.findViewById(R.id.chipCategoryGroup), CATEGORIES, value -> {
+        setupChips(view.findViewById(R.id.chipCategoryGroup), CATEGORY_LABELS, CATEGORY_FILTER_VALUES, value -> {
             categoryFilter = value;
             renderHabits();
         });
-        setupChips(view.findViewById(R.id.chipFrequencyGroup), FREQUENCIES, value -> {
+        setupChips(view.findViewById(R.id.chipFrequencyGroup), FREQUENCY_LABELS, FREQUENCY_FILTER_VALUES, value -> {
             frequencyFilter = value;
             renderHabits();
         });
@@ -86,12 +89,13 @@ public class HabitosFragment extends Fragment {
         UiAnimator.enter(view);
     }
 
-    private void setupChips(ChipGroup group, String[] values, FilterListener listener) {
+    private void setupChips(ChipGroup group, String[] labels, String[] values, FilterListener listener) {
         group.removeAllViews();
         for (int i = 0; i < values.length; i++) {
+            String label = labels[i];
             String value = values[i];
             Chip chip = new Chip(requireContext());
-            chip.setText(value);
+            chip.setText(label);
             chip.setCheckable(true);
             chip.setChecked(i == 0);
             int[][] states = new int[][]{
@@ -130,7 +134,7 @@ public class HabitosFragment extends Fragment {
         for (HabitRecord habit : habits) {
             if (HabitStore.isHabitDoneToday(prefs, habit.name)) completed++;
         }
-        summary.setText(completed + " de " + habits.size() + " habitos concluidos hoje | " + HabitStore.getStreak(prefs) + " dias fortes");
+        summary.setText(completed + " de " + habits.size() + " hábitos concluídos hoje | " + HabitStore.getStreak(prefs) + " dias fortes");
 
         listLayout.removeAllViews();
         int visible = 0;
@@ -145,7 +149,7 @@ public class HabitosFragment extends Fragment {
         emptyLayout.setVisibility(hasNoHabits ? View.VISIBLE : View.GONE);
 
         if (!hasNoHabits && visible == 0) {
-            TextView emptyFiltered = HabitUi.text(requireContext(), "Nenhum habito aparece com esses filtros.", 14, R.color.muted, false);
+            TextView emptyFiltered = HabitUi.text(requireContext(), "Nenhum hábito aparece com esses filtros.", 14, R.color.muted, false);
             emptyFiltered.setGravity(Gravity.CENTER);
             emptyFiltered.setPadding(0, HabitUi.dp(requireContext(), 18), 0, HabitUi.dp(requireContext(), 18));
             listLayout.addView(emptyFiltered);
@@ -171,7 +175,7 @@ public class HabitosFragment extends Fragment {
                     HabitStore.setHabitDoneToday(prefs, habit.name, !done);
                     FeedbackHelper.success(requireContext());
                     if (!done) CelebrationView.burst(rootView);
-                    FeedbackHelper.snack(rootView, !done ? "Habito concluido." : "Habito reaberto.");
+                    FeedbackHelper.snack(rootView, !done ? "Hábito concluído." : "Hábito reaberto.");
                     UiAnimator.complete(v);
                     renderHabits();
                 },
@@ -187,7 +191,7 @@ public class HabitosFragment extends Fragment {
         MaterialButton button = new MaterialButton(requireContext(), null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
         button.setText("");
         button.setContentDescription(label);
-        button.setTooltipText(label);
+        HabitUi.tooltip(button, label);
         button.setIconResource(iconRes);
         button.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), tintRes)));
         button.setIconPadding(0);
@@ -222,25 +226,25 @@ public class HabitosFragment extends Fragment {
 
         form.addView(HabitComponents.sectionTitle(
                 requireContext(),
-                isEditing ? "Editar habito" : "Novo habito",
-                "Defina nome, cor, icone e frequencia sem sair do fluxo.",
+                isEditing ? "Editar hábito" : "Novo hábito",
+                "Defina nome, cor, ícone e frequência sem sair do fluxo.",
                 R.drawable.ic_nav_goals,
                 R.color.primary
         ));
 
-        TextInputLayout nameLayout = input(form, "Nome do habito", isEditing ? editing.name : "");
-        TextInputLayout descriptionLayout = input(form, "Descricao", isEditing ? editing.description : "");
-        TextInputLayout timeLayout = input(form, "Horario", isEditing ? editing.time : "");
+        TextInputLayout nameLayout = input(form, "Nome do hábito", isEditing ? editing.name : "");
+        TextInputLayout descriptionLayout = input(form, "Descrição", isEditing ? editing.description : "");
+        TextInputLayout timeLayout = input(form, "Horário", isEditing ? editing.time : "");
         Spinner category = spinner(form, "Categoria", CATEGORY_VALUES, isEditing ? editing.category : "Rotina");
-        Spinner frequency = spinner(form, "Frequencia", FREQUENCY_VALUES, isEditing ? editing.frequency : "Diario");
+        Spinner frequency = spinner(form, "Frequência", FREQUENCY_VALUES, isEditing ? editing.frequency : "Diario");
         Spinner color = spinner(form, "Cor", COLORS, isEditing ? editing.colorName : "Azul");
-        Spinner icon = spinner(form, "Icone", ICONS, isEditing ? editing.iconName : "Estudo");
+        Spinner icon = spinner(form, "Ícone", ICONS, isEditing ? editing.iconName : "Estudo");
         if (!isEditing) {
             addTemplates(form, nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon);
         }
 
         SwitchMaterial reminder = new SwitchMaterial(requireContext());
-        reminder.setText("Ativar lembrete deste habito");
+        reminder.setText("Ativar lembrete deste hábito");
         reminder.setTextColor(ContextCompat.getColor(requireContext(), R.color.ink));
         reminder.setPadding(HabitUi.dp(requireContext(), 12), HabitUi.dp(requireContext(), 8), HabitUi.dp(requireContext(), 12), HabitUi.dp(requireContext(), 8));
         reminder.setBackground(HabitUi.rounded(requireContext(), R.color.primary_soft, R.color.line, 1, 18));
@@ -248,7 +252,7 @@ public class HabitosFragment extends Fragment {
         form.addView(reminder);
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setTitle(isEditing ? "Editar habito" : "Criar habito")
+                .setTitle(isEditing ? "Editar hábito" : "Criar hábito")
                 .setView(scroll)
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Salvar", null)
@@ -265,7 +269,7 @@ public class HabitosFragment extends Fragment {
             name = HabitStore.sanitizeHabitName(name);
             List<String> existing = HabitStore.getCustomHabits(prefs);
             if ((oldName == null || !oldName.equals(name)) && existing.contains(name)) {
-                nameLayout.setError("Esse habito ja existe.");
+                nameLayout.setError("Esse hábito já existe.");
                 return;
             }
 
@@ -285,7 +289,7 @@ public class HabitosFragment extends Fragment {
                     value(icon)
             );
             HabitStore.saveHabitRecord(prefs, oldName, record);
-            FeedbackHelper.snack(rootView, isEditing ? "Habito atualizado." : "Habito criado.");
+            FeedbackHelper.snack(rootView, isEditing ? "Hábito atualizado." : "Hábito criado.");
             renderHabits();
             dialog.dismiss();
         }));
@@ -303,15 +307,15 @@ public class HabitosFragment extends Fragment {
         row.setPadding(0, 0, 0, HabitUi.dp(requireContext(), 8));
         parent.addView(row);
 
-        row.addView(templateButton("Beber agua", R.drawable.ic_premium_drop, R.color.water,
+        row.addView(templateButton("Beber água", R.drawable.ic_premium_drop, R.color.water,
                 nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
         row.addView(templateButton("Estudar 30 min", R.drawable.ic_nav_focus, R.color.study,
                 nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
-        row.addView(templateButton("Fazer exercicio", R.drawable.ic_premium_dumbbell, R.color.coral,
+        row.addView(templateButton("Fazer exercício", R.drawable.ic_premium_dumbbell, R.color.coral,
                 nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
         row.addView(templateButton("Dormir cedo", R.drawable.ic_premium_sleep, R.color.success,
                 nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
-        row.addView(templateButton("Ler 10 paginas", R.drawable.ic_premium_book, R.color.primary,
+        row.addView(templateButton("Ler 10 páginas", R.drawable.ic_premium_book, R.color.primary,
                 nameLayout, descriptionLayout, timeLayout, category, frequency, color, icon));
     }
 
@@ -354,11 +358,13 @@ public class HabitosFragment extends Fragment {
     }
 
     private void selectSpinner(Spinner spinner, String value) {
-        if (!(spinner.getAdapter() instanceof ArrayAdapter)) return;
-        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
-        int position = adapter.getPosition(value);
-        if (position >= 0) {
-            spinner.setSelection(position);
+        if (spinner.getAdapter() == null) return;
+        for (int position = 0; position < spinner.getAdapter().getCount(); position++) {
+            Object item = spinner.getAdapter().getItem(position);
+            if (value.equals(String.valueOf(item))) {
+                spinner.setSelection(position);
+                return;
+            }
         }
     }
 
@@ -370,7 +376,7 @@ public class HabitosFragment extends Fragment {
         layout.setBoxCornerRadii(radius, radius, radius, radius);
 
         TextInputEditText editText = new TextInputEditText(requireContext());
-        editText.setSingleLine(!"Descricao".equals(hint));
+        editText.setSingleLine(!"Descrição".equals(hint));
         editText.setText(value);
         layout.addView(editText);
 
@@ -415,12 +421,12 @@ public class HabitosFragment extends Fragment {
 
     private void confirmDelete(HabitRecord habit) {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Excluir habito")
+                .setTitle("Excluir hábito")
                 .setMessage("Remover \"" + habit.name + "\" da sua rotina?")
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Excluir", (dialog, which) -> {
                     HabitStore.removeHabitRecord(prefs, habit.name);
-                    FeedbackHelper.snack(rootView, "Habito removido.");
+                    FeedbackHelper.snack(rootView, "Hábito removido.");
                     renderHabits();
                 })
                 .show();

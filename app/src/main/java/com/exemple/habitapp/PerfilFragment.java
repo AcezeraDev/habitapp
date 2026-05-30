@@ -64,6 +64,7 @@ public class PerfilFragment extends Fragment {
         HabitStore.ensureToday(prefs);
 
         imgAvatar = view.findViewById(R.id.imgPerfilAvatar);
+        imgAvatar.setClipToOutline(true);
         txtTitulo = view.findViewById(R.id.txtPerfilTitulo);
         txtSubtitulo = view.findViewById(R.id.txtPerfilSubtitulo);
         txtEmail = view.findViewById(R.id.txtPerfilEmail);

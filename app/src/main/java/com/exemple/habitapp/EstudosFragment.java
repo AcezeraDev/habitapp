@@ -30,6 +30,8 @@ public class EstudosFragment extends Fragment {
     private static final String PREF_FOCUS_TOTAL_MS = "focus_timer_total_ms";
     private static final String PREF_FOCUS_REMAINING_MS = "focus_timer_remaining_ms";
     private static final String PREF_FOCUS_END_AT_MS = "focus_timer_end_at_ms";
+    private static final int MIN_FOCUS_MINUTES = 5;
+    private static final int MAX_FOCUS_MINUTES = 180;
 
     private CountDownTimer timer;
     private boolean rodando = false;
@@ -91,6 +93,7 @@ public class EstudosFragment extends Fragment {
             return;
         }
 
+        minutos = limitarDuracao(minutos);
         if (timer != null) timer.cancel();
         tempoTotal = minutos * 60 * 1000L;
         tempoRestante = tempoTotal;
@@ -124,9 +127,11 @@ public class EstudosFragment extends Fragment {
     }
 
     private void restaurarEstadoTimer(int fallbackMinutos) {
-        long fallbackMs = fallbackMinutos * 60 * 1000L;
+        long fallbackMs = limitarDuracao(fallbackMinutos) * 60 * 1000L;
         tempoTotal = prefs.getLong(PREF_FOCUS_TOTAL_MS, fallbackMs);
+        tempoTotal = limitarDuracao((int) Math.max(1L, tempoTotal / 60000L)) * 60 * 1000L;
         tempoRestante = prefs.getLong(PREF_FOCUS_REMAINING_MS, tempoTotal);
+        tempoRestante = Math.max(0L, Math.min(tempoRestante, tempoTotal));
         inputTempo.setText(String.valueOf(Math.max(1, tempoTotal / 60000L)));
 
         if (prefs.getBoolean(PREF_FOCUS_RUNNING, false)) {
@@ -217,8 +222,8 @@ public class EstudosFragment extends Fragment {
 
         try {
             int minutos = Integer.parseInt(valor);
-            if (minutos <= 0) {
-                Toast.makeText(getContext(), "Tempo inválido.", Toast.LENGTH_SHORT).show();
+            if (minutos < MIN_FOCUS_MINUTES || minutos > MAX_FOCUS_MINUTES) {
+                Toast.makeText(getContext(), "Use um tempo entre 5 e 180 minutos.", Toast.LENGTH_SHORT).show();
                 return false;
             }
 
@@ -232,6 +237,10 @@ public class EstudosFragment extends Fragment {
             Toast.makeText(getContext(), "Use apenas numeros.", Toast.LENGTH_SHORT).show();
             return false;
         }
+    }
+
+    private int limitarDuracao(int minutos) {
+        return Math.max(MIN_FOCUS_MINUTES, Math.min(MAX_FOCUS_MINUTES, minutos));
     }
 
     private void resetarTimer() {

@@ -45,20 +45,20 @@ public class EstatisticasFragment extends Fragment {
         }
         int monthlyAverage = Math.round(total / 30f);
 
-        ((TextView) view.findViewById(R.id.txtFeatureTitle)).setText("Estatisticas");
-        ((TextView) view.findViewById(R.id.txtFeatureSubtitle)).setText("Uma leitura mais avancada do seu ritmo.");
-        ((TextView) view.findViewById(R.id.txtFeatureHeroTitle)).setText(monthlyAverage + "% media mensal");
-        ((TextView) view.findViewById(R.id.txtFeatureHeroSubtitle)).setText(strong + " dias fortes nos ultimos 30 dias. Melhor score: " + best + "%.");
+        ((TextView) view.findViewById(R.id.txtFeatureTitle)).setText("Estatísticas");
+        ((TextView) view.findViewById(R.id.txtFeatureSubtitle)).setText("Uma leitura mais avançada do seu ritmo.");
+        ((TextView) view.findViewById(R.id.txtFeatureHeroTitle)).setText(monthlyAverage + "% média mensal");
+        ((TextView) view.findViewById(R.id.txtFeatureHeroSubtitle)).setText(strong + " dias fortes nos últimos 30 dias. Melhor score: " + best + "%.");
         ((LinearProgressIndicator) view.findViewById(R.id.progressFeatureHero)).setProgressCompat(monthlyAverage, true);
 
         LinearLayout list = view.findViewById(R.id.layoutFeatureContent);
         list.removeAllViews();
         FeatureUi.addCard(requireContext(), list, "Melhor dia da semana", bestWeekday(prefs), -1, R.color.primary);
-        FeatureUi.addCard(requireContext(), list, "Habito mais consistente", habitRanking(prefs, true), -1, R.color.success);
-        FeatureUi.addCard(requireContext(), list, "Habito para recuperar", habitRanking(prefs, false), -1, R.color.coral);
+        FeatureUi.addCard(requireContext(), list, "Hábito mais consistente", habitRanking(prefs, true), -1, R.color.success);
+        FeatureUi.addCard(requireContext(), list, "Hábito para recuperar", habitRanking(prefs, false), -1, R.color.coral);
         FeatureUi.addCard(requireContext(), list, "Produtividade", prefs.getInt("total_foco_min_registrado", 0) + " minutos de foco registrados no total.", -1, R.color.study);
-        FeatureUi.addCard(requireContext(), list, "Hidratacao", prefs.getInt("total_agua_ml_registrado", 0) + " ml de agua registrados no total.", -1, R.color.water);
-        FeatureUi.addCard(requireContext(), list, "XP e nivel", XpEngine.getBaseXp(prefs) + " XP | nivel " + XpEngine.getLevel(prefs) + " | " + XpEngine.getLevelProgress(prefs) + "% ate o proximo nivel.", XpEngine.getLevelProgress(prefs), R.color.primary);
+        FeatureUi.addCard(requireContext(), list, "Hidratação", prefs.getInt("total_agua_ml_registrado", 0) + " ml de água registrados no total.", -1, R.color.water);
+        FeatureUi.addCard(requireContext(), list, "XP e nível", XpEngine.getBaseXp(prefs) + " XP | nível " + XpEngine.getLevel(prefs) + " | " + XpEngine.getLevelProgress(prefs) + "% até o próximo nível.", XpEngine.getLevelProgress(prefs), R.color.primary);
         FeatureUi.addCard(requireContext(), list, "Conquistas", AchievementEngine.getUnlockedCount(AchievementEngine.getAchievements(prefs)) + " medalhas desbloqueadas.", -1, R.color.success);
 
         view.findViewById(R.id.btnFeaturePrimary).setVisibility(View.GONE);
@@ -68,7 +68,7 @@ public class EstatisticasFragment extends Fragment {
     private String habitRanking(SharedPreferences prefs, boolean best) {
         List<HabitRecord> habits = HabitStore.getHabitRecords(prefs);
         if (habits.isEmpty()) {
-            return best ? "Crie um habito para medir consistencia." : "Nenhum habito precisa de recuperacao ainda.";
+            return best ? "Crie um hábito para medir consistência." : "Nenhum hábito precisa de recuperação ainda.";
         }
 
         HabitRecord selected = null;
@@ -82,7 +82,7 @@ public class EstatisticasFragment extends Fragment {
         }
 
         if (selected == null) return "Sem dados suficientes.";
-        return selected.name + " com " + selectedPercent + "% nos ultimos 30 dias.";
+        return selected.name + " com " + selectedPercent + "% nos últimos 30 dias.";
     }
 
     private String bestWeekday(SharedPreferences prefs) {
@@ -108,7 +108,7 @@ public class EstatisticasFragment extends Fragment {
         }
 
         String day = new DateFormatSymbols(Locale.getDefault()).getWeekdays()[bestIndex + 1];
-        return capitalize(day) + " costuma render melhor, com media de " + bestAverage + "%.";
+        return capitalize(day) + " costuma render melhor, com média de " + bestAverage + "%.";
     }
 
     private String capitalize(String value) {

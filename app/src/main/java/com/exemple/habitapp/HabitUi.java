@@ -1,9 +1,11 @@
 package com.exemple.habitapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,6 +121,7 @@ public final class HabitUi {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public static void press(View view) {
         view.setOnTouchListener((v, event) -> {
             switch (event.getActionMasked()) {
@@ -145,6 +148,12 @@ public final class HabitUi {
             }
             return false;
         });
+    }
+
+    public static void tooltip(View view, String label) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            view.setTooltipText(label);
+        }
     }
 
     public static int dp(Context context, int value) {

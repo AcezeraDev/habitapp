@@ -56,9 +56,9 @@ public class AguaFragment extends Fragment {
     private void configurarObservadores() {
         viewModel.getLitros().observe(getViewLifecycleOwner(), litros -> atualizarTela());
         viewModel.getMeta().observe(getViewLifecycleOwner(), meta -> {
-            binding.progressoAgua.setMax((int) (meta * 100));
-            if (binding.editMeta.getText() == null || binding.editMeta.getText().toString().isEmpty()) {
-                binding.editMeta.setText(String.valueOf(meta));
+            binding.progressoAgua.setMax(100);
+            if (!binding.editMeta.hasFocus()) {
+                binding.editMeta.setText(String.valueOf((int) Math.round(meta * 1000)));
             }
             atualizarTela();
         });
@@ -67,19 +67,21 @@ public class AguaFragment extends Fragment {
     private void atualizarTela() {
         double litros = viewModel.getLitros().getValue() != null ? viewModel.getLitros().getValue() : 0.0;
         double meta = viewModel.getMeta().getValue() != null ? viewModel.getMeta().getValue() : 2.0;
-        double faltaMl = Math.max(0, (meta - litros) * 1000);
+        int aguaMl = (int) Math.round(litros * 1000);
+        int metaMl = Math.max(1, (int) Math.round(meta * 1000));
+        int faltaMl = Math.max(0, metaMl - aguaMl);
         int coposRestantes = (int) Math.ceil(faltaMl / 250.0);
 
         binding.txtAgua.setText(String.format(Locale.getDefault(), "%.2f L", litros));
-        binding.txtMetaLabel.setText(String.format(Locale.getDefault(), "Meta: %.2f L", meta));
-        binding.progressoAgua.setMax((int) (meta * 100));
-        UiAnimator.animateProgress(binding.progressoAgua, (int) (litros * 100));
+        binding.txtMetaLabel.setText(String.format(Locale.getDefault(), "Meta: %d ml", metaMl));
+        binding.progressoAgua.setMax(100);
+        UiAnimator.animateProgress(binding.progressoAgua, HabitStore.percent(aguaMl, metaMl));
         binding.txtCoposRestantes.setText(coposRestantes == 0
                 ? "Nenhum copo restante"
                 : coposRestantes + (coposRestantes == 1 ? " copo" : " copos") + " de 250 ml restantes");
 
         if (faltaMl == 0) {
-            binding.txtFaltam.setText("Meta atingida. Excelente consistencia.");
+            binding.txtFaltam.setText("Meta atingida. Excelente consistência.");
             binding.txtDicaAgua.setText("Dica: mantenha o ritmo amanhã com pequenos registros ao longo do dia.");
             binding.txtProximaAgua.setText("Próximo lembrete sugerido: meta fechada");
             binding.txtRitmoAgua.setText("Ritmo de hoje: completo.");
@@ -97,6 +99,7 @@ public class AguaFragment extends Fragment {
         binding.btnWater100.setOnClickListener(v -> adicionarQuantidade(100));
         binding.btnWater250.setOnClickListener(v -> adicionarQuantidade(250));
         binding.btnWater500.setOnClickListener(v -> adicionarQuantidade(500));
+        binding.btnUndoWater.setOnClickListener(v -> desfazerUltimoRegistro());
 
         binding.btnAdd.setOnClickListener(v -> {
             String input = binding.editQuantidade.getText() != null
@@ -134,10 +137,16 @@ public class AguaFragment extends Fragment {
             if (input.isEmpty()) return;
 
             try {
-                double novaMeta = parseDecimal(input);
-                viewModel.salvarNovaMeta(novaMeta);
+                int novaMetaMl = (int) Math.round(parseDecimal(input));
+                if (novaMetaMl < 500 || novaMetaMl > 8000) {
+                    Toast.makeText(requireContext(), "Defina uma meta entre 500 ml e 8000 ml.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                viewModel.salvarNovaMeta(novaMetaMl / 1000.0);
                 HabitStore.saveTodaySnapshot(prefs);
                 renderHistoricoSemanalAgua();
+                binding.editMeta.setText(String.valueOf(novaMetaMl));
                 binding.editMeta.clearFocus();
                 Toast.makeText(requireContext(), "Nova meta salva.", Toast.LENGTH_SHORT).show();
             } catch (NumberFormatException e) {
@@ -160,6 +169,7 @@ public class AguaFragment extends Fragment {
             return;
         }
 
+        boolean metaAtingidaAgora = atual < meta && atual + (quantidadeMl / 1000.0) >= meta;
         int registradoMl = (int) Math.round(Math.min(quantidadeMl, (meta - atual) * 1000));
         viewModel.adicionarAgua(quantidadeMl);
         registrarAgua(registradoMl);
@@ -167,7 +177,14 @@ public class AguaFragment extends Fragment {
         renderHistoricoAgua();
         renderHistoricoSemanalAgua();
         UiAnimator.pulse(binding.txtAgua);
-        Toast.makeText(requireContext(), "+" + registradoMl + " ml adicionados.", Toast.LENGTH_SHORT).show();
+
+        if (metaAtingidaAgora) {
+            FeedbackHelper.success(requireContext());
+            CelebrationView.burst(binding.getRoot());
+            Toast.makeText(requireContext(), "Meta de água atingida. Excelente ritmo.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(requireContext(), "+" + registradoMl + " ml adicionados.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private String criarRitmoHidratacao(double litros, double meta) {
@@ -188,6 +205,58 @@ public class AguaFragment extends Fragment {
                 .putString(getLogKey(), novoLog)
                 .putInt("total_agua_ml_registrado", totalRegistrado)
                 .apply();
+    }
+
+    private void desfazerUltimoRegistro() {
+        String logAtual = prefs.getString(getLogKey(), "");
+        if (TextUtils.isEmpty(logAtual)) {
+            Toast.makeText(requireContext(), "Não há registro para desfazer.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String[] entradas = logAtual.split("\\|");
+        String ultimaEntrada = entradas[entradas.length - 1];
+        int ultimoMl = extrairMl(ultimaEntrada);
+
+        if (ultimoMl <= 0) {
+            Toast.makeText(requireContext(), "Não consegui identificar o último registro.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        StringBuilder novoLog = new StringBuilder();
+        for (int i = 0; i < entradas.length - 1; i++) {
+            if (i > 0) novoLog.append("|");
+            novoLog.append(entradas[i]);
+        }
+
+        int aguaAtualMl = HabitStore.getAguaMl(prefs);
+        int novoAguaMl = Math.max(0, aguaAtualMl - ultimoMl);
+        int totalRegistrado = Math.max(0, prefs.getInt("total_agua_ml_registrado", 0) - ultimoMl);
+
+        prefs.edit()
+                .putString(getLogKey(), novoLog.toString())
+                .putInt("total_agua_ml_registrado", totalRegistrado)
+                .apply();
+
+        viewModel.definirAguaMl(novoAguaMl);
+        HabitStore.saveTodaySnapshot(prefs);
+        renderHistoricoAgua();
+        renderHistoricoSemanalAgua();
+        UiAnimator.pulse(binding.txtAgua);
+        Toast.makeText(requireContext(), "-" + ultimoMl + " ml removidos.", Toast.LENGTH_SHORT).show();
+    }
+
+    private int extrairMl(String entrada) {
+        if (TextUtils.isEmpty(entrada)) return 0;
+        String[] partes = entrada.split("-");
+        if (partes.length == 0) return 0;
+
+        String quantidade = partes[partes.length - 1].replace("ml", "").trim();
+        try {
+            return Math.max(0, (int) Math.round(parseDecimal(quantidade)));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     private void renderHistoricoAgua() {

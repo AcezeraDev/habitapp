@@ -40,14 +40,14 @@ public class TemasFragment extends Fragment {
         ((TextView) view.findViewById(R.id.txtFeatureTitle)).setText("Loja de temas");
         ((TextView) view.findViewById(R.id.txtFeatureSubtitle)).setText("Desbloqueie estilos conforme ganha XP.");
         ((TextView) view.findViewById(R.id.txtFeatureHeroTitle)).setText("Tema: " + selected);
-        ((TextView) view.findViewById(R.id.txtFeatureHeroSubtitle)).setText("Nivel " + level + ". Novos temas liberam conforme seu uso cresce.");
+        ((TextView) view.findViewById(R.id.txtFeatureHeroSubtitle)).setText("Nível " + level + ". Novos temas liberam conforme seu uso cresce.");
         ((LinearProgressIndicator) view.findViewById(R.id.progressFeatureHero)).setProgressCompat(XpEngine.getLevelProgress(prefs), true);
 
         LinearLayout list = view.findViewById(R.id.layoutFeatureContent);
         list.removeAllViews();
         for (int i = 0; i < NAMES.length; i++) {
             boolean unlocked = level >= REQUIRED_LEVELS[i];
-            String status = unlocked ? "Liberado" : "Desbloqueia no nivel " + REQUIRED_LEVELS[i];
+            String status = unlocked ? "Liberado" : "Desbloqueia no nível " + REQUIRED_LEVELS[i];
             FeatureUi.addCard(requireContext(), list, NAMES[i] + (NAMES[i].equals(selected) ? " | ativo" : ""), status, unlocked ? 100 : XpEngine.getLevelProgress(prefs), COLORS[i]);
             final int index = i;
             list.getChildAt(list.getChildCount() - 1).setOnClickListener(v -> selectTheme(index, unlocked, view));

@@ -53,7 +53,6 @@
                     android:layout_width="92dp"
                     android:layout_height="92dp"
                     android:background="@drawable/shape_circle_avatar"
-                    android:clipToOutline="true"
                     android:contentDescription="Foto do perfil"
                     android:padding="16dp"
                     android:scaleType="centerCrop"

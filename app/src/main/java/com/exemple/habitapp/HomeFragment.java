@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment {
 
         if (exercicios != null) {
             HabitUi.press(exercicios);
-            exercicios.setOnClickListener(v -> marcarChecklistPorCategoria(view, R.id.checkTreino, "check_treino_", "Exercicios marcados no checklist."));
+            exercicios.setOnClickListener(v -> marcarChecklistPorCategoria(view, R.id.checkTreino, "check_treino_", "Exercícios marcados no checklist."));
         }
 
         if (diario != null) {
@@ -150,7 +150,7 @@ public class HomeFragment extends Fragment {
                         atualizarResumo(rootView);
                         atualizarGaleria();
                     } else {
-                        Toast.makeText(getContext(), "Nao foi possivel tirar a foto.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Não foi possível tirar a foto.", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -167,6 +167,7 @@ public class HomeFragment extends Fragment {
     private void atualizarResumo(View view) {
         TextView txtGreeting = view.findViewById(R.id.txtGreeting);
         TextView txtTodaySubtitle = view.findViewById(R.id.txtTodaySubtitle);
+        TextView txtTodayDate = view.findViewById(R.id.txtTodayDate);
         TextView txtHomeXp = view.findViewById(R.id.txtHomeXp);
         TextView txtHomeMission = view.findViewById(R.id.txtHomeMission);
         TextView txtHomeTheme = view.findViewById(R.id.txtHomeTheme);
@@ -216,13 +217,16 @@ public class HomeFragment extends Fragment {
         int weeklyAverage = HabitStore.getWeeklyAverage(prefs);
         List<Mission> missions = MissionEngine.getDailyMissions(prefs);
 
-        txtGreeting.setText("Ola, " + nome + "!");
+        txtGreeting.setText("Olá, " + nome + "!");
         if (txtTodaySubtitle != null) {
-            txtTodaySubtitle.setText(getSaudacao() + ". Que bom te ver por aqui.");
+            txtTodaySubtitle.setText(getSaudacao() + ". " + mensagemDoDia(score, streak, faltaAgua, faltaEstudos));
         }
-        txtHomeXp.setText("Nivel " + XpEngine.getLevel(prefs) + " | " + XpEngine.getBaseXp(prefs) + " XP | faltam " + XpEngine.getXpToNextLevel(prefs));
-        txtHomeMission.setText("Missao em foco: " + MissionEngine.getNextMissionTitle(missions));
-            txtHomeTheme.setText("Tema ativo: " + ThemeController.getAccentTheme(requireContext()) + " | " + ThemeController.getModeLabel(requireContext()));
+        if (txtTodayDate != null) {
+            txtTodayDate.setText(formatarDataHoje());
+        }
+        txtHomeXp.setText("Nível " + XpEngine.getLevel(prefs) + " | " + XpEngine.getBaseXp(prefs) + " XP | faltam " + XpEngine.getXpToNextLevel(prefs));
+        txtHomeMission.setText("Missão em foco: " + MissionEngine.getNextMissionTitle(missions));
+        txtHomeTheme.setText("Tema ativo: " + ThemeController.getAccentTheme(requireContext()) + " | " + ThemeController.getModeLabel(requireContext()));
         UiAnimator.animatePercentText(txtScore, score);
         txtScoreLabel.setText(score >= 100 ? "Dia fechado com consistência" : "Próxima meta: " + proximaAcao(faltaAgua, faltaEstudos));
         txtAguaHome.setText(aguaMl + " / " + metaMl + " ml");
@@ -244,7 +248,7 @@ public class HomeFragment extends Fragment {
         }
         txtCheckinResumo.setText("Humor: " + labelNivel(getMood()) + "  |  Energia: " + labelNivel(getEnergy()));
         setTextIfPresent(view, R.id.txtMotivationHome, fraseMotivacional(score, streak));
-        setTextIfPresent(view, R.id.txtHomeCompleted, habitosConcluidos + "/" + habitos.size() + " habitos");
+        setTextIfPresent(view, R.id.txtHomeCompleted, habitosConcluidos + "/" + habitos.size() + " hábitos");
         setTextIfPresent(view, R.id.txtHomeProgressBadge, score + "% hoje");
         txtHabitosResumo.setText(habitos.isEmpty()
                 ? "Crie hábitos pequenos para acompanhar hoje."
@@ -397,7 +401,7 @@ public class HomeFragment extends Fragment {
                 if (!hasCompleted) {
                     layoutHabitosExtras.addView(HabitComponents.sectionTitle(
                             requireContext(),
-                            "Concluidos",
+                            "Concluídos",
                             "Pequenas vitorias registradas hoje.",
                             R.drawable.check_circle,
                             R.color.success
@@ -424,7 +428,7 @@ public class HomeFragment extends Fragment {
                     if (!done) {
                         FeedbackHelper.success(requireContext());
                         CelebrationView.burst(rootView);
-                        FeedbackHelper.snack(rootView, "Habito concluido.");
+                        FeedbackHelper.snack(rootView, "Hábito concluído.");
                     } else {
                         FeedbackHelper.snack(rootView, "Habito reaberto.");
                     }
@@ -448,7 +452,7 @@ public class HomeFragment extends Fragment {
         button.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_START);
         button.setText("");
         button.setContentDescription(description);
-        button.setTooltipText(description);
+        HabitUi.tooltip(button, description);
         button.setMinWidth(0);
         button.setMinimumWidth(0);
         button.setMinHeight(0);
@@ -659,10 +663,10 @@ public class HomeFragment extends Fragment {
     }
 
     private String nextActionLabel(int faltaAgua, int faltaEstudos) {
-        if (faltaAgua > 0) return "Registrar agua agora";
+        if (faltaAgua > 0) return "Registrar água agora";
         if (faltaEstudos > 0) return "Abrir bloco de foco";
         if (getChecklistConcluido() < 3) return "Fechar checklist";
-        if (getCustomHabits().size() > getHabitosExtrasConcluidos(getCustomHabits())) return "Ver habitos pendentes";
+        if (getCustomHabits().size() > getHabitosExtrasConcluidos(getCustomHabits())) return "Ver hábitos pendentes";
         return "Ver progresso";
     }
 
@@ -719,16 +723,30 @@ public class HomeFragment extends Fragment {
         return "Boa noite";
     }
 
+    private String formatarDataHoje() {
+        String data = new SimpleDateFormat("EEEE, dd/MM", Locale.getDefault()).format(new Date());
+        if (data.isEmpty()) return "Hoje";
+        return data.substring(0, 1).toUpperCase(Locale.getDefault()) + data.substring(1);
+    }
+
+    private String mensagemDoDia(int score, int streak, int faltaAgua, int faltaEstudos) {
+        if (score >= 100) return "Dia fechado. Mantenha o ritmo leve.";
+        if (streak >= 3 && score >= 70) return "Sua sequência está forte hoje.";
+        if (faltaAgua > 0) return "Comece pelo próximo copo de água.";
+        if (faltaEstudos > 0) return "Proteja um bloco curto de foco.";
+        return "Escolha uma ação pequena e avance.";
+    }
+
     private void setTextIfPresent(View view, int id, String value) {
         TextView textView = view.findViewById(id);
         if (textView != null) textView.setText(value);
     }
 
     private String fraseMotivacional(int score, int streak) {
-        if (score >= 90) return "Excelente. Agora transforme esse ritmo em padrao.";
-        if (streak >= 3) return "Sua sequencia esta criando tracao. Mantenha simples.";
-        if (score >= 60) return "O dia esta encaminhado. Feche mais um bloco.";
-        return "Uma acao pequena agora ja muda o placar.";
+        if (score >= 90) return "Excelente. Agora transforme esse ritmo em padrão.";
+        if (streak >= 3) return "Sua sequência está criando tração. Mantenha simples.";
+        if (score >= 60) return "O dia está encaminhado. Feche mais um bloco.";
+        return "Uma ação pequena agora já muda o placar.";
     }
 
     private boolean jaTirouFotoHoje() {

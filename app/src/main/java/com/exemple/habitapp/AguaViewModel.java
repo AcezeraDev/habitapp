@@ -41,12 +41,24 @@ public class AguaViewModel extends AndroidViewModel {
 
     public void salvarNovaMeta(double novaMetaLitros) {
         if (novaMetaLitros > 0) {
-            prefs.edit().putFloat("meta_litros", (float) novaMetaLitros).apply();
+            double atual = (litrosLiveData.getValue() != null) ? litrosLiveData.getValue() : 0.0;
+            double litrosAjustados = Math.min(atual, novaMetaLitros);
+            prefs.edit()
+                    .putFloat("meta_litros", (float) novaMetaLitros)
+                    .putFloat("agua_litros", (float) litrosAjustados)
+                    .apply();
+            litrosLiveData.setValue(litrosAjustados);
             metaLiveData.setValue(novaMetaLitros);
         }
     }
 
     public void resetarAgua() { salvarLitros(0.0); }
+
+    public void definirAguaMl(int quantidadeMl) {
+        double metaAtual = (metaLiveData.getValue() != null) ? metaLiveData.getValue() : 2.0;
+        double litros = Math.max(0, quantidadeMl) / 1000.0;
+        salvarLitros(Math.min(litros, metaAtual));
+    }
 
     private void salvarLitros(double valor) {
         prefs.edit().putFloat("agua_litros", (float) valor).apply();

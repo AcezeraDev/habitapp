@@ -33,7 +33,7 @@ public class AparenciaFragment extends Fragment {
         String modeLabel = ThemeController.getModeLabel(requireContext());
         String accent = ThemeController.getAccentTheme(requireContext());
 
-        ((TextView) view.findViewById(R.id.txtFeatureTitle)).setText("Aparencia");
+        ((TextView) view.findViewById(R.id.txtFeatureTitle)).setText("Aparência");
         ((TextView) view.findViewById(R.id.txtFeatureSubtitle)).setText("Controle o visual claro ou escuro do HabitApp.");
         ((TextView) view.findViewById(R.id.txtFeatureHeroTitle)).setText("Modo " + modeLabel);
         ((TextView) view.findViewById(R.id.txtFeatureHeroSubtitle)).setText("Tema de cor: " + accent + ". O app atualiza o visual na hora.");
@@ -42,7 +42,7 @@ public class AparenciaFragment extends Fragment {
         LinearLayout list = view.findViewById(R.id.layoutFeatureContent);
         list.removeAllViews();
         addModeCard(view, list, false, "Modo claro", "Visual limpo para usar durante o dia.", !darkMode, R.color.sun);
-        addModeCard(view, list, true, "Modo escuro", "Visual com menos brilho para usar a noite.", darkMode, R.color.primary_dark);
+        addModeCard(view, list, true, "Modo escuro", "Visual com menos brilho para usar à noite.", darkMode, R.color.primary_dark);
 
         MaterialButton primary = view.findViewById(R.id.btnFeaturePrimary);
         primary.setText(darkMode ? "Usar modo claro" : "Usar modo escuro");
@@ -65,7 +65,7 @@ public class AparenciaFragment extends Fragment {
 
     private void setMode(boolean darkMode, View root) {
         if (ThemeController.isDarkMode(requireContext()) == darkMode) {
-            Toast.makeText(requireContext(), darkMode ? "Modo escuro ja esta ativo." : "Modo claro ja esta ativo.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), darkMode ? "Modo escuro já está ativo." : "Modo claro já está ativo.", Toast.LENGTH_SHORT).show();
             return;
         }
 

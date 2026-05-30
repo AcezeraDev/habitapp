@@ -47,6 +47,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -104,6 +105,32 @@ fun HabitAppRoot(viewModel: HabitMainViewModel) {
     val timer by viewModel.timer.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val navController = rememberNavController()
+    val actions = remember(viewModel) {
+        HabitActions(
+            addWater = viewModel::addWater,
+            undoWater = viewModel::undoWater,
+            setWaterGoal = viewModel::setWaterGoal,
+            setFocusGoal = viewModel::setFocusGoal,
+            addManualFocus = viewModel::addManualFocus,
+            setSessionMinutes = viewModel::setSessionMinutes,
+            toggleTimer = viewModel::toggleTimer,
+            resetTimer = viewModel::resetTimer,
+            setChecklist = viewModel::setChecklist,
+            setMood = viewModel::setMood,
+            setEnergy = viewModel::setEnergy,
+            addHabit = viewModel::addHabit,
+            toggleHabit = viewModel::toggleHabit,
+            removeHabit = viewModel::removeHabit,
+            saveProfile = viewModel::saveProfile,
+            setTheme = viewModel::setTheme,
+            setNotificationSettings = viewModel::setNotificationSettings,
+            saveDiary = viewModel::saveDiary,
+            setChallengeGoal = viewModel::setChallengeGoal,
+            claimMissionXp = viewModel::claimMissionXp,
+            importBackup = viewModel::importBackup,
+            exportBackup = viewModel::exportBackup,
+        )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { message ->
@@ -143,23 +170,23 @@ fun HabitAppRoot(viewModel: HabitMainViewModel) {
                     .background(Brush.linearGradient(screenGradient(state.darkMode))),
             ) {
                 NavHost(navController = navController, startDestination = HabitRoute.Home.route) {
-                    composable(HabitRoute.Home.route) { HomeScreen(state, viewModel, navController::navigate) }
-                    composable(HabitRoute.Water.route) { WaterScreen(state, viewModel) }
-                    composable(HabitRoute.Focus.route) { FocusScreen(state, timer, viewModel) }
-                    composable(HabitRoute.Habits.route) { HabitsScreen(state, viewModel) }
-                    composable(HabitRoute.Progress.route) { ProgressScreen(state, viewModel, navController::navigate) }
+                    composable(HabitRoute.Home.route) { HomeScreen(state, actions, navController::navigate) }
+                    composable(HabitRoute.Water.route) { WaterScreen(state, actions) }
+                    composable(HabitRoute.Focus.route) { FocusScreen(state, timer, actions) }
+                    composable(HabitRoute.Habits.route) { HabitsScreen(state, actions) }
+                    composable(HabitRoute.Progress.route) { ProgressScreen(state, actions, navController::navigate) }
                     composable(HabitRoute.More.route) { MoreScreen(state, navController::navigate) }
-                    composable(HabitRoute.Goals.route) { GoalsScreen(state, viewModel) }
-                    composable(HabitRoute.Profile.route) { ProfileScreen(state, viewModel) }
-                    composable(HabitRoute.Settings.route) { SettingsScreen(state, viewModel) }
+                    composable(HabitRoute.Goals.route) { GoalsScreen(state, actions) }
+                    composable(HabitRoute.Profile.route) { ProfileScreen(state, actions) }
+                    composable(HabitRoute.Settings.route) { SettingsScreen(state, actions) }
                     composable(HabitRoute.History.route) { HistoryScreen(state) }
                     composable(HabitRoute.Calendar.route) { CalendarScreen(state) }
                     composable(HabitRoute.Achievements.route) { AchievementsScreen(state) }
-                    composable(HabitRoute.Missions.route) { MissionsScreen(state, viewModel) }
+                    composable(HabitRoute.Missions.route) { MissionsScreen(state, actions) }
                     composable(HabitRoute.Report.route) { ReportScreen(state) }
-                    composable(HabitRoute.Backup.route) { BackupScreen(state, viewModel) }
-                    composable(HabitRoute.Diary.route) { DiaryScreen(state, viewModel) }
-                    composable(HabitRoute.Challenges.route) { ChallengesScreen(state, viewModel) }
+                    composable(HabitRoute.Backup.route) { BackupScreen(state, actions) }
+                    composable(HabitRoute.Diary.route) { DiaryScreen(state, actions) }
+                    composable(HabitRoute.Challenges.route) { ChallengesScreen(state, actions) }
                     composable(HabitRoute.Stats.route) { StatsScreen(state) }
                 }
             }
@@ -167,8 +194,34 @@ fun HabitAppRoot(viewModel: HabitMainViewModel) {
     }
 }
 
+@Stable
+private data class HabitActions(
+    val addWater: (Int) -> Unit,
+    val undoWater: () -> Unit,
+    val setWaterGoal: (Int) -> Unit,
+    val setFocusGoal: (Int) -> Unit,
+    val addManualFocus: (Int) -> Unit,
+    val setSessionMinutes: (Int) -> Unit,
+    val toggleTimer: () -> Unit,
+    val resetTimer: () -> Unit,
+    val setChecklist: (Int, Boolean) -> Unit,
+    val setMood: (Int) -> Unit,
+    val setEnergy: (Int) -> Unit,
+    val addHabit: (String) -> Unit,
+    val toggleHabit: (String) -> Unit,
+    val removeHabit: (String) -> Unit,
+    val saveProfile: (String, String, String, String, String) -> Unit,
+    val setTheme: (Boolean, String) -> Unit,
+    val setNotificationSettings: (Boolean, Boolean, Boolean) -> Unit,
+    val saveDiary: (String) -> Unit,
+    val setChallengeGoal: (Int) -> Unit,
+    val claimMissionXp: () -> Unit,
+    val importBackup: (String) -> Unit,
+    val exportBackup: () -> String,
+)
+
 @Composable
-private fun HomeScreen(state: HabitDashboardState, viewModel: HabitMainViewModel, navigate: (String) -> Unit) {
+private fun HomeScreen(state: HabitDashboardState, actions: HabitActions, navigate: (String) -> Unit) {
     ScreenColumn {
         HeroCard(
             title = greeting(state.name),
@@ -204,17 +257,17 @@ private fun HomeScreen(state: HabitDashboardState, viewModel: HabitMainViewModel
         }
 
         ScreenSection("Checklist rápido", "Marque o básico sem sair da home.")
-        ChecklistCard(state, viewModel)
+        ChecklistCard(state, actions)
 
         ScreenSection("Check-in", "Humor e energia ajudam a calibrar o dia.")
-        MoodEnergyCard(state, viewModel)
+        MoodEnergyCard(state, actions)
 
         ScreenSection("Hábitos de hoje", "Toque para concluir ou reabrir.")
         if (state.habits.isEmpty()) {
             EmptyPanel("Nenhum hábito ainda", "Crie o primeiro hábito e acompanhe streak, semana e score.")
         } else {
             state.habits.take(4).forEach { habit ->
-                HabitRow(habit = habit, onToggle = { viewModel.toggleHabit(habit.name) }, onRemove = null)
+                HabitRow(habit = habit, onToggle = { actions.toggleHabit(habit.name) }, onRemove = null)
             }
             TextButton(onClick = { navigate(HabitRoute.Habits.route) }, modifier = Modifier.align(Alignment.End)) {
                 Text("Ver todos")
@@ -224,7 +277,7 @@ private fun HomeScreen(state: HabitDashboardState, viewModel: HabitMainViewModel
 }
 
 @Composable
-private fun WaterScreen(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun WaterScreen(state: HabitDashboardState, actions: HabitActions) {
     var goalText by remember(state.waterGoalMl) { mutableStateOf(state.waterGoalMl.toString()) }
 
     ScreenColumn {
@@ -237,16 +290,16 @@ private fun WaterScreen(state: HabitDashboardState, viewModel: HabitMainViewMode
             ScoreRing(score = state.waterPercent, label = if (state.waterPercent >= 100) "Meta fechada" else "Ritmo de água")
             Spacer(Modifier.height(18.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                PrimaryActionButton("+250 ml", R.drawable.ic_nav_water, Modifier.weight(1f)) { viewModel.addWater(250) }
-                PrimaryActionButton("+500 ml", R.drawable.ic_nav_water, Modifier.weight(1f)) { viewModel.addWater(500) }
+                PrimaryActionButton("+250 ml", R.drawable.ic_nav_water, Modifier.weight(1f)) { actions.addWater(250) }
+                PrimaryActionButton("+500 ml", R.drawable.ic_nav_water, Modifier.weight(1f)) { actions.addWater(500) }
             }
         }
 
         ElevatedPanel {
             ScreenSection("Ajuste fino", "Use um registro rápido ou altere a meta diária.")
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                OutlinedButton(onClick = { viewModel.addWater(100) }, modifier = Modifier.weight(1f)) { Text("+100 ml") }
-                OutlinedButton(onClick = viewModel::undoWater, modifier = Modifier.weight(1f)) { Text("Desfazer") }
+                OutlinedButton(onClick = { actions.addWater(100) }, modifier = Modifier.weight(1f)) { Text("+100 ml") }
+                OutlinedButton(onClick = actions.undoWater, modifier = Modifier.weight(1f)) { Text("Desfazer") }
             }
             Spacer(Modifier.height(14.dp))
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -258,7 +311,7 @@ private fun WaterScreen(state: HabitDashboardState, viewModel: HabitMainViewMode
                     singleLine = true,
                     modifier = Modifier.weight(1f),
                 )
-                Button(onClick = { viewModel.setWaterGoal(goalText.toIntOrNull() ?: 0) }) { Text("Salvar") }
+                Button(onClick = { actions.setWaterGoal(goalText.toIntOrNull() ?: 0) }) { Text("Salvar") }
             }
         }
 
@@ -268,7 +321,7 @@ private fun WaterScreen(state: HabitDashboardState, viewModel: HabitMainViewMode
 }
 
 @Composable
-private fun FocusScreen(state: HabitDashboardState, timer: FocusTimerState, viewModel: HabitMainViewModel) {
+private fun FocusScreen(state: HabitDashboardState, timer: FocusTimerState, actions: HabitActions) {
     ScreenColumn {
         HeroCard(
             title = "Foco profundo",
@@ -293,8 +346,8 @@ private fun FocusScreen(state: HabitDashboardState, timer: FocusTimerState, view
             }
             Spacer(Modifier.height(18.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                PrimaryActionButton(if (timer.running) "Pausar" else "Iniciar", R.drawable.ic_nav_focus, Modifier.weight(1f), viewModel::toggleTimer)
-                PrimaryActionButton("Reset", R.drawable.ic_clock_history, Modifier.weight(1f), viewModel::resetTimer)
+                PrimaryActionButton(if (timer.running) "Pausar" else "Iniciar", R.drawable.ic_nav_focus, Modifier.weight(1f), actions.toggleTimer)
+                PrimaryActionButton("Reset", R.drawable.ic_clock_history, Modifier.weight(1f), actions.resetTimer)
             }
         }
 
@@ -302,14 +355,14 @@ private fun FocusScreen(state: HabitDashboardState, timer: FocusTimerState, view
             ScreenSection("Duração da sessão", "Escolha um bloco realista para hoje.")
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(15, 25, 45).forEach { minutes ->
-                    FilterChip(selected = timer.sessionMinutes == minutes, onClick = { viewModel.setSessionMinutes(minutes) }, label = { Text("$minutes min") })
+                    FilterChip(selected = timer.sessionMinutes == minutes, onClick = { actions.setSessionMinutes(minutes) }, label = { Text("$minutes min") })
                 }
             }
             Spacer(Modifier.height(16.dp))
             Text("Meta diária: ${state.focusGoalMinutes} min", color = MaterialTheme.colorScheme.onSurfaceVariant)
             Slider(
                 value = state.focusGoalMinutes.toFloat(),
-                onValueChange = { viewModel.setFocusGoal(it.roundToInt().coerceIn(15, 240)) },
+                onValueChange = { actions.setFocusGoal(it.roundToInt().coerceIn(15, 240)) },
                 valueRange = 15f..240f,
                 steps = 14,
             )
@@ -321,7 +374,7 @@ private fun FocusScreen(state: HabitDashboardState, timer: FocusTimerState, view
                 strokeCap = StrokeCap.Round,
             )
             Spacer(Modifier.height(12.dp))
-            OutlinedButton(onClick = { viewModel.addManualFocus(10) }, modifier = Modifier.fillMaxWidth()) {
+            OutlinedButton(onClick = { actions.addManualFocus(10) }, modifier = Modifier.fillMaxWidth()) {
                 Text("Registrar +10 min manualmente")
             }
         }
@@ -332,7 +385,7 @@ private fun FocusScreen(state: HabitDashboardState, timer: FocusTimerState, view
 }
 
 @Composable
-private fun HabitsScreen(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun HabitsScreen(state: HabitDashboardState, actions: HabitActions) {
     var newHabit by remember { mutableStateOf("") }
 
     ScreenColumn {
@@ -351,7 +404,7 @@ private fun HabitsScreen(state: HabitDashboardState, viewModel: HabitMainViewMod
                     modifier = Modifier.weight(1f),
                 )
                 Button(onClick = {
-                    viewModel.addHabit(newHabit)
+                    actions.addHabit(newHabit)
                     newHabit = ""
                 }) { Text("Criar") }
             }
@@ -365,18 +418,18 @@ private fun HabitsScreen(state: HabitDashboardState, viewModel: HabitMainViewMod
             val done = state.habits.filter { it.done }
             if (pending.isNotEmpty()) {
                 SmallLabel("Pendentes")
-                pending.forEach { habit -> HabitRow(habit, { viewModel.toggleHabit(habit.name) }, { viewModel.removeHabit(habit.name) }) }
+                pending.forEach { habit -> HabitRow(habit, { actions.toggleHabit(habit.name) }, { actions.removeHabit(habit.name) }) }
             }
             if (done.isNotEmpty()) {
                 SmallLabel("Concluídos")
-                done.forEach { habit -> HabitRow(habit, { viewModel.toggleHabit(habit.name) }, { viewModel.removeHabit(habit.name) }) }
+                done.forEach { habit -> HabitRow(habit, { actions.toggleHabit(habit.name) }, { actions.removeHabit(habit.name) }) }
             }
         }
     }
 }
 
 @Composable
-private fun ProgressScreen(state: HabitDashboardState, viewModel: HabitMainViewModel, navigate: (String) -> Unit) {
+private fun ProgressScreen(state: HabitDashboardState, actions: HabitActions, navigate: (String) -> Unit) {
     ScreenColumn {
         HeroCard(
             title = "Progresso",
@@ -388,7 +441,7 @@ private fun ProgressScreen(state: HabitDashboardState, viewModel: HabitMainViewM
             Spacer(Modifier.height(12.dp))
             Text("Faltam ${state.xpToNext} XP para o próximo nível.", color = Color.White.copy(alpha = 0.82f))
             Spacer(Modifier.height(10.dp))
-            PrimaryActionButton("Resgatar XP", R.drawable.ic_mission_flag, Modifier.fillMaxWidth(), viewModel::claimMissionXp)
+            PrimaryActionButton("Resgatar XP", R.drawable.ic_mission_flag, Modifier.fillMaxWidth(), actions.claimMissionXp)
         }
 
         ScreenSection("Semana", "Leitura visual dos últimos 7 dias.")
@@ -435,7 +488,7 @@ private fun MoreScreen(state: HabitDashboardState, navigate: (String) -> Unit) {
 }
 
 @Composable
-private fun GoalsScreen(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun GoalsScreen(state: HabitDashboardState, actions: HabitActions) {
     var waterGoal by remember(state.waterGoalMl) { mutableStateOf(state.waterGoalMl.toString()) }
     var focusGoal by remember(state.focusGoalMinutes) { mutableStateOf(state.focusGoalMinutes.toString()) }
     var session by remember(state.sessionMinutes) { mutableStateOf(state.sessionMinutes.toString()) }
@@ -444,20 +497,20 @@ private fun GoalsScreen(state: HabitDashboardState, viewModel: HabitMainViewMode
         SimpleHero("Metas", "Ajuste água, foco diário e duração das sessões.", R.drawable.ic_nav_goals, listOf(Success, Study))
         ElevatedPanel {
             GoalInput("Meta de água em ml", waterGoal, { waterGoal = it.filter(Char::isDigit).take(4) }) {
-                viewModel.setWaterGoal(waterGoal.toIntOrNull() ?: 0)
+                actions.setWaterGoal(waterGoal.toIntOrNull() ?: 0)
             }
             GoalInput("Meta de foco em min", focusGoal, { focusGoal = it.filter(Char::isDigit).take(3) }) {
-                viewModel.setFocusGoal(focusGoal.toIntOrNull() ?: 0)
+                actions.setFocusGoal(focusGoal.toIntOrNull() ?: 0)
             }
             GoalInput("Sessão Pomodoro em min", session, { session = it.filter(Char::isDigit).take(3) }) {
-                viewModel.setSessionMinutes(session.toIntOrNull() ?: 0)
+                actions.setSessionMinutes(session.toIntOrNull() ?: 0)
             }
         }
     }
 }
 
 @Composable
-private fun ProfileScreen(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun ProfileScreen(state: HabitDashboardState, actions: HabitActions) {
     var name by remember(state.name) { mutableStateOf(state.name) }
     var email by remember(state.email) { mutableStateOf(state.email) }
     var objective by remember(state.objective) { mutableStateOf(state.objective) }
@@ -473,7 +526,7 @@ private fun ProfileScreen(state: HabitDashboardState, viewModel: HabitMainViewMo
             OutlinedTextField(routine, { routine = it.take(32) }, label = { Text("Ritmo de rotina") }, singleLine = true, modifier = Modifier.fillMaxWidth())
             OutlinedTextField(period, { period = it.take(32) }, label = { Text("Melhor horário") }, singleLine = true, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
-            Button(onClick = { viewModel.saveProfile(name, email, objective, routine, period) }, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { actions.saveProfile(name, email, objective, routine, period) }, modifier = Modifier.fillMaxWidth()) {
                 Text("Salvar perfil")
             }
         }
@@ -481,7 +534,7 @@ private fun ProfileScreen(state: HabitDashboardState, viewModel: HabitMainViewMo
 }
 
 @Composable
-private fun SettingsScreen(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun SettingsScreen(state: HabitDashboardState, actions: HabitActions) {
     var dark by remember(state.darkMode) { mutableStateOf(state.darkMode) }
     var accent by remember(state.accentTheme) { mutableStateOf(state.accentTheme) }
     var notifications by remember(state.notificationsEnabled) { mutableStateOf(state.notificationsEnabled) }
@@ -493,22 +546,22 @@ private fun SettingsScreen(state: HabitDashboardState, viewModel: HabitMainViewM
         ElevatedPanel {
             SettingSwitch("Modo escuro", "Alterna o tema Material 3.", dark) {
                 dark = it
-                viewModel.setTheme(dark, accent)
+                actions.setTheme(dark, accent)
             }
             OutlinedTextField(accent, { accent = it.take(24) }, label = { Text("Tema/acento") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-            Button(onClick = { viewModel.setTheme(dark, accent) }, modifier = Modifier.fillMaxWidth()) { Text("Salvar tema") }
+            Button(onClick = { actions.setTheme(dark, accent) }, modifier = Modifier.fillMaxWidth()) { Text("Salvar tema") }
             HorizontalDivider(Modifier.padding(vertical = 14.dp))
             SettingSwitch("Notificações", "Liga ou desliga lembretes do app.", notifications) {
                 notifications = it
-                viewModel.setNotificationSettings(notifications, waterReminder, focusReminder)
+                actions.setNotificationSettings(notifications, waterReminder, focusReminder)
             }
             SettingSwitch("Lembrete de água", "Sugestão diária de hidratação.", waterReminder) {
                 waterReminder = it
-                viewModel.setNotificationSettings(notifications, waterReminder, focusReminder)
+                actions.setNotificationSettings(notifications, waterReminder, focusReminder)
             }
             SettingSwitch("Lembrete de foco", "Sugestão diária de Pomodoro.", focusReminder) {
                 focusReminder = it
-                viewModel.setNotificationSettings(notifications, waterReminder, focusReminder)
+                actions.setNotificationSettings(notifications, waterReminder, focusReminder)
             }
         }
     }
@@ -576,10 +629,10 @@ private fun AchievementsScreen(state: HabitDashboardState) {
 }
 
 @Composable
-private fun MissionsScreen(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun MissionsScreen(state: HabitDashboardState, actions: HabitActions) {
     ScreenColumn {
         SimpleHero("Missões", "Tarefas diárias com XP real.", R.drawable.ic_mission_flag, listOf(Success, Water))
-        Button(onClick = viewModel::claimMissionXp, modifier = Modifier.fillMaxWidth()) { Text("Resgatar XP disponível") }
+        Button(onClick = actions.claimMissionXp, modifier = Modifier.fillMaxWidth()) { Text("Resgatar XP disponível") }
         state.missions.forEach { mission ->
             ElevatedPanel {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -612,7 +665,7 @@ private fun ReportScreen(state: HabitDashboardState) {
 }
 
 @Composable
-private fun BackupScreen(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun BackupScreen(state: HabitDashboardState, actions: HabitActions) {
     val context = LocalContext.current
     var importText by remember { mutableStateOf("") }
     ScreenColumn {
@@ -621,14 +674,14 @@ private fun BackupScreen(state: HabitDashboardState, viewModel: HabitMainViewMod
             Text("Prévia", fontWeight = FontWeight.Black)
             Text(state.backupPreview.ifBlank { "Sem dados para exportar." }, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 8, overflow = TextOverflow.Ellipsis)
             Spacer(Modifier.height(12.dp))
-            Button(onClick = { copyToClipboard(context, "Backup HabitApp", viewModel.exportBackup()) }, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { copyToClipboard(context, "Backup HabitApp", actions.exportBackup()) }, modifier = Modifier.fillMaxWidth()) {
                 Text("Copiar backup completo")
             }
         }
         ElevatedPanel {
             OutlinedTextField(importText, { importText = it }, label = { Text("Cole o backup aqui") }, minLines = 4, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
-            Button(onClick = { viewModel.importBackup(importText) }, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { actions.importBackup(importText) }, modifier = Modifier.fillMaxWidth()) {
                 Text("Restaurar backup")
             }
         }
@@ -636,20 +689,20 @@ private fun BackupScreen(state: HabitDashboardState, viewModel: HabitMainViewMod
 }
 
 @Composable
-private fun DiaryScreen(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun DiaryScreen(state: HabitDashboardState, actions: HabitActions) {
     var note by remember(state.diaryNote) { mutableStateOf(state.diaryNote) }
     ScreenColumn {
         SimpleHero("Diário", "Uma nota curta para fechar o dia.", R.drawable.ic_premium_book, listOf(Coral, Warning))
         ElevatedPanel {
             OutlinedTextField(note, { note = it.take(800) }, label = { Text("Nota do dia") }, minLines = 6, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
-            Button(onClick = { viewModel.saveDiary(note) }, modifier = Modifier.fillMaxWidth()) { Text("Salvar diário") }
+            Button(onClick = { actions.saveDiary(note) }, modifier = Modifier.fillMaxWidth()) { Text("Salvar diário") }
         }
     }
 }
 
 @Composable
-private fun ChallengesScreen(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun ChallengesScreen(state: HabitDashboardState, actions: HabitActions) {
     ScreenColumn {
         SimpleHero("Desafios", "Ciclos de consistência para manter ritmo.", R.drawable.ic_premium_fire, listOf(Coral, Study))
         ElevatedPanel {
@@ -663,7 +716,7 @@ private fun ChallengesScreen(state: HabitDashboardState, viewModel: HabitMainVie
             Spacer(Modifier.height(12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(7, 14, 30, 60).forEach { days ->
-                    FilterChip(selected = state.challengeGoalDays == days, onClick = { viewModel.setChallengeGoal(days) }, label = { Text("$days dias") })
+                    FilterChip(selected = state.challengeGoalDays == days, onClick = { actions.setChallengeGoal(days) }, label = { Text("$days dias") })
                 }
             }
         }
@@ -690,12 +743,12 @@ private fun StatsScreen(state: HabitDashboardState) {
 }
 
 @Composable
-private fun ChecklistCard(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun ChecklistCard(state: HabitDashboardState, actions: HabitActions) {
     ElevatedPanel {
         val items = listOf("Planejamento" to "Definir a prioridade do dia.", "Movimento" to "Mover o corpo por alguns minutos.", "Sono" to "Proteger a rotina de descanso.")
         items.forEachIndexed { index, item ->
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                Checkbox(checked = state.checklist.getOrElse(index) { false }, onCheckedChange = { viewModel.setChecklist(index, it) })
+                Checkbox(checked = state.checklist.getOrElse(index) { false }, onCheckedChange = { actions.setChecklist(index, it) })
                 Column(modifier = Modifier.weight(1f)) {
                     Text(item.first, fontWeight = FontWeight.Bold)
                     Text(item.second, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
@@ -706,13 +759,13 @@ private fun ChecklistCard(state: HabitDashboardState, viewModel: HabitMainViewMo
 }
 
 @Composable
-private fun MoodEnergyCard(state: HabitDashboardState, viewModel: HabitMainViewModel) {
+private fun MoodEnergyCard(state: HabitDashboardState, actions: HabitActions) {
     ElevatedPanel {
         Text("Humor: ${levelLabel(state.mood)}", fontWeight = FontWeight.Bold)
-        LevelChips(selected = state.mood, onSelect = viewModel::setMood)
+        LevelChips(selected = state.mood, onSelect = actions.setMood)
         Spacer(Modifier.height(10.dp))
         Text("Energia: ${levelLabel(state.energy)}", fontWeight = FontWeight.Bold)
-        LevelChips(selected = state.energy, onSelect = viewModel::setEnergy)
+        LevelChips(selected = state.energy, onSelect = actions.setEnergy)
     }
 }
 

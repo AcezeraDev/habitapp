@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -15,28 +14,13 @@
         android:roundIcon="@drawable/ic_app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HabitApp">
+
         <receiver
-            android:name=".ReminderReceiver"
+            android:name=".notifications.ReminderReceiver"
             android:exported="false" />
 
         <receiver
-            android:name=".WidgetActionReceiver"
-            android:exported="false" />
-
-        <receiver
-            android:name=".HabitWidgetProvider"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/habit_widget_info" />
-        </receiver>
-
-        <receiver
-            android:name=".BootReceiver"
+            android:name=".notifications.BootReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -45,26 +29,10 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.HabitApp" />
-
-        <activity
-            android:name=".OnboardingActivity"
-            android:exported="false"
-            android:theme="@style/Theme.HabitApp" />
-
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false"
-            android:theme="@style/Theme.HabitApp" />
-
-        <activity
-            android:name=".SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.HabitApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
